@@ -1,0 +1,33 @@
+name: musicplayer
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+  just_audio: ^0.9.36
+  file_picker: ^8.0.0
+  font_awesome_flutter: ^10.12.0
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^6.0.0
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/logo.png"
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/test/
+    - assets/now_playing.json
