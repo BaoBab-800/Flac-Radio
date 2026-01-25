@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicplayer/data/radio_stations.dart';
-import 'package:musicplayer/Player/player_logic.dart';
+import 'package:musicplayer/Services/player_logic.dart';
 
 enum _RadioStationActions { secure, }
 

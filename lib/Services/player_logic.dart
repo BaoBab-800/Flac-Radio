@@ -15,7 +15,7 @@ Future<void> stopPlayer() async {
   await player.stop();
 }
 
-// Функция выбора и воспроизвидения файла
+// Функция выбора и воспроизвидения файла (пока не используется)
 Future<void> pickAndPlay() async {
   // Открывает диалог выбора файла и ждёт пока пользователь выберет файл
   final result = await FilePicker.platform.pickFiles(
