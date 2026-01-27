@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musicplayer/Services/player_logic.dart';
+import 'package:musicplayer/data/radio_stations.dart';
 import 'package:musicplayer/data/song_model.dart';
 import 'package:musicplayer/Services/accept_JSON.dart';
+
+final currentStation = radioStations.first;
 
 // Нижняя панель плеера
 class BottomPanelOfThePlayer extends StatefulWidget {
@@ -37,7 +40,8 @@ class _BottomPanelOfThePlayerState extends State<BottomPanelOfThePlayer> {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                PlayerPanel(song: snapshot.data!),
+                // PlayerPanel(song: snapshot.data!),
+                _CurrentRadioStation(),
                 _RightSection(),
               ],
             );
@@ -46,6 +50,45 @@ class _BottomPanelOfThePlayerState extends State<BottomPanelOfThePlayer> {
           }
         },
       ),
+    );
+  }
+}
+
+// Левая часть с информацией о текущей песне
+class PlayerPanel extends StatefulWidget {
+  final Song song;
+  const PlayerPanel({super.key, required this.song});
+
+  @override
+  _PlayerPanelState createState() => _PlayerPanelState();
+}
+
+class _PlayerPanelState extends State<PlayerPanel> {
+  @override
+  Widget build(BuildContext context) {
+    final song = widget.song;
+
+    return Row(
+      children: [
+        // Если есть картика то расшифровать
+        if (song.iconBytes != null) Image.memory(
+          song.iconBytes!,
+          width: 50,
+          height: 50,
+          fit: BoxFit.cover,
+        )
+        // Если нема то показать иконку альбома
+        else Icon(Icons.album, size: 42),
+        const SizedBox(width: 8),
+        // Название песни и автор
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(song.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(song.artist),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -94,37 +137,21 @@ class _RightSection extends StatelessWidget {
   }
 }
 
-class PlayerPanel extends StatefulWidget {
-  final Song song;
-  const PlayerPanel({super.key, required this.song});
+class _CurrentRadioStation extends StatelessWidget {
+  const _CurrentRadioStation({super.key});
 
-  @override
-  _PlayerPanelState createState() => _PlayerPanelState();
-}
-
-class _PlayerPanelState extends State<PlayerPanel> {
   @override
   Widget build(BuildContext context) {
-    final song = widget.song;
-
     return Row(
       children: [
-        // Если есть картика то расшифровать
-        if (song.iconBytes != null) Image.memory(
-          song.iconBytes!,
-          width: 50,
-          height: 50,
-          fit: BoxFit.cover,
-        )
-        // Если нема то показать иконку альбома
-        else Icon(Icons.album, size: 42),
-        const SizedBox(width: 8),
-        // Название песни и автор
+        Icon(
+          currentStation.icon
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(song.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-            Text(song.artist),
+            Text(currentStation.title),
+            Text(currentStation.description),
           ],
         ),
       ],
