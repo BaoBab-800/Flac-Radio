@@ -1,38 +1,69 @@
-import 'dart:io';
 import 'package:just_audio/just_audio.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:musicplayer/data/radio_stations.dart';
+import 'package:flutter/foundation.dart';
 
-final player = AudioPlayer(); // Создание плеера
+// Контроллер плеера с автоматическим уведомлением UI
+class PlayerController {
+  // Встроенный плеер
+  final AudioPlayer _player = AudioPlayer();
 
-// Запуск плеера
-Future<void> playFromServer(String streamUrl) async {
-  await player.setUrl(streamUrl);
-  player.play();
-}
+  // ValueNotifier для текущей станции
+  // UI может слушать currentStationNotifier и автоматически обновляться
+  final ValueNotifier<RadioStation?> currentStationNotifier = ValueNotifier(null);
 
-// Остановка плеера
-Future<void> stopPlayer() async {
-  await player.stop();
-}
+  // ValueNotifier для состояния воспроизведения
+  final ValueNotifier<bool> isPlayingNotifier = ValueNotifier(false);
 
-// Функция выбора и воспроизвидения файла (пока не используется)
-Future<void> pickAndPlay() async {
-  // Открывает диалог выбора файла и ждёт пока пользователь выберет файл
-  final result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,
-    allowedExtensions: ['flac', 'mp3', 'wav'],
-  );
+  PlayerController() {
+    // Подписка на поток состояния плеера
+    _player.playerStateStream.listen((state) {
+      // Обновление флага воспроизведения и уведомление слушателей
+      isPlayingNotifier.value = state.playing;
+    });
+  }
 
-  if (result == null) return; // Если пользователь отменил выбор - функция ничего не вернёт
+  // Чтение текущей станции
+  RadioStation? get currentStation => currentStationNotifier.value;
 
-  // Путь к единственному выбранному файлу
-  final path = result.files.single.path!;
-  print('FILE PATH: $path');  // Для отладки (потом уберу)
+  // Проверка, играет ли плеер
+  bool get isPlaying => isPlayingNotifier.value;
 
-  // Тоже для отладки
-  final file = File(path);
-  print('EXISTS: ${await file.exists()}');
+  // Выбор станции пользователем
+  Future<void> selectStation(RadioStation station) async {
+    // Если выбрана та же станция - переключение Play/Pause
+    if (currentStation == station) {
+      await togglePlayPause();
+      return;
+    }
 
-  await player.setFilePath(path); // Загрузка файла в плеер
-  await player.play();  // Непосредственно проигрывание
+    // Установка новой станции и уведомление слушателей
+    currentStationNotifier.value = station;
+
+    // Подготовка потока и запуск воспроизведения
+    await _player.setUrl(station.streamUrl.toString());
+    await _player.play();
+  }
+
+  // Переключение Play/Pause
+  Future<void> togglePlayPause() async {
+    if (_player.playing) {
+      await _player.pause();
+    } else {
+      await _player.play();
+    }
+    // isPlayingNotifier автоматически обновится через playerStateStream
+  }
+
+  // Полная остановка плеера
+  Future<void> stop() async {
+    await _player.stop();
+    currentStationNotifier.value = null;
+  }
+
+  // Освобождение ресурсов плеера
+  Future<void> dispose() async {
+    await _player.dispose();
+    currentStationNotifier.dispose();
+    isPlayingNotifier.dispose();
+  }
 }
