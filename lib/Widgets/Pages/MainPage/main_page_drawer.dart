@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:musicplayer/Widgets/Pages/SettingsPage/settings_page_builder.dart';
+import 'package:musicplayer/Themes/theme_helper.dart';
 
-// Класс-сборщик Drawer
+// Drawer главного экрана
+// Содержит заголовок и список навигационных пунктов
 class MainPageDrawer extends StatelessWidget {
-  const MainPageDrawer({super.key});
+  final AppThemeOption currentTheme;
+  final ValueChanged<AppThemeOption> onThemeChange;
+
+  const MainPageDrawer({
+    super.key,
+    required this.currentTheme,
+    required this.onThemeChange,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -10,39 +20,48 @@ class MainPageDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const _DrawerHeader(),
-          Divider(),
-          const _DrawerContent(),
+          const _DrawerHeader(),  // Верхняя часть Drawer
+          const Divider(),
+          _DrawerContent(
+            currentTheme: currentTheme,
+            onThemeChange: onThemeChange,
+          ),
         ],
       ),
     );
   }
 }
 
-// Верхняя часть Drawer
+// Верхняя часть Drawer с заголовком и кнопкой закрытия
 class _DrawerHeader extends StatelessWidget {
   const _DrawerHeader();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 26, top: 32, right: 12, bottom: 6), // Потом наверное поменяю
+      padding: const EdgeInsets.only(
+        left: 26,
+        top: 32,
+        right: 12,
+        bottom: 6,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // "Меню"
+          // Заголовок Drawer
           const Text(
             "Меню",
             style: TextStyle(
               fontSize: 28,
             ),
           ),
-          // Кнопка крестик
+          // Кнопка закрытия Drawer
           IconButton(
             onPressed: () {
-              Navigator.pop(context); // Закрываем Drawer
+              // Закрытие Drawer без перехода между экранами
+              Navigator.pop(context);
             },
-            icon: Icon(Icons.close, size: 28),
+            icon: const Icon(Icons.close, size: 28),
           ),
         ],
       ),
@@ -50,42 +69,71 @@ class _DrawerHeader extends StatelessWidget {
   }
 }
 
-// Содержимое Drawer
+// Основное содержимое Drawer с пунктами меню
 class _DrawerContent extends StatelessWidget {
-  const _DrawerContent();
+  final AppThemeOption currentTheme;
+  final ValueChanged<AppThemeOption> onThemeChange;
+
+  const _DrawerContent({
+    super.key,
+    required this.currentTheme,
+    required this.onThemeChange,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        DrawerItem(icon: Icons.settings, title: "Настройки", route: "/settings"),
-        DrawerItem(icon: Icons.check, title: "Больше будет потом", route: "/more"),
+      children: [
+        // Переход к экрану настроек
+        DrawerItem(
+          icon: Icons.settings,
+          title: "Настройки",
+          onTap: () {
+            Navigator.pop(context); // закрываем Drawer
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SettingsPage(
+                  currentTheme: currentTheme,
+                  onThemeChange: onThemeChange,
+                ),
+              ),
+            );
+          },
+        ),
+        // Временный пункт меню
+        DrawerItem(
+          icon: Icons.check,
+          title: "Больше будет потом",
+          onTap: () {},
+        ),
       ],
     );
   }
 }
 
-// Пункт меню
+// Отдельный пункт меню Drawer
+// Выполняет закрытие Drawer и переход по маршруту
 class DrawerItem extends StatelessWidget {
   final IconData icon;
   final String title;
-  final String route;
+  final VoidCallback onTap; // теперь колбек
 
   const DrawerItem({
+    super.key,
     required this.icon,
     required this.title,
-    required this.route,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      onTap: () {
-        Navigator.pop(context);
-        Navigator.pushNamed(context, route);
-      },
+      // Иконка пункта меню
+      leading: Icon(icon, color: Theme.of(context).colorScheme.onSurface),
+      // Название пункта меню
+      title: Text(title, style: Theme.of(context).textTheme.titleMedium),
+      onTap: onTap,
     );
   }
 }

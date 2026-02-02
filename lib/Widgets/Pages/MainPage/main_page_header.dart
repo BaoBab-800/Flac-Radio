@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
 
-enum _MenuAction { sort, }
+enum _MenuAction { sort, update }
 
 // Класс-сборщик "Шапки"
 class Header extends StatelessWidget {
-  const Header({super.key});
+  final VoidCallback onUpdate;
+
+  const Header({
+    super.key,
+    required this.onUpdate,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Column(
         children: [
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
           // Горизонтальная линия приколов (я не знаю как это назвать)
           Row(
             children: [
               _LeftSection(), // "Flac Radio"
               Spacer(), // Разделитель на оставшееся простансво
-              _RightSection(),  // Три точки "больше"
+              _RightSection(onUpdate: onUpdate),  // Три точки "больше"
             ],
           ),
 
@@ -47,13 +52,9 @@ class _LeftSection extends StatelessWidget {
           icon: Icon(Icons.menu),
         ),
         // "Flac Radio"
-        const Text(
+        Text(
           "Flac Radio",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
       ],
     );
@@ -62,16 +63,22 @@ class _LeftSection extends StatelessWidget {
 
 // Три точки "больше"
 class _RightSection extends StatelessWidget {
-  const _RightSection();
+  final VoidCallback onUpdate;
+
+  const _RightSection({required this.onUpdate});
 
   @override
   Widget build(BuildContext context) {
     // Пока только кнока "Сортировка"
     return PopupMenuButton<_MenuAction>(
+      icon: const Icon(Icons.more_vert),
       onSelected: (action) {
         switch (action) {
           case _MenuAction.sort:
           // TODO: сделать меню сортировки
+            break;
+          case _MenuAction.update:
+            onUpdate();
             break;
         }
       },
@@ -81,6 +88,11 @@ class _RightSection extends StatelessWidget {
           value: _MenuAction.sort,
           child: Text("Сортировка"),
         ),
+        // Обновить список
+        PopupMenuItem(
+          value: _MenuAction.update,
+          child: Text("Обновить список"),
+        )
       ],
     );
   }

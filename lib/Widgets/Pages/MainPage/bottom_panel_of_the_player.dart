@@ -1,91 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:musicplayer/Services/player_logic.dart';
 import 'package:musicplayer/data/radio_stations.dart';
-import 'package:musicplayer/data/song_model.dart';
-import 'package:musicplayer/Services/accept_JSON.dart';
 
-final currentStation = radioStations.first;
+// Нижняя панель плеера, отображает текущую станцию и кнопку Play/Pause
+class BottomPanelOfThePlayer extends StatelessWidget {
+  final RadioStation? currentStation;     // Текущая станция
+  final bool isPlaying;                   // Флаг состояния плеера
+  final VoidCallback onPlayPausePressed;  // Callback на нажатие play/pause
 
-// Нижняя панель плеера
-class BottomPanelOfThePlayer extends StatefulWidget {
-  const BottomPanelOfThePlayer({super.key});
+  const BottomPanelOfThePlayer({
+    super.key,
+    required this.currentStation,
+    required this.isPlaying,
+    required this.onPlayPausePressed,
+  });
 
-  @override
-  _BottomPanelOfThePlayerState createState() => _BottomPanelOfThePlayerState();
-}
-
-class _BottomPanelOfThePlayerState extends State<BottomPanelOfThePlayer> {
-  late Future<Song> futureSong;
-
-  @override
-  void initState() {
-    super.initState();
-    futureSong = fetchCurrentSongFromFile();
-  }
-
-  // TODO: Когда отдохну сделать тут красоту
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      height: 72,
-      child: FutureBuilder<Song>(
-        future: futureSong,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('Ошибка: ${snapshot.error}');
-          } else if (snapshot.hasData) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // PlayerPanel(song: snapshot.data!),
-                _CurrentRadioStation(),
-                _RightSection(),
-              ],
-            );
-          } else {
-            return Text('Нет данных');
-          }
-        },
+      height: 72, // Фиксированная высота нижней панели
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Левая секция с информацией о радиостанции
+            _LeftSection(currentStation: currentStation),
+            // Правая секция с кнопкой управления плеером
+            _RightSection(
+              isPlaying: isPlaying,
+              onPlayPausePressed: onPlayPausePressed,
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-// Левая часть с информацией о текущей песне
-class PlayerPanel extends StatefulWidget {
-  final Song song;
-  const PlayerPanel({super.key, required this.song});
+// Левая часть панели с информацией о текущей радиостанции
+class _LeftSection extends StatelessWidget {
+  final RadioStation? currentStation;
 
-  @override
-  _PlayerPanelState createState() => _PlayerPanelState();
-}
+  const _LeftSection({super.key, this.currentStation});
 
-class _PlayerPanelState extends State<PlayerPanel> {
   @override
   Widget build(BuildContext context) {
-    final song = widget.song;
+    // Если станция ещё не выбрана, отображается заглушка
+    if (currentStation == null) {
+      return const SizedBox(
+        width: 150,
+        child: Text("Выберите станцию"),
+      );
+    }
 
+    // Отображение иконки и информации о станции
     return Row(
       children: [
-        // Если есть картика то расшифровать
-        if (song.iconBytes != null) Image.memory(
-          song.iconBytes!,
-          width: 50,
-          height: 50,
-          fit: BoxFit.cover,
-        )
-        // Если нема то показать иконку альбома
-        else Icon(Icons.album, size: 42),
+        Icon(currentStation!.icon, size: 48), // Иконка станции
         const SizedBox(width: 8),
-        // Название песни и автор
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(song.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-            Text(song.artist),
+            // Название станции жирным текстом
+            Text(
+              currentStation!.title,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            // Описание станции серым цветом
+            Text(
+              currentStation!.description,
+              style: const TextStyle(color: Colors.grey),
+            ),
           ],
         ),
       ],
@@ -93,68 +78,24 @@ class _PlayerPanelState extends State<PlayerPanel> {
   }
 }
 
-// Правая часть с кнопками управления плеером
+// Правая часть панели с кнопкой Play/Pause
 class _RightSection extends StatelessWidget {
-  const _RightSection({super.key});
+  final bool isPlaying;
+  final VoidCallback onPlayPausePressed;
+
+  const _RightSection({
+    super.key,
+    required this.isPlaying,
+    required this.onPlayPausePressed,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        // Кнопка переключить трек назад (пока не работает)
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.arrow_left, size: 32),
-        ),
-        // Кнопка пауза/плей
-        IconButton(
-          iconSize: 32,
-          onPressed: () {
-            if (player.playing) {
-              player.pause();
-            } else {
-              player.play();
-            }
-          },
-          icon: StreamBuilder<PlayerState>(
-            stream: player.playerStateStream,
-            builder: (context, snapshot) {
-              final playing = snapshot.data?.playing ?? false;
-
-              return Icon(
-                playing ? Icons.pause : Icons.play_arrow,
-              );
-            },
-          ),
-        ),
-        // Кнопка переключить трек вперёд (тоже не работает)
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.arrow_right, size: 32),
-        ),
-      ],
-    );
-  }
-}
-
-class _CurrentRadioStation extends StatelessWidget {
-  const _CurrentRadioStation({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-          currentStation.icon
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(currentStation.title),
-            Text(currentStation.description),
-          ],
-        ),
-      ],
+    // Кнопка управления воспроизведением
+    return IconButton(
+      iconSize: 32,
+      icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+      onPressed: onPlayPausePressed,
     );
   }
 }
