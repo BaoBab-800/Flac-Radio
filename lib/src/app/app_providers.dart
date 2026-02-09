@@ -11,12 +11,12 @@ import 'package:musicplayer/src/core/theme/theme_service.dart';
 final appProviders = [
   ChangeNotifierProvider<ThemeService>(
     create: (_) {
-      // создание сервиса управления темой с реализацией хранения через SharedPreferences
+      // Создание сервиса управления темой с реализацией хранения через SharedPreferences
       final service = ThemeService(
         SharedPrefsThemeStorage(),
       );
 
-      // загрузка сохранённой темы при инициализации сервиса
+      // Загрузка сохранённой темы при инициализации сервиса
       service.init();
 
       return service;

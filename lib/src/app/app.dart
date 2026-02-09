@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:musicplayer/src/core/theme/theme_service.dart';
-import 'package:musicplayer/src/core/theme/theme_data.dart';
-import 'package:musicplayer/src/core/theme/app_theme_catalog.dart';
-// import 'app_routes.dart';
+import 'package:musicplayer/src/services/theme/theme_service.dart';
+
+/*
+  Общая идея:
+  Корневой виджет приложения
+  1. Подключает MaterialApp с конфигурацией темы и названия приложения
+  2. Использует ThemeController (ThemeService) для динамического управления ThemeMode
+  3. Подключение Provider позволяет автоматически обновлять UI при смене темы
+*/
 
 class FlacRadioApp extends StatelessWidget {
   const FlacRadioApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final themeType = context.watch<ThemeService>().themeType;
-    final appTheme = AppThemes.byType(themeType);
+    // Получение текущего сервиса темы из контекста
+    final themeService = context.watch<ThemeController>();
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flac Radio',
+      debugShowCheckedModeBanner: false, // Отключение баннера дебага
+      title: 'Flac Radio', // Название приложения
 
-      theme: ThemeDataFactory.fromAppTheme(appTheme),
-      // routes: appRoutes,
+      theme: ThemeData.light(), // Светлая тема
+      darkTheme: ThemeData.dark(), // Тёмная тема
+      themeMode: themeService.themeMode, // Динамический выбор темы из ThemeService
     );
   }
 }
