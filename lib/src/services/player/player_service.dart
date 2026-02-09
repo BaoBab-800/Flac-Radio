@@ -7,48 +7,48 @@ import 'audio_player_state.dart';
 
 /*
   Общая идея:
-  PlayerService управляет аудиоплеером just_audio и состоянием воспроизведения
-
-  Ответственность:
-  хранение и обновление AudioPlayerState
-  управление воспроизведением радиостанций
-  уведомление UI о изменениях через ChangeNotifier
+  PlayerService управляет воспроизведением радиостанций и состоянием плеера
+  1. Хранит текущее состояние плеера через AudioPlayerState
+  2. Инкапсулирует AudioPlayer из just_audio
+  3. Обеспечивает запуск, паузу, остановку и переключение воспроизведения
+  4. Обрабатывает ошибки воспроизведения через AppError
+  5. Уведомляет UI об изменениях через ChangeNotifier
 */
 
 class PlayerService extends ChangeNotifier {
+  // Внутренний аудиоплеер для воспроизведения потоков
   final AudioPlayer _audioPlayer;
 
   PlayerService(this._audioPlayer);
 
+  // Текущее состояние плеера
   AudioPlayerState _state = AudioPlayerState.empty;
   AudioPlayerState get state => _state;
 
-  // обновление состояния плеера и уведомление слушателей
+  // Обновление состояния плеера и уведомление слушателей
   void _emit(AudioPlayerState newState) {
     _state = newState;
     notifyListeners();
   }
 
-  // запуск воспроизведения выбранной радиостанции
+  // Запуск воспроизведения выбранной радиостанции
   Future<void> play(RadioStation station) async {
-    // защита от повторного запуска уже воспроизводимой станции
+    // Если та же станция уже играет не делать повторного запуска
     if (_state.currentStation?.id == station.id && _state.isPlaying) return;
 
+    // Установка состояния загрузки перед началом воспроизведения
     _emit(
       _state.copyWith(
         isLoading: true,
-        error: null,
+        error: null, // Сброс предыдущих ошибок
       ),
     );
 
     try {
-      // установка URL потока в плеер
-      await _audioPlayer.setUrl(station.streamUrl.toString());
+      await _audioPlayer.setUrl(station.streamUrl.toString()); // установка URL потока
+      await _audioPlayer.play(); // запуск воспроизведения
 
-      // запуск воспроизведения после успешной инициализации источника
-      await _audioPlayer.play();
-
-      // обновление состояния после успешного старта воспроизведения
+      // Обновление состояния после успешного старта
       _emit(
         _state.copyWith(
           currentStation: station,
@@ -59,7 +59,7 @@ class PlayerService extends ChangeNotifier {
     } catch (e, st) {
       debugPrint('PlayerService.play error: $e\n$st');
 
-      // обработка любой ошибки и возврат плеера в безопасное состояние
+      // Обновление состояния при ошибке запуска воспроизведения
       _emit(
         _state.copyWith(
           isLoading: false,
@@ -70,27 +70,24 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
-  // переключение между паузой и воспроизведением
+  // Переключение между паузой и воспроизведением
   Future<void> togglePlayPause() async {
     try {
-      // если играт - остановить, иначе воспроизвести
-      // проверка текущего состояния воспроизведения, логика управления строится на локальном состоянии а не на состоянии плеера
       if (_state.isPlaying) {
         await _audioPlayer.pause(); // постановка воспроизведения на паузу
 
-        // синхронизация состояния после успешной паузы
+        // Синхронизация состояния после успешной паузы
         _emit(_state.copyWith(isPlaying: false));
       } else {
-        // возобновление или запуск воспроизведения
-        await _audioPlayer.play();
+        await _audioPlayer.play(); // возобновление или запуск воспроизведения
 
-        // обновление состояния после старта воспроизведения
+        // Обновление состояния после старта воспроизведения
         _emit(_state.copyWith(isPlaying: true));
       }
     } catch (e, st) {
       debugPrint('PlayerService.toggle error: $e\n$st');
 
-      // обработка ошибок управления плеером без изменения текущей станции
+      // Обновление состояния при ошибке управления воспроизведением
       _emit(
         _state.copyWith(
           error: AppError.playbackControl,
@@ -99,8 +96,7 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
-  // полная остановка воспроизведения и сброс состояния
-  // гарантированно сбрасывает состояние плеера
+  // Полная остановка воспроизведения и сброс состояния
   Future<void> stop() async {
     try {
       await _audioPlayer.stop();
@@ -109,10 +105,9 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
-  // освобождает все ресурсы just_audio
   @override
   void dispose() {
-    _audioPlayer.dispose();
+    _audioPlayer.dispose(); // Освобождение ресурсов плеера
     super.dispose();
   }
 }

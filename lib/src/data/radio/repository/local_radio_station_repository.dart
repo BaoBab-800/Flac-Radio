@@ -3,14 +3,15 @@ import 'radio_station_repository.dart';
 
 /*
   Общая идея:
-  Этот файл реализует локальный репозиторий радиостанций
-  1. Данные хранятся в памяти
-  2. Класс реализует интерфейс RadioStationRepository
-  3. Используется как источник данных (data layer)
+  LocalRadioStationRepository предоставляет локальный список радиостанций
+  1. Хранит статический набор радиостанций в памяти
+  2. Позволяет получать все станции или конкретную станцию по идентификатору
+  3. Используется как источник данных до внедрения сетевого репозитория
+  4. Гарантирует неизменяемость списка станций через List.unmodifiable
 */
 
 class LocalRadioStationRepository implements RadioStationRepository {
-  // локальное хранилище радиостанций в памяти
+  // Локальный список радиостанций, защищённый от изменений
   final List<RadioStation> _stations = List.unmodifiable([
     RadioStation(
       id: "rock",
@@ -19,19 +20,18 @@ class LocalRadioStationRepository implements RadioStationRepository {
     ),
   ]);
 
-  // возвращает все радиостанции
+  // Получение всех радиостанций
   @override
   Future<List<RadioStation>> getAllStations() async {
     return List.unmodifiable(_stations);
   }
 
-  // возвращает радиостанцию по id или null если не найдено
-  // использование firstWhere с fallback вместо try/catch
+  // Получение радиостанции по идентификатору
   @override
   Future<RadioStation?> getById(String id) async {
     for (final station in _stations) {
-      if (station.id == id) return station;
+      if (station.id == id) return station; // Возврат найденной станции
     }
-    return null;
+    return null; // Если станция не найдена вернуть null
   }
 }

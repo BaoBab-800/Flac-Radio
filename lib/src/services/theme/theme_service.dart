@@ -11,7 +11,7 @@ import 'package:musicplayer/src/services/settings/settings_service.dart';
   4. Уведомляет UI об изменениях через ChangeNotifier
 */
 
-class ThemeService extends ChangeNotifier {
+class ThemeController extends ChangeNotifier {
   // Сервис настроек приложения для синхронизации темы
   final SettingsService _settingsService;
 
@@ -19,7 +19,7 @@ class ThemeService extends ChangeNotifier {
   ThemeMode _themeMode;
 
   // Конструктор с синхронизацией начального состояния и подпиской на изменения настроек
-  ThemeService(this._settingsService)
+  ThemeController(this._settingsService)
       : _themeMode = _settingsService.global.themeMode {
     _settingsService.addListener(_handleSettingsChanged);
   }
