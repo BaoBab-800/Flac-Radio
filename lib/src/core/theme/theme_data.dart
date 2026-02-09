@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'app_theme.dart';
 
-// фабрика для преобразования AppTheme в ThemeData Flutter
+// Фабрика для преобразования AppTheme в ThemeData Flutter
 class ThemeDataFactory {
-  static ThemeData getThemeData(AppTheme theme) {
-    // список со всеми темами
+  static ThemeData fromAppTheme(AppTheme theme) {
+    // Список со всеми темами
     switch (theme.type) {
-      // тёмная тема
+      // Тёмная тема
       case AppThemeType.dark:
         return ThemeData(
           brightness: Brightness.dark,  // акцент темы
@@ -17,7 +17,7 @@ class ThemeDataFactory {
           ),
         );
 
-      // светлая тема
+      // Светлая тема
       case AppThemeType.light:
         return ThemeData(
           brightness: Brightness.light,
@@ -28,8 +28,8 @@ class ThemeDataFactory {
           ),
         );
 
-      // кастомная тема пока использует светлую цветовую схему
-      // сюда можно добавить более сложные правила для своих цветов
+      // Кастомная тема пока использует светлую цветовую схему
+      // Сюда можно добавить более сложные правила для своих цветов
       case AppThemeType.custom:
         return ThemeData(
           brightness: Brightness.dark,

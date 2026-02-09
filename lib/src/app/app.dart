@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:musicplayer/src/core/theme/theme_controller.dart';
-import 'package:musicplayer/src//core/theme/app_theme.dart';
-import 'app_routes.dart';
+import 'package:musicplayer/src/core/theme/theme_service.dart';
+import 'package:musicplayer/src/core/theme/theme_data.dart';
+import 'package:musicplayer/src/core/theme/app_theme_catalog.dart';
+// import 'app_routes.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class FlacRadioApp extends StatelessWidget {
+  const FlacRadioApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final themeController = context.watch<ThemeController>();
+    final themeType = context.watch<ThemeService>().themeType;
+    final appTheme = AppThemes.byType(themeType);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Music Player',
+      title: 'Flac Radio',
 
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: themeController.themeMode,
-
-      initialRoute: AppRoutes.initial,
-      routes: AppRoutes.routes,
+      theme: ThemeDataFactory.fromAppTheme(appTheme),
+      // routes: appRoutes,
     );
   }
 }
