@@ -8,7 +8,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: appProviders,
-      child: const MusicPlayerApp(),
+      child: const FlacRadioApp(),
     ),
   );
 }
