@@ -1,4 +1,5 @@
 import 'package:just_audio/just_audio.dart';
+import 'package:musicplayer/src/services/theme/theme_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -39,5 +40,12 @@ final List<SingleChildWidget> appProviders = [
     create: (context) => SettingsService(
       context.read<SettingsRepository>(),
     )..init(),
+  ),
+
+  // Провайдер контроллера темы, синхронизированного с глобальными настройками
+  ChangeNotifierProvider<ThemeController>(
+    create: (context) => ThemeController(
+      context.read<SettingsService>(),
+    ),
   ),
 ];

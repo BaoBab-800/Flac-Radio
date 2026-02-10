@@ -1,11 +1,11 @@
-// import 'package:flutter/material.dart';
-//
-// import '../features/settings/ui/settings_screen.dart';
-//
-// class AppRoutes {
-//   static const initial = '/';
-//
-//   static final routes = <String, WidgetBuilder>{
-//     initial: (_) => const SettingsScreen(),
-//   };
-// }
+import 'package:flutter/material.dart';
+import 'package:musicplayer/src/features/settings/settings_page_builder.dart';
+
+class AppRoutes {
+  static const initial = '/';
+  static const settings = '/settings';
+
+  static final routes = <String, WidgetBuilder>{
+    settings: (_) => const SettingsPageBuilder(),
+  };
+}
