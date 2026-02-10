@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:musicplayer/src/app/app_routes.dart';
 import 'package:musicplayer/src/services/theme/theme_service.dart';
+import 'package:musicplayer/src/features/main/main_page_builder.dart';
 
 /*
   Общая идея:
@@ -26,6 +28,10 @@ class FlacRadioApp extends StatelessWidget {
       theme: ThemeData.light(), // Светлая тема
       darkTheme: ThemeData.dark(), // Тёмная тема
       themeMode: themeService.themeMode, // Динамический выбор темы из ThemeService
+
+      routes: AppRoutes.routes,
+
+      home: MainPageBuilder(),
     );
   }
 }
