@@ -29,9 +29,8 @@ class FlacRadioApp extends StatelessWidget {
       darkTheme: ThemeData.dark(), // Тёмная тема
       themeMode: themeService.themeMode, // Динамический выбор темы из ThemeService
 
+      initialRoute: AppRoute.main.path,
       routes: AppRoutes.routes,
-
-      home: MainPageBuilder(),
     );
   }
 }

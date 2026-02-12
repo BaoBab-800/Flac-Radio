@@ -7,6 +7,7 @@ import 'package:musicplayer/src/core/settings/settings_repository.dart';
 import 'package:musicplayer/src/core/settings/shared_prefs_settings_repository.dart';
 import 'package:musicplayer/src/services/player/player_service.dart';
 import 'package:musicplayer/src/services/settings/settings_service.dart';
+import 'package:musicplayer/src/data/radio/repository/local_radio_station_repository.dart';
 
 /*
   Общая идея:
@@ -24,10 +25,15 @@ final List<SingleChildWidget> appProviders = [
   ),
 
   // Провайдер сервиса плеера, получает AudioPlayer через контекст
-  Provider<PlayerService>(
+  ChangeNotifierProvider<PlayerService>(
     create: (context) => PlayerService(
       context.read<AudioPlayer>(),
     ),
+  ),
+
+  // Провайдер репозитория радиостанций
+  Provider<LocalRadioStationRepository>(
+    create: (_) => LocalRadioStationRepository(),
   ),
 
   // Провайдер репозитория настроек через SharedPreferences

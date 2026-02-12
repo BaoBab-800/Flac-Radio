@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Список действий для трёх точек
 enum _MenuAction { sort, }
 
 // Класс-сборщик "Шапки"
@@ -12,7 +13,7 @@ class Header extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Column(
         children: [
-          SizedBox(height: 16),
+          SizedBox(height: 20),
 
           // Горизонтальная линия приколов (я не знаю как это назвать)
           Row(
@@ -22,9 +23,6 @@ class Header extends StatelessWidget {
               _RightSection(),  // Три точки "больше"
             ],
           ),
-
-          // Горизонтальная линия кнопок сортировки
-          // _SortingButtons(),
         ],
       ),
     );
@@ -46,11 +44,11 @@ class _LeftSection extends StatelessWidget {
           },
           icon: Icon(Icons.menu),
         ),
+
         // "Flac Radio"
         const Text(
           "Flac Radio",
           style: TextStyle(
-            color: Colors.white,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -85,54 +83,3 @@ class _RightSection extends StatelessWidget {
     );
   }
 }
-
-// Кнопки сортировки (может быть пригодиться)
-/*
-class _SortingButtons extends StatelessWidget {
-  const _SortingButtons();
-
-  @override
-  Widget build(BuildContext context) {
-    // Скролл-список
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          _sortingCardDesigner("Рекомендуем"),
-          _sortingCardDesigner("Рок"),
-          _sortingCardDesigner("Металл"),
-          _sortingCardDesigner("Поп"),
-          _sortingCardDesigner("Подкасты"),
-        ],
-      ),
-    );
-  }
-
-  // Конструктор карточек
-  Widget _sortingCardDesigner(String name) {
-    return TextButton(
-      onPressed: () {},
-      child: DecoratedBox(
-        // Стиль фона
-        decoration: BoxDecoration(
-          color: Colors.white24,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        // Название карточки
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          // Название
-          child: Text(
-            name,
-            style: TextStyle(
-              color: Colors.grey[400],
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-*/

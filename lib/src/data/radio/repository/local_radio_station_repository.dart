@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 import 'radio_station_repository.dart';
 
@@ -13,10 +14,30 @@ import 'radio_station_repository.dart';
 class LocalRadioStationRepository implements RadioStationRepository {
   // Локальный список радиостанций, защищённый от изменений
   final List<RadioStation> _stations = List.unmodifiable([
+    // Rock
     RadioStation(
-      id: "rock",
-      title: "Rock radio",
-      streamUrl: Uri.parse("https://146.0.82.234/public/flac_radio"),
+      id: 'rock',
+      title: 'Rock radio',
+      streamUrl: Uri.parse('http://146.0.82.234/listen/flac_radio/radio.flac?refresh=1770892783597'),
+      imageUrl: Uri.parse('http://146.0.82.234/api/station/flac_radio/art/fb287d599b561d48932443fe'),
+    ),
+    // Metal
+    RadioStation(
+      id: 'metal',
+      title: 'Metal radio',
+      streamUrl: Uri.parse('http://146.0.82.234/listen/flac_radio/radio.flac?refresh=1770892783597'),
+    ),
+    // Jazz
+    RadioStation(
+      id: 'jazz',
+      title: 'Jazz radio',
+      streamUrl: Uri.parse('http://146.0.82.234/listen/flac_radio/radio.flac?refresh=1770892783597'),
+    ),
+    // Pop
+    RadioStation(
+      id: 'pop',
+      title: 'Pop radio',
+      streamUrl: Uri.parse('http://146.0.82.234/listen/flac_radio/radio.flac?refresh=1770892783597'),
     ),
   ]);
 
