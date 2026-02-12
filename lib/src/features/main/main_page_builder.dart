@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:musicplayer/src/services/player/player_service.dart';
 import 'sections/header_section.dart';
 import 'sections/drawer_section.dart';
+import 'sections/radio_station_feed.dart';
+import 'sections/bottom_panel_section.dart';
 
 class MainPageBuilder extends StatelessWidget {
   const MainPageBuilder({super.key});
@@ -16,10 +21,13 @@ class MainPageBuilder extends StatelessWidget {
       body: Column(
         children: [
           const Header(), // "шапка" экрана
+          Expanded(child: RadioStationFeed()),
         ],
       ),
       // Нижняя панель управления плеером
-      // bottomNavigationBar: BottomPanelOfThePlayer(),
+      bottomNavigationBar: context.watch<PlayerService>().state.currentStation == null
+          ? null
+          : const BottomPanelSection(),
     );
   }
 }

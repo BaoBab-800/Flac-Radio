@@ -15,16 +15,22 @@ class ResetSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = context.read<SettingsService>(); // Подписка на изменения глобальных настроек
 
-    return ListTile(
-      // Заголовок
-      title: const Text(
-        'Reset settings',
-        style: TextStyle(color: Colors.red),
-      ),
-      // При нажатии сбрасывает настройки (потом добавить диалог подтверждения)
-      onTap: () async {
-        await settings.reset();
-      },
+    return Column(
+      children: [
+        Divider(),
+
+        ListTile(
+          // Заголовок
+          title: const Text(
+            'Reset settings',
+            style: TextStyle(color: Colors.red),
+          ),
+          // При нажатии сбрасывает настройки (потом добавить диалог подтверждения)
+          onTap: () async {
+            await settings.reset();
+          },
+        ),
+      ],
     );
   }
 }
