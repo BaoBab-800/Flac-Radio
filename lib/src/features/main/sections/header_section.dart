@@ -23,6 +23,7 @@ class Header extends StatelessWidget {
               _RightSection(),  // Три точки "больше"
             ],
           ),
+          Divider(),  // Для красоты
         ],
       ),
     );

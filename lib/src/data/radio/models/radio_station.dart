@@ -12,7 +12,6 @@ import 'package:flutter/cupertino.dart';
 class RadioStation {
   final String id;
   final String title;
-  final String? description;
   final Uri streamUrl;
   final Uri? imageUrl;
 
@@ -21,7 +20,6 @@ class RadioStation {
     required this.id,
     required this.title,
     required this.streamUrl,
-    this.description,
     this.imageUrl,
   });
 }
