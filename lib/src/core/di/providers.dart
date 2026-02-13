@@ -3,6 +3,7 @@ import 'package:musicplayer/src/services/theme/theme_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import 'package:musicplayer/src/features/main/sections/feed/radio_station_feed_vm.dart';
 import 'package:musicplayer/src/core/settings/settings_repository.dart';
 import 'package:musicplayer/src/core/settings/shared_prefs_settings_repository.dart';
 import 'package:musicplayer/src/services/player/player_service.dart';
@@ -52,6 +53,13 @@ final List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider<ThemeController>(
     create: (context) => ThemeController(
       context.read<SettingsService>(),
+    ),
+  ),
+
+  ChangeNotifierProvider<RadioStationFeedViewModel>(
+    create: (context) => RadioStationFeedViewModel(
+      repository: context.read<LocalRadioStationRepository>(),
+      playerService: context.read<PlayerService>(),
     ),
   ),
 ];

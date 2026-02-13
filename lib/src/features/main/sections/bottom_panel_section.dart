@@ -72,19 +72,33 @@ class _PanelContents extends StatelessWidget {
             ),
           ),
 
-          // Плей/пауза
-          IconButton(
-            // Если загружается показать крутилку
-            icon: isLoading
-                ? const SizedBox(
-              width: 26,
-              height: 26,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            ) : Icon(isPlaying ? Icons.pause : Icons.play_arrow, size: 32), // Иначе плей/пауза
-            onPressed: isLoading ? null : onToggle,
+          isLoading
+              ? const SizedBox(
+            width: 32,
+            height: 32,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          )
+              : IconButton(
+            iconSize: 32,
+            icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+            onPressed: onToggle,
           ),
         ],
       ),
     );
   }
 }
+
+/*
+          // Плей/пауза
+          IconButton(
+            // Если загружается показать крутилку
+            icon: isLoading
+                ? const SizedBox(
+              width: 36,
+              height: 36,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ) : Icon(isPlaying ? Icons.pause : Icons.play_arrow, size: 32), // Иначе плей/пауза
+            onPressed: isLoading ? null : onToggle,
+          ),
+*/

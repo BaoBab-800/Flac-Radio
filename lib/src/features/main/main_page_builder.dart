@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:musicplayer/src/services/player/player_service.dart';
 import 'sections/header_section.dart';
 import 'sections/drawer_section.dart';
-import 'sections/radio_station_feed.dart';
+import 'sections/feed/radio_station_feed.dart';
 import 'sections/bottom_panel_section.dart';
 
 class MainPageBuilder extends StatelessWidget {

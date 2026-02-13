@@ -18,26 +18,26 @@ class LocalRadioStationRepository implements RadioStationRepository {
     RadioStation(
       id: 'rock',
       title: 'Rock radio',
-      streamUrl: Uri.parse('http://146.0.82.234/listen/flac_radio/radio.flac?refresh=1770892783597'),
-      imageUrl: Uri.parse('http://146.0.82.234/api/station/flac_radio/art/fb287d599b561d48932443fe'),
+      streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
+      imageUrl: Uri.parse('https://e7.pngegg.com/pngimages/72/807/png-clipart-guitar-hero-rock-logo-bass-guitar-guitar-text-logo-thumbnail.png'),
     ),
     // Metal
     RadioStation(
       id: 'metal',
       title: 'Metal radio',
-      streamUrl: Uri.parse('http://146.0.82.234/listen/flac_radio/radio.flac?refresh=1770892783597'),
+      streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
     ),
     // Jazz
     RadioStation(
       id: 'jazz',
       title: 'Jazz radio',
-      streamUrl: Uri.parse('http://146.0.82.234/listen/flac_radio/radio.flac?refresh=1770892783597'),
+      streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
     ),
     // Pop
     RadioStation(
       id: 'pop',
       title: 'Pop radio',
-      streamUrl: Uri.parse('http://146.0.82.234/listen/flac_radio/radio.flac?refresh=1770892783597'),
+      streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
     ),
   ]);
 
