@@ -7,63 +7,120 @@ import 'audio_player_state.dart';
 
 /*
   Общая идея:
-  PlayerService управляет воспроизведением радиостанций и состоянием плеера
-  1. Хранит текущее состояние плеера через AudioPlayerState
-  2. Инкапсулирует AudioPlayer из just_audio
-  3. Обеспечивает запуск, паузу, остановку и переключение воспроизведения
-  4. Обрабатывает ошибки воспроизведения через AppError
-  5. Уведомляет UI об изменениях через ChangeNotifier
+  PlayerService управляет воспроизведением аудио и синхронизирует состояние AudioPlayer с состоянием приложения
+  1. Инкапсулирует работу с just_audio
+  2. Подписывается на стримы плеера и обновляет AudioPlayerState
+  3. Предоставляет методы управления воспроизведением
+  4. Уведомляет UI об изменениях через ChangeNotifier
 */
 
 class PlayerService extends ChangeNotifier {
-  // Внутренний аудиоплеер для воспроизведения потоков
-  final AudioPlayer _audioPlayer;
+  final AudioPlayer _audioPlayer; // Низкоуровневый аудиоплеер
 
-  PlayerService(this._audioPlayer);
+  PlayerService(this._audioPlayer) {
+    // Подписка на события плеера при создании сервиса
+    _listenToPlayer();
+  }
 
-  // Текущее состояние плеера
-  AudioPlayerState _state = AudioPlayerState.empty;
-  AudioPlayerState get state => _state;
+  AudioPlayerState _state = AudioPlayerState.empty; // Текущее состояние плеера
+  AudioPlayerState get state => _state; // Доступ к состоянию для UI
 
-  // Обновление состояния плеера и уведомление слушателей
+  // Обновление состояния и уведомление слушателей
   void _emit(AudioPlayerState newState) {
+    if (_state == newState) return; // Защита от лишних notifyListeners при неизменном состоянии
     _state = newState;
     notifyListeners();
   }
 
+  // Подписка на стримы AudioPlayer
+  // Синхронизация внутреннего состояния приложения с состоянием плеера
+  void _listenToPlayer() {
+    _audioPlayer.playerStateStream.listen((playerState) {
+      final isPlaying = playerState.playing;
+      final processingState = playerState.processingState;
+
+      // Определение состояния загрузки на основе ProcessingState
+      final isLoading = processingState == ProcessingState.loading ||
+          processingState == ProcessingState.buffering;
+
+      // Обработка завершения воспроизведения
+      if (processingState == ProcessingState.completed) {
+        _emit(
+          _state.copyWith(
+            isPlaying: false,
+            isLoading: false,
+          ),
+        );
+        return;
+      }
+
+      // Синхронизация состояния воспроизведения и загрузки
+      _emit(
+        _state.copyWith(
+          isPlaying: isPlaying,
+          isLoading: isLoading,
+          error: null,
+        ),
+      );
+    });
+
+    // Обработка ошибок стрима воспроизведения
+    _audioPlayer.playbackEventStream.listen(
+          (event) {},
+      onError: (e, st) {
+        debugPrint('Playback stream error: $e\n$st');
+
+        _emit(
+          _state.copyWith(
+            isPlaying: false,
+            isLoading: false,
+            error: AppError.playbackStart,
+          ),
+        );
+      },
+    );
+  }
+
   // Запуск воспроизведения выбранной радиостанции
   Future<void> play(RadioStation station) async {
-    // Если та же станция уже играет не делать повторного запуска
-    if (_state.currentStation?.id == station.id && _state.isPlaying) return;
+    // Если выбрана та же станция выполняется только возобновление воспроизведения
+    if (_state.currentStation?.id == station.id) {
+      if (!_audioPlayer.playing) {
+        await _audioPlayer.play();
+      }
+      return;
+    }
 
-    // Установка состояния загрузки перед началом воспроизведения
+    // Обновление текущей станции до загрузки потока
     _emit(
       _state.copyWith(
-        isLoading: true,
-        error: null, // Сброс предыдущих ошибок
+        currentStation: station,
+        error: null,
       ),
     );
 
     try {
-      await _audioPlayer.setUrl(station.streamUrl.toString()); // установка URL потока
-      await _audioPlayer.play(); // запуск воспроизведения
-
-      // Обновление состояния после успешного старта
-      _emit(
-        _state.copyWith(
-          currentStation: station,
-          isPlaying: true,
-          isLoading: false,
+      // Установка URL потока и запуск воспроизведения
+      await _audioPlayer.setAudioSource(
+        AudioSource.uri(
+          station.streamUrl,
+          headers: {
+            "User-Agent": "Mozilla/5.0 (Android)",
+            "Accept": "*/*",
+            "Connection": "keep-alive",
+          },
         ),
       );
+
+      await _audioPlayer.play();
     } catch (e, st) {
       debugPrint('PlayerService.play error: $e\n$st');
 
-      // Обновление состояния при ошибке запуска воспроизведения
+      // Обработка ошибки запуска воспроизведения
       _emit(
         _state.copyWith(
-          isLoading: false,
           isPlaying: false,
+          isLoading: false,
           error: AppError.playbackStart,
         ),
       );
@@ -71,23 +128,16 @@ class PlayerService extends ChangeNotifier {
   }
 
   // Переключение между паузой и воспроизведением
+  // Логика опирается на реальное состояние AudioPlayer
   Future<void> togglePlayPause() async {
     try {
-      if (_state.isPlaying) {
-        await _audioPlayer.pause(); // постановка воспроизведения на паузу
-
-        // Синхронизация состояния после успешной паузы
-        _emit(_state.copyWith(isPlaying: false));
-      } else {
-        await _audioPlayer.play(); // возобновление или запуск воспроизведения
-
-        // Обновление состояния после старта воспроизведения
-        _emit(_state.copyWith(isPlaying: true));
+      if (_audioPlayer.playing) await _audioPlayer.pause();
+      else {
+        await _audioPlayer.play();
       }
     } catch (e, st) {
       debugPrint('PlayerService.toggle error: $e\n$st');
 
-      // Обновление состояния при ошибке управления воспроизведением
       _emit(
         _state.copyWith(
           error: AppError.playbackControl,
@@ -98,16 +148,20 @@ class PlayerService extends ChangeNotifier {
 
   // Полная остановка воспроизведения и сброс состояния
   Future<void> stop() async {
-    try {
-      await _audioPlayer.stop();
-    } finally {
-      _emit(AudioPlayerState.empty);
-    }
+    await _audioPlayer.stop();
+    _emit(AudioPlayerState.empty);
   }
 
+  // Управление громкостью
+  Future<void> setVolume(double volume) async {
+    await _audioPlayer.setVolume(volume);
+    _emit(_state.copyWith(volume: volume));
+  }
+
+  // Освобождение ресурсов плеера
   @override
   void dispose() {
-    _audioPlayer.dispose(); // Освобождение ресурсов плеера
+    _audioPlayer.dispose();
     super.dispose();
   }
 }

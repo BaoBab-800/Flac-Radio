@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicplayer/src/data/radio/models/radio_station.dart';
+import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 enum _RadioStationActions { secure }
 
@@ -31,7 +32,7 @@ class RadioStationTile extends StatelessWidget {
 
       // Название радиостанции
       title: Text(
-        station.title,
+        context.l10n.byKey(station.titleKey),
         style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -52,16 +53,16 @@ class RadioStationTile extends StatelessWidget {
       trailing: PopupMenuButton<_RadioStationActions>(
         icon: Icon(Icons.more_vert),
         onSelected: (action) {
-          debugPrint('Выбрано действие: $action для ${station.title}');
+          debugPrint('Выбрано действие: $action для ${station.titleKey}');
         },
-        itemBuilder: (context) => const [
+        itemBuilder: (context) => [
           PopupMenuItem(
             value: _RadioStationActions.secure,
             child: Row(
               children: [
-                Icon(Icons.push_pin, size: 20),
-                SizedBox(width: 10),
-                Text("Закрепить"),
+                const Icon(Icons.push_pin, size: 20),
+                const SizedBox(width: 10),
+                Text(context.l10n.byKey('secureStation')),
               ],
             ),
           ),

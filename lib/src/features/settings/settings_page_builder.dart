@@ -4,6 +4,7 @@ import 'sections/appearance_section.dart';
 import 'sections/language_section.dart';
 import 'sections/player_section.dart';
 import 'sections/reset_section.dart';
+import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 /*
   Общая идея:
@@ -18,7 +19,7 @@ class SettingsPageBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       // Кастомный AppBar
-      appBar: SettingsAppBar(title: "Settings", showBackButton: true),
+      appBar: SettingsAppBar(title: context.l10n.settings, showBackButton: true),
 
       body: ListView(
         children: const [

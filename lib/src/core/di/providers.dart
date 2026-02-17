@@ -9,6 +9,7 @@ import 'package:musicplayer/src/core/settings/shared_prefs_settings_repository.d
 import 'package:musicplayer/src/services/player/player_service.dart';
 import 'package:musicplayer/src/services/settings/settings_service.dart';
 import 'package:musicplayer/src/data/radio/repository/local_radio_station_repository.dart';
+import 'package:musicplayer/src/services/settings/app_lifecycle_service.dart';
 
 /*
   Общая идея:
@@ -56,10 +57,21 @@ final List<SingleChildWidget> appProviders = [
     ),
   ),
 
+  // Провайдер ViewModel для ленты радиостанций
   ChangeNotifierProvider<RadioStationFeedViewModel>(
     create: (context) => RadioStationFeedViewModel(
       repository: context.read<LocalRadioStationRepository>(),
       playerService: context.read<PlayerService>(),
     ),
+  ),
+
+  // AppLifecycleService без ChangeNotifier, просто как Provider
+  Provider(
+    create: (context) => AppLifecycleService(
+      context.read<PlayerService>(),
+      context.read<SettingsService>(),
+    ),
+    dispose: (_, service) => service.dispose(),
+    lazy: false, // чтобы создался сразу, а не при первом обращении
   ),
 ];

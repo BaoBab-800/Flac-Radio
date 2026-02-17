@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:musicplayer/src/services/settings/settings_service.dart';
+import 'package:musicplayer/src/services/player/player_service.dart';
 
 /*
   Общая идея:
@@ -22,9 +24,9 @@ class PlayerSection extends StatelessWidget {
         Divider(),
 
         // Заголовок секции
-        const ListTile(
+        ListTile(
           title: Text(
-            'Player',
+            context.l10n.player,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -32,42 +34,28 @@ class PlayerSection extends StatelessWidget {
           ),
         ),
 
-        // Включение/отключение автозапуска
-        SwitchListTile(
-          title: const Text('Autoplay'),
-          value: player.autoplay,
-          onChanged: (value) {
-            // Обновление глобальных настроек с новым значением autoplay
-            settings.updatePlayer(
-              player.copyWith(autoplay: value),
-            );
-          },
-        ),
-
         // Включение/отключение остановки при потере аудио фокуса
         SwitchListTile(
-          title: const Text('Stop on audio focus loss'),
-          value: player.stopOnAudioFocusLoss,
-          onChanged: (value) {
-            // Обновление глобальных настроек с новым значением stopOnAudioFocusLoss
-            settings.updatePlayer(
-              player.copyWith(stopOnAudioFocusLoss: value),
+          title: Text(context.l10n.stopAudioWhenMinimizingTheApplication),
+          value: player.stopOnBackground,
+
+          onChanged: (value) async {
+            // Обновление настроек плеера с новым значением stopOnBackground
+            await settings.updatePlayer(
+              player.copyWith(stopOnBackground: value),
             );
           },
         ),
 
         // Управление громкостью через слайдер
         ListTile(
-          title: const Text('Volume'),
+          title: Text(context.l10n.volume),
           subtitle: Slider(
-            value: player.volume,
+            value: context.watch<PlayerService>().state.volume,
             min: 0,
             max: 1,
             onChanged: (value) {
-              // Обновление глобальных настроек с новым значением громкости
-              settings.updatePlayer(
-                player.copyWith(volume: value),
-              );
+              context.read<PlayerService>().setVolume(value);
             },
           ),
         ),

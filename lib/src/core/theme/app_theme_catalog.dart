@@ -11,32 +11,25 @@ import 'package:musicplayer/src/core/theme/app_theme.dart';
 
 class AppThemes {
   // Список тем
-  static final Map<AppThemeType, AppTheme> all = {
+  static final Map<AppThemeMode, AppTheme> all = {
     // Тёмная
-    AppThemeType.dark: AppTheme(
-      type: AppThemeType.dark,
+    AppThemeMode.dark: AppTheme(
+      type: AppThemeMode.dark,
       primaryColor: Colors.blue,
       accentColor: Colors.orange,
       backgroundColor: Colors.black,
     ),
     // Светлая
-    AppThemeType.light: AppTheme(
-      type: AppThemeType.light,
+    AppThemeMode.light: AppTheme(
+      type: AppThemeMode.light,
       primaryColor: Colors.grey,
       accentColor: Colors.redAccent,
       backgroundColor: Colors.white,
     ),
-    // Кастомная
-    AppThemeType.custom: AppTheme(
-      type: AppThemeType.custom,
-      primaryColor: Colors.teal,
-      accentColor: Colors.amber,
-      backgroundColor: Colors.grey[900]!,
-    ),
   };
 
   // Доступ по типу
-  static AppTheme byType(AppThemeType type) {
-    return all[type] ?? all[AppThemeType.light]!;
+  static AppTheme byType(AppThemeMode type) {
+    return all[type] ?? all[AppThemeMode.light]!;
   }
 }

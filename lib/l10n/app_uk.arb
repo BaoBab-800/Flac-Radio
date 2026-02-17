@@ -1,0 +1,20 @@
+{
+  "@@locale": "uk",
+  "appTitle": "Flac Radio",
+  "rockRadio": "Рок радіо",
+  "metalRadio": "Метал радіо",
+  "jazzRadio": "Джаз радіо",
+  "popRadio": "Поп радіо",
+  "sorting": "Сортування",
+  "secureStation": "Закріпити",
+  "menu": "Меню",
+  "settings": "Налаштування",
+  "about": "Про додаток",
+  "theme": "Тема",
+  "language": "Мова",
+  "player": "Плеер",
+  "volume": "Обсяг",
+  "resetSettings": "Скинути налаштування",
+  "stopAudioWhenMinimizingTheApplication": "Зупинити звук під час згортання програми",
+  "aboutPageContent": ""
+}

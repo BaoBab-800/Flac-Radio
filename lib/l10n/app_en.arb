@@ -1,0 +1,20 @@
+{
+  "@@locale": "en",
+  "appTitle": "Flac Radio",
+  "rockRadio": "Rock radio",
+  "metalRadio": "Metal radio",
+  "jazzRadio": "Jazz radio",
+  "popRadio": "Pop radio",
+  "sorting": "Sorting",
+  "secureStation": "Pin it",
+  "menu": "Menu",
+  "settings": "Settings",
+  "about": "About",
+  "theme": "Theme",
+  "language": "Language",
+  "player": "Player",
+  "volume": "Volume",
+  "resetSettings": "Reset settings",
+  "stopAudioWhenMinimizingTheApplication": "Stop audio when minimizing the application",
+  "aboutPageContent": ""
+}

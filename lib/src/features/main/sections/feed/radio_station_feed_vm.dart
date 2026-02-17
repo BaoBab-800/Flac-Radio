@@ -53,7 +53,7 @@ class RadioStationFeedViewModel extends ChangeNotifier {
   // Заглушка для закрепления станции
   // TODO: Потом сделать полноценно
   void secureStation(RadioStation station) {
-    debugPrint('Станция закреплена: ${station.title}');
+    debugPrint('Станция закреплена: ${station.titleKey}');
   }
 
   // Удобное свойство для проверки, что список пуст и загрузка завершена

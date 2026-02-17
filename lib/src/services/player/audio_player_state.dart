@@ -21,6 +21,9 @@ class AudioPlayerState {
   // Признак процесса загрузки или инициализации потока
   final bool isLoading;
 
+  // Громкость
+  final double volume;
+
   // Сообщение об ошибке для отображения в UI
   final AppError? error;
 
@@ -29,6 +32,7 @@ class AudioPlayerState {
     this.currentStation,
     required this.isPlaying,
     required this.isLoading,
+    required this.volume,
     this.error,
   });
 
@@ -37,6 +41,7 @@ class AudioPlayerState {
     isPlaying: false,
     isLoading: false,
     currentStation: null,
+    volume: 1,
     error: null,
   );
 
@@ -45,12 +50,14 @@ class AudioPlayerState {
     bool? isPlaying,
     bool? isLoading,
     RadioStation? currentStation,
+    double? volume,
     AppError? error,
   }) {
     return AudioPlayerState(
       isPlaying: isPlaying ?? this.isPlaying,
       isLoading: isLoading ?? this.isLoading,
       currentStation: currentStation ?? this.currentStation,
+      volume: volume ?? this.volume,
       error: error, // Если передан null, сбрасывает ошибку
     );
   }

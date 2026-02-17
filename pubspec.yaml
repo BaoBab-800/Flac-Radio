@@ -1,5 +1,5 @@
 name: musicplayer
-description: "A new Flutter project."
+description: 'An open source radio application developed as a learning project. The project is still in development, and constructive feedback is welcome'
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -17,6 +17,10 @@ dependencies:
   http: ^1.2.0
   provider: ^6.0.5
   shared_preferences: ^2.2.1
+  flutter_localizations:
+    sdk: flutter
+
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +35,4 @@ flutter_launcher_icons:
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/test/
-    - assets/now_playing.json
+  generate: true

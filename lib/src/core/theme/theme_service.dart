@@ -12,10 +12,10 @@ import 'app_theme.dart';
 abstract class ThemeStorage {
   // Загружает сохранённый тип темы из хранилища
   // Возвращает null если тема ещё не сохранялась
-  Future<AppThemeType?> loadTheme();
+  Future<AppThemeMode?> loadTheme();
 
   // Сохраняет выбранный тип темы в хранилище
-  Future<void> saveTheme(AppThemeType type);
+  Future<void> saveTheme(AppThemeMode type);
 }
 
 /*
@@ -29,19 +29,19 @@ class SharedPrefsThemeStorage implements ThemeStorage {
   static const _key = 'app_theme_type';
 
   @override
-  Future<AppThemeType?> loadTheme() async {
+  Future<AppThemeMode?> loadTheme() async {
     final prefs = await SharedPreferences.getInstance(); // Доступ к SharedPreferences
     final index = prefs.getInt(_key); // Чтение сохранённого индекса enum
 
     // Если тема не сохранена или индекс некорректен, вернуть null
     if (index == null) return null;
-    if (index < 0 || index >= AppThemeType.values.length) return null;
+    if (index < 0 || index >= AppThemeMode.values.length) return null;
 
-    return AppThemeType.values[index];
+    return AppThemeMode.values[index];
   }
 
   @override
-  Future<void> saveTheme(AppThemeType type) async {
+  Future<void> saveTheme(AppThemeMode type) async {
     final prefs = await SharedPreferences.getInstance(); // Доступ к SharedPreferences
     await prefs.setInt(_key, type.index); // Сохранение индекса enum
   }
@@ -60,12 +60,12 @@ class ThemeService extends ChangeNotifier {
   final ThemeStorage _storage;
 
   // Текущий тип темы в памяти по умолчанию
-  AppThemeType _themeType = AppThemeType.light;
+  AppThemeMode _themeType = AppThemeMode.light;
 
   ThemeService(this._storage);
 
   // Доступ к текущему типу темы для UI
-  AppThemeType get themeType => _themeType;
+  AppThemeMode get themeType => _themeType;
 
   // Инициализация сервиса и загрузка сохранённой темы
   Future<void> init() async {
@@ -82,7 +82,7 @@ class ThemeService extends ChangeNotifier {
   }
 
   // Установка новой темы
-  Future<void> setTheme(AppThemeType type) async {
+  Future<void> setTheme(AppThemeMode type) async {
     // Защита от повторной установки той же темы
     if (_themeType == type) return;
 

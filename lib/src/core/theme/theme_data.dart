@@ -7,7 +7,7 @@ class ThemeDataFactory {
     // Список со всеми темами
     switch (theme.type) {
       // Тёмная тема
-      case AppThemeType.dark:
+      case AppThemeMode.dark:
         return ThemeData(
           brightness: Brightness.dark,  // акцент темы
           primaryColor: theme.primaryColor, // основной цвет
@@ -18,21 +18,9 @@ class ThemeDataFactory {
         );
 
       // Светлая тема
-      case AppThemeType.light:
+      case AppThemeMode.light:
         return ThemeData(
           brightness: Brightness.light,
-          primaryColor: theme.primaryColor,
-          colorScheme: ColorScheme.light(
-            secondary: theme.accentColor,
-            surface: theme.backgroundColor,
-          ),
-        );
-
-      // Кастомная тема пока использует светлую цветовую схему
-      // Сюда можно добавить более сложные правила для своих цветов
-      case AppThemeType.custom:
-        return ThemeData(
-          brightness: Brightness.dark,
           primaryColor: theme.primaryColor,
           colorScheme: ColorScheme.light(
             secondary: theme.accentColor,

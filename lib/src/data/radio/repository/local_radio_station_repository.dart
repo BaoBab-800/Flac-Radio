@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 import 'radio_station_repository.dart';
 
@@ -17,26 +16,26 @@ class LocalRadioStationRepository implements RadioStationRepository {
     // Rock
     RadioStation(
       id: 'rock',
-      title: 'Rock radio',
+      titleKey: 'rockRadio',
       streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
       imageUrl: Uri.parse('https://e7.pngegg.com/pngimages/72/807/png-clipart-guitar-hero-rock-logo-bass-guitar-guitar-text-logo-thumbnail.png'),
     ),
     // Metal
     RadioStation(
       id: 'metal',
-      title: 'Metal radio',
+      titleKey: 'metalRadio',
       streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
     ),
     // Jazz
     RadioStation(
       id: 'jazz',
-      title: 'Jazz radio',
+      titleKey: 'jazzRadio',
       streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
     ),
     // Pop
     RadioStation(
       id: 'pop',
-      title: 'Pop radio',
+      titleKey: 'popRadio',
       streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
     ),
   ]);

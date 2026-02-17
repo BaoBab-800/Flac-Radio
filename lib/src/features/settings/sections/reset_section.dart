@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:musicplayer/src/services/settings/settings_service.dart';
+import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 /*
   Общая идея:
@@ -21,10 +22,11 @@ class ResetSection extends StatelessWidget {
 
         ListTile(
           // Заголовок
-          title: const Text(
-            'Reset settings',
+          title: Text(
+            context.l10n.resetSettings,
             style: TextStyle(color: Colors.red),
           ),
+
           // При нажатии сбрасывает настройки (потом добавить диалог подтверждения)
           onTap: () async {
             await settings.reset();

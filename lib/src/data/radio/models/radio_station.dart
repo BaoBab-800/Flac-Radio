@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 /*
   Общая идея:
   RadioStation представляет одну радиостанцию в приложении
@@ -11,14 +9,14 @@ import 'package:flutter/cupertino.dart';
 
 class RadioStation {
   final String id;
-  final String title;
+  final String titleKey;
   final Uri streamUrl;
   final Uri? imageUrl;
 
   // Конструктор с обязательными и необязательными полями
   const RadioStation({
     required this.id,
-    required this.title,
+    required this.titleKey,
     required this.streamUrl,
     this.imageUrl,
   });

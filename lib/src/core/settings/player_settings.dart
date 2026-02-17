@@ -8,48 +8,40 @@
 */
 
 class PlayerSettings {
-  // Включён ли автозапуск воспроизведения
-  final bool autoplay;
+  // Останавливать ли воспроизведение при уходе приложения в background
+  final bool stopOnBackground;
 
   // Громкость плеера от 0 до 1
   final double volume;
 
-  // Останавливать ли воспроизведение при потере фокуса аудио
-  final bool stopOnAudioFocusLoss;
-
   // Конструктор с обязательными параметрами
   const PlayerSettings({
-    required this.autoplay,
+    required this.stopOnBackground,
     required this.volume,
-    required this.stopOnAudioFocusLoss,
   });
 
   // Значения настроек плеера по умолчанию
   static const defaults = PlayerSettings(
-    autoplay: true,
-    volume: 1,
-    stopOnAudioFocusLoss: true,
+    stopOnBackground: false,
+    volume: 1.0,
   );
 
   // Создание копии объекта с выборочным изменением полей
   PlayerSettings copyWith({
-    bool? autoplay,
+    bool? stopOnBackground,
     double? volume,
-    bool? stopOnAudioFocusLoss,
   }) {
     return PlayerSettings(
-      autoplay: autoplay ?? this.autoplay,
+      stopOnBackground: stopOnBackground ?? this.stopOnBackground,
       volume: volume ?? this.volume,
-      stopOnAudioFocusLoss: stopOnAudioFocusLoss ?? this.stopOnAudioFocusLoss,
     );
   }
 
   // Сериализация настроек плеера в Map для хранения или передачи
   Map<String, dynamic> toJson() {
     return {
-      'autoplay': autoplay,
+      'stopOnBackground': stopOnBackground,
       'volume': volume,
-      'stopOnAudioFocusLoss': stopOnAudioFocusLoss,
     };
   }
 
@@ -64,10 +56,9 @@ class PlayerSettings {
     };
 
     return PlayerSettings(
-      autoplay: json['autoplay'] as bool? ?? defaults.autoplay,
       volume: normalizedVolume.clamp(0, 1), // Ограничение громкости от 0 до 1
-      stopOnAudioFocusLoss:
-      json['stopOnAudioFocusLoss'] as bool? ?? defaults.stopOnAudioFocusLoss,
+      stopOnBackground:
+      json['stopOnBackground'] as bool? ?? defaults.stopOnBackground,
     );
   }
 }

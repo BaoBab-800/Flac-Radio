@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicplayer/src/app/app_routes.dart';
+import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 /*
   Общая идея:
@@ -36,7 +37,7 @@ class _DrawerHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text("Меню", style: TextStyle(fontSize: 24)), // Заголовок
+          Text(context.l10n.menu, style: TextStyle(fontSize: 24)), // Заголовок
 
           // Кнопка закрытия меню
           IconButton(
@@ -56,9 +57,9 @@ class _DrawerContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        DrawerItem(icon: Icons.settings, title: 'Настройки', route: AppRoute.settings),
-        DrawerItem(icon: Icons.info_outline, title: 'О приложении', route: AppRoute.about),
+      children: [
+        DrawerItem(icon: Icons.settings, titleKey: 'settings', route: AppRoute.settings),
+        DrawerItem(icon: Icons.info_outline, titleKey: 'about', route: AppRoute.about),
       ],
     );
   }
@@ -67,12 +68,12 @@ class _DrawerContent extends StatelessWidget {
 // Отдельный пункт меню с иконкой и переходом по маршруту
 class DrawerItem extends StatelessWidget {
   final IconData icon;    // иконка пункта
-  final String title;     // текст пункта
+  final String titleKey;     // текст пункта
   final AppRoute route;   // маршрут для навигации
 
   const DrawerItem({
     required this.icon,
-    required this.title,
+    required this.titleKey,
     required this.route,
   });
 
@@ -80,7 +81,7 @@ class DrawerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(icon),   // иконка слева
-      title: Text(title),    // название пункта
+      title: Text(context.l10n.byKey(titleKey)),    // название пункта
       onTap: () {
         Navigator.pop(context);                   // закрыть Drawer
         Navigator.pushNamed(context, route.path); // переход на страницу

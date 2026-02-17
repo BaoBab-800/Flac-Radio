@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:musicplayer/src/services/settings/settings_service.dart';
+import 'package:musicplayer/src/core/theme/app_theme.dart';
+import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 /*
   Общая идея:
@@ -24,12 +26,15 @@ class AppearanceSection extends StatelessWidget {
 
         // Верх колонки
         ListTile(
-          title: Text("Theme"),
+          title: Text(
+            context.l10n.theme,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
 
         // Тайлы выбора темы
-        for (final mode in ThemeMode.values)  // foreach для каждой темы из enum
-          RadioListTile<ThemeMode>(
+        for (final mode in AppThemeMode.values)  // foreach для каждой темы из enum
+          RadioListTile<AppThemeMode>(
             title: Text(mode.name),
             value: mode,
             groupValue: current,

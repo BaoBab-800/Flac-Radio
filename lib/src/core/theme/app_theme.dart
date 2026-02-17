@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 // типы доступных тем приложения
-enum AppThemeType { light, dark, custom }
+enum AppThemeMode { light, dark }
 
 // модель темы приложения
 // хранит основные цвета и тип темы
 class AppTheme {
-  final AppThemeType type;  // тип темы для логики переключения
+  final AppThemeMode type;  // тип темы для логики переключения
   final Color primaryColor; // основной цвет интерфейса
   final Color accentColor;  // акцентный цвет для кнопок, иконок, выделений
   final Color backgroundColor;  // цвет фона

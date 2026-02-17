@@ -1,60 +1,63 @@
 import 'package:flutter/material.dart';
-
 import 'package:musicplayer/src/services/settings/settings_service.dart';
+import 'package:musicplayer/src/core/theme/app_theme.dart';
 
 /*
   Общая идея:
-  ThemeService синхронизирует ThemeMode приложения с глобальными настройками
-  1. Хранит текущий ThemeMode в памяти
-  2. Позволяет менять тему через setThemeMode и сохраняет изменения в SettingsService
-  3. Отслеживает изменения глобальных настроек и обновляет ThemeMode автоматически
-  4. Уведомляет UI об изменениях через ChangeNotifier
+  ThemeController управляет текущей темой приложения
+  1. Хранит состояние темы в _themeMode
+  2. Слушает изменения глобальных настроек через SettingsService
+  3. Позволяет переключать тему и сохранять выбор пользователя
+  4. Уведомляет слушателей о смене темы через ChangeNotifier
 */
 
 class ThemeController extends ChangeNotifier {
-  // Сервис настроек приложения для синхронизации темы
   final SettingsService _settingsService;
+  AppThemeMode _themeMode;
 
-  // Текущий ThemeMode в памяти
-  ThemeMode _themeMode;
-
-  // Конструктор с синхронизацией начального состояния и подпиской на изменения настроек
+  // Инициализация с текущей темой из глобальных настроек и подписка на их изменения
   ThemeController(this._settingsService)
       : _themeMode = _settingsService.global.themeMode {
     _settingsService.addListener(_handleSettingsChanged);
   }
 
-  // Доступ к текущему ThemeMode для UI
-  ThemeMode get themeMode => _themeMode;
+  // Текущий режим темы
+  AppThemeMode get themeMode => _themeMode;
 
-  // Установка нового ThemeMode и сохранение в SettingsService
-  Future<void> setThemeMode(ThemeMode mode) async {
-    // Защита от повторной установки той же темы
-    if (_themeMode == mode) return;
+  // Преобразование темы в формат, который понимает Flutter (light/dark)
+  ThemeMode get flutterThemeMode =>
+      _themeMode == AppThemeMode.dark
+          ? ThemeMode.dark
+          : ThemeMode.light;
 
-    _themeMode = mode;
-    notifyListeners(); // уведомление UI
+  // Переключение темы между светлой и тёмной, сохранение в настройках
+  Future<void> toggleTheme() async {
+    final newMode =
+    _themeMode == AppThemeMode.light
+        ? AppThemeMode.dark
+        : AppThemeMode.light;
 
-    // Обновление глобальных настроек приложения
+    _themeMode = newMode;
+    notifyListeners();
+
+    // Обновление глобальных настроек через SettingsService
     await _settingsService.updateGlobal(
-      _settingsService.global.copyWith(themeMode: mode),
+      _settingsService.global.copyWith(themeMode: newMode),
     );
   }
 
-  // Обработка изменений глобальных настроек
+  // Обработка изменений глобальных настроек, синхронизация локального состояния
   void _handleSettingsChanged() {
     final nextMode = _settingsService.global.themeMode;
-
-    // Если тема не изменилась, не делать лишних обновлений
     if (_themeMode == nextMode) return;
 
     _themeMode = nextMode;
-    notifyListeners(); // уведомление UI о смене темы
+    notifyListeners();
   }
 
+  // Очистка подписки при уничтожении контроллера
   @override
   void dispose() {
-    // Отписка от изменений настроек при уничтожении ThemeService
     _settingsService.removeListener(_handleSettingsChanged);
     super.dispose();
   }

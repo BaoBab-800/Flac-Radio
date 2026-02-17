@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:musicplayer/src/app/app_routes.dart';
+import 'app_routes.dart';
+import 'app_localization_config.dart';
 import 'package:musicplayer/src/services/theme/theme_service.dart';
-import 'package:musicplayer/src/features/main/main_page_builder.dart';
+import 'package:musicplayer/src/services/settings/settings_service.dart';
 
 /*
   Общая идея:
@@ -25,9 +26,13 @@ class FlacRadioApp extends StatelessWidget {
       debugShowCheckedModeBanner: false, // Отключение баннера дебага
       title: 'Flac Radio', // Название приложения
 
+      localizationsDelegates: AppLocalizationConfig.localizationsDelegates,
+      supportedLocales: AppLocalizationConfig.supportedLocales,
+      locale: Locale(context.watch<SettingsService>().global.localeCode),
+
       theme: ThemeData.light(), // Светлая тема
       darkTheme: ThemeData.dark(), // Тёмная тема
-      themeMode: themeService.themeMode, // Динамический выбор темы из ThemeService
+      themeMode: themeService.flutterThemeMode, // Динамический выбор темы из ThemeService
 
       initialRoute: AppRoute.main.path,
       routes: AppRoutes.routes,

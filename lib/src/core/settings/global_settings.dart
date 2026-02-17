@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:musicplayer/src/core/theme/app_theme.dart';
 
 /*
   Общая идея:
@@ -11,53 +11,45 @@ import 'package:flutter/material.dart';
 */
 
 class GlobalSettings {
-  // Текущий режим темы приложения (светлая, тёмная, системная)
-  final ThemeMode themeMode;
-
-  // Код локали приложения, например 'en' или 'ru'
   final String localeCode;
+  final AppThemeMode themeMode;
 
   // Конструктор с обязательными параметрами
   const GlobalSettings({
-    required this.themeMode,
     required this.localeCode,
+    required this.themeMode,
   });
 
   // Значения по умолчанию для глобальных настроек
   static const defaults = GlobalSettings(
-    themeMode: ThemeMode.system,
     localeCode: 'en',
+    themeMode: AppThemeMode.light,
   );
 
   // Создание копии объекта с выборочным изменением полей
   GlobalSettings copyWith({
-    ThemeMode? themeMode,
     String? localeCode,
+    AppThemeMode? themeMode,
   }) {
     return GlobalSettings(
-      themeMode: themeMode ?? this.themeMode,
       localeCode: localeCode ?? this.localeCode,
+      themeMode: themeMode ?? this.themeMode,
     );
   }
 
   // Сериализация глобальных настроек в Map для хранения или передачи
   Map<String, dynamic> toJson() {
     return {
-      'themeMode': themeMode.name,
       'localeCode': localeCode,
+      'themeMode': themeMode.index,
     };
   }
 
   // Восстановление глобальных настроек из Map (JSON)
   factory GlobalSettings.fromJson(Map<String, dynamic> json) {
-    final themeName = json['themeMode'] as String?;
-
     return GlobalSettings(
-      themeMode: ThemeMode.values.firstWhere(
-            (mode) => mode.name == themeName,
-        orElse: () => defaults.themeMode,
-      ),
       localeCode: json['localeCode'] as String? ?? defaults.localeCode,
+      themeMode: AppThemeMode.values[(json['themeMode'] as int?) ?? defaults.themeMode.index],
     );
   }
 }

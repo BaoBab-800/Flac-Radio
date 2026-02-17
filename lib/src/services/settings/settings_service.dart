@@ -53,6 +53,14 @@ class SettingsService extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Установка языка
+  Future<void> setLocale(String localeCode) async {
+    _state =
+        _state.copyWith(global: _state.global.copyWith(localeCode: localeCode));
+    await _repository.save(_state);
+    notifyListeners();
+  }
+
   // Сброс настроек к значениям по умолчанию и очистка репозитория
   Future<void> reset() async {
     _state = SettingsDto.defaults;

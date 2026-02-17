@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 // Список действий для трёх точек
 enum _MenuAction { sort, }
@@ -78,7 +79,7 @@ class _RightSection extends StatelessWidget {
         // Сортировка
         PopupMenuItem(
           value: _MenuAction.sort,
-          child: Text("Сортировка"),
+          child: Text(context.l10n.sorting),
         ),
       ],
     );

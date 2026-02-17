@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:musicplayer/src/services/player/player_service.dart';
+import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 /*
   Общая идея:
@@ -32,7 +33,7 @@ class BottomPanelSection extends StatelessWidget {
 
           // Непосредственно панель
           return _PanelContents(
-            title: station.title,
+            titleKey: station.titleKey,
             isPlaying: isPlaying,
             isLoading: isLoading,
             onToggle: player.togglePlayPause,
@@ -46,13 +47,13 @@ class BottomPanelSection extends StatelessWidget {
 // Виджет
 class _PanelContents extends StatelessWidget {
   const _PanelContents({
-    required this.title,
+    required this.titleKey,
     required this.isPlaying,
     required this.isLoading,
     required this.onToggle,
   });
 
-  final String title;
+  final String titleKey;
   final bool isPlaying;
   final bool isLoading;
   final VoidCallback onToggle;
@@ -66,7 +67,7 @@ class _PanelContents extends StatelessWidget {
           // Название станции
           Expanded(
             child: Text(
-              title,
+              context.l10n.byKey(titleKey),
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
             ),
@@ -88,17 +89,3 @@ class _PanelContents extends StatelessWidget {
     );
   }
 }
-
-/*
-          // Плей/пауза
-          IconButton(
-            // Если загружается показать крутилку
-            icon: isLoading
-                ? const SizedBox(
-              width: 36,
-              height: 36,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            ) : Icon(isPlaying ? Icons.pause : Icons.play_arrow, size: 32), // Иначе плей/пауза
-            onPressed: isLoading ? null : onToggle,
-          ),
-*/

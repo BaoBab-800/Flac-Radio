@@ -1,54 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:musicplayer/src/services/settings/settings_service.dart';
+import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 /*
   Общая идея:
-  LanguageSection отображает UI для выбора языка приложения
-  Подписывается на SettingsService и обновляет глобальные настройки при выборе нового языка
+  LanguageSection отображает интерфейс для выбора языка приложения
+  1. Использует SettingsService для чтения и изменения текущей локали
+  2. Предоставляет DropdownButton со списком поддерживаемых языков
+  3. При выборе языка обновляет глобальные настройки через сервис
+  4. Подписывается на изменения настроек и автоматически обновляется
 */
 
 class LanguageSection extends StatelessWidget {
   const LanguageSection({super.key});
 
-  // Список поддерживаемых локалей
+  // Поддерживаемые языки приложения
   static const supportedLocales = {
     'en': 'English',
+    'uk': 'Українська',
     'ru': 'Русский',
   };
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsService>();  // Подписка на изменения глобальных настроек
-    final locale = settings.global.localeCode;          // Текущий выбранный язык
+    // Получение сервиса настроек и подписка на изменения
+    final settings = context.watch<SettingsService>();
 
-    // Отображение строки выбора языка
     return Column(
       children: [
-        Divider(),
+        const Divider(),
 
+        // Секция выбора языка
         ListTile(
-          title: const Text('Language'),
+          title: Text(
+            context.l10n.language,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
 
-          // Dropdown с выбором локали
           trailing: DropdownButton<String>(
-            value: locale,  // Текущий выбранный язык
+            value: settings.global.localeCode, // Текущий выбранный язык
             items: supportedLocales.entries
                 .map(
                   (e) => DropdownMenuItem(
-                value: e.key,     // Код локали
-                child: Text(e.value), // Название локали
+                value: e.key,
+                child: Text(e.value), // Отображение названия языка
               ),
             ).toList(),
 
-            // Обработка выбора нового языка
             onChanged: (value) {
-              if (value == null) return;  // Защита от null
-
-              // Обновление глобальных настроек с новым языком
-              settings.updateGlobal(
-                settings.global.copyWith(localeCode: value),
-              );
+              if (value != null) {
+                // Обновление глобальной локали через SettingsService
+                settings.setLocale(value);
+              }
             },
           ),
         ),
