@@ -1,18 +1,20 @@
 import 'package:musicplayer/src/data/radio/radio_station_model.dart';
 
 class AudioPlayerState {
+  static const _sentinel = Object();
+
   final RadioStationModel? currentStation;
   final bool isPlaying;
   final bool isLoading;
   final double volume;
-  final bool stopOnBackground;
+  final String? errorMessage;
 
   const AudioPlayerState({
     this.currentStation,
     required this.isPlaying,
     required this.isLoading,
     required this.volume,
-    required this.stopOnBackground,
+    this.errorMessage,
   });
 
   // Чистое/стартовое состояние плеера
@@ -21,21 +23,26 @@ class AudioPlayerState {
     isLoading: false,
     currentStation: null,
     volume: 1,
-    stopOnBackground: false,
+    errorMessage: null,
   );
 
   AudioPlayerState copyWith({
-    RadioStationModel? currentStation,
+    Object? currentStation = _sentinel,
     bool? isPlaying,
     bool? isLoading,
     double? volume,
+    Object? errorMessage = _sentinel,
   }) {
     return AudioPlayerState(
-      currentStation: currentStation ?? this.currentStation,
+      currentStation: currentStation == _sentinel
+          ? this.currentStation
+          : currentStation as RadioStationModel?,
       isPlaying: isPlaying ?? this.isPlaying,
       isLoading: isLoading ?? this.isLoading,
       volume: volume ?? this.volume,
-      stopOnBackground: stopOnBackground ?? this.stopOnBackground,
+      errorMessage: errorMessage == _sentinel
+          ? this.errorMessage
+          : errorMessage as String?,
     );
   }
 
@@ -47,9 +54,16 @@ class AudioPlayerState {
               currentStation == other.currentStation &&
               isPlaying == other.isPlaying &&
               isLoading == other.isLoading &&
-              volume == other.volume;
+              volume == other.volume &&
+              errorMessage == other.errorMessage;
 
   @override
   int get hashCode =>
-      currentStation.hashCode ^ isPlaying.hashCode ^ isLoading.hashCode ^ volume.hashCode;
+      Object.hash(
+        currentStation,
+        isPlaying,
+        isLoading,
+        volume,
+        errorMessage,
+      );
 }

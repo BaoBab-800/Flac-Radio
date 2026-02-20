@@ -1,47 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:musicplayer/src/data/theme/app_theme.dart';
+import 'package:musicplayer/src/services/theme/theme_settings_store.dart';
 
-// Сервис смены темы с сохранением настроек
 class ThemeService extends ChangeNotifier {
-  // Ключи
-  static const _keyThemeMode = 'theme_mode';
-  static const _keyThemeColor = 'theme_color';
+  final ThemeSettingsStore _store;
 
-  // Переменные текущего состояния
-  ThemeMode _themeMode = ThemeMode.system;
-  AppThemeColor _themeColor = AppThemeColor.red;
+  ThemeMode _themeMode = ThemeSettings.defaults.mode;
+  AppThemeColor _themeColor = ThemeSettings.defaults.color;
 
-  // Публичные геттеры
   ThemeMode get themeMode => _themeMode;
   AppThemeColor get themeColor => _themeColor;
 
-  // Загрузка настроек при запуске приложения
-  ThemeService() {
+  ThemeService(this._store) {
     _loadTheme();
   }
 
-  // Загрузка темы из локальной памяти
   Future<void> _loadTheme() async {
-    final prefs = await SharedPreferences.getInstance();
-    _themeMode = ThemeMode.values[prefs.getInt(_keyThemeMode) ?? 0];  // Загружает и тему
-    _themeColor = AppThemeColor.values[prefs.getInt(_keyThemeColor) ?? 0];  // И цвет темы
+    final settings = await _store.load();
+    _themeMode = settings.mode;
+    _themeColor = settings.color;
     notifyListeners();
   }
 
-  // Установка мода темы в память
   Future<void> setThemeMode(ThemeMode mode) async {
+    if (_themeMode == mode) return;
+
     _themeMode = mode;
     notifyListeners();
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setInt(_keyThemeMode, mode.index);
+    await _store.saveMode(mode);
   }
 
-  // Установка цвета темы в память
   Future<void> setThemeColor(AppThemeColor color) async {
+    if (_themeColor == color) return;
+
     _themeColor = color;
     notifyListeners();
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setInt(_keyThemeColor, color.index);
+    await _store.saveColor(color);
   }
 }

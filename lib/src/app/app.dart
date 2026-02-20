@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:musicplayer/src/app/app_localization_config.dart';
 import 'package:musicplayer/src/data/theme/app_theme.dart';
+import 'package:musicplayer/src/services/localization/context_l10n_extension.dart';
+import 'package:musicplayer/src/services/localization/localization_service.dart';
 import 'package:musicplayer/src/services/theme/theme_service.dart';
 
 class FlacRadioApp extends StatelessWidget {
@@ -9,17 +12,22 @@ class FlacRadioApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<ThemeService>();
+    final themeSettings = context.watch<ThemeService>();
+    final localizationSettings = context.watch<LocalizationService>();
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false, // Отключение баннера дебага
-      title: 'Flac Radio', // Название приложения
+      debugShowCheckedModeBanner: false,
+      title: 'Flac Radio',
 
-      theme: AppThemes.fromSettings(ThemeMode.light, settings.themeColor),
-      darkTheme: AppThemes.fromSettings(ThemeMode.dark, settings.themeColor),
-      themeMode: settings.themeMode,
+      localizationsDelegates: AppLocalizationConfig.localizationsDelegates,
+      supportedLocales: AppLocalizationConfig.supportedLocales,
+      locale: localizationSettings.locale,
 
-      home: _TestHomePage(),
+      theme: AppThemes.fromSettings(ThemeMode.light, themeSettings.themeColor),
+      darkTheme: AppThemes.fromSettings(ThemeMode.dark, themeSettings.themeColor),
+      themeMode: themeSettings.themeMode,
+
+      home: const _TestHomePage(),
     );
   }
 }
@@ -30,12 +38,31 @@ class _TestHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeService = context.watch<ThemeService>();
+    final localizationService = context.watch<LocalizationService>();
 
     return Scaffold(
       body: Center(
         child: Column(
           children: [
-            SizedBox(height: 70),
+            SizedBox(height: 100),
+            const SizedBox(height: 70),
+            Text(context.l10n.appTitle),
+            const SizedBox(height: 10),
+            DropdownButton<Locale>(
+              value: localizationService.locale,
+              items: LocalizationService.supportedLocales.map((locale) {
+                return DropdownMenuItem(
+                  value: locale,
+                  child: Text(locale.languageCode.toUpperCase()),
+                );
+              }).toList(),
+              onChanged: (locale) {
+                if (locale != null) {
+                  context.read<LocalizationService>().setLocale(locale);
+                }
+              },
+            ),
+            const SizedBox(height: 10),
             DropdownButton<ThemeMode>(
               value: themeService.themeMode,
               items: ThemeMode.values.map((mode) {
