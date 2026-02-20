@@ -1,64 +1,55 @@
-import 'package:musicplayer/src/core/error/app_error.dart';
-import 'package:musicplayer/src/data/radio/models/radio_station.dart';
-
-/*
-  Общая идея:
-  AudioPlayerState хранит состояние аудиоплеера в приложении
-  1. Отслеживает текущую выбранную радиостанцию
-  2. Хранит флаги воспроизведения и загрузки потока
-  3. Позволяет передавать информацию об ошибках через AppError
-  4. Поддерживает создание изменённых копий через copyWith
-  5. Используется PlayerService и UI для синхронизации состояния плеера
-*/
+import 'package:musicplayer/src/data/radio/radio_station_model.dart';
 
 class AudioPlayerState {
-  // Текущая выбранная радиостанция
-  final RadioStation? currentStation;
-
-  // Признак активного воспроизведения
+  final RadioStationModel? currentStation;
   final bool isPlaying;
-
-  // Признак процесса загрузки или инициализации потока
   final bool isLoading;
-
-  // Громкость
   final double volume;
+  final bool stopOnBackground;
 
-  // Сообщение об ошибке для отображения в UI
-  final AppError? error;
-
-  // Конструктор с обязательными флагами и необязательными полями
   const AudioPlayerState({
     this.currentStation,
     required this.isPlaying,
     required this.isLoading,
     required this.volume,
-    this.error,
+    required this.stopOnBackground,
   });
 
-  // Пустое состояние плеера по умолчанию
+  // Чистое/стартовое состояние плеера
   static const empty = AudioPlayerState(
     isPlaying: false,
     isLoading: false,
     currentStation: null,
     volume: 1,
-    error: null,
+    stopOnBackground: false,
   );
 
-  // Создание копии состояния с выборочным изменением полей
   AudioPlayerState copyWith({
+    RadioStationModel? currentStation,
     bool? isPlaying,
     bool? isLoading,
-    RadioStation? currentStation,
     double? volume,
-    AppError? error,
   }) {
     return AudioPlayerState(
+      currentStation: currentStation ?? this.currentStation,
       isPlaying: isPlaying ?? this.isPlaying,
       isLoading: isLoading ?? this.isLoading,
-      currentStation: currentStation ?? this.currentStation,
       volume: volume ?? this.volume,
-      error: error, // Если передан null, сбрасывает ошибку
+      stopOnBackground: stopOnBackground ?? this.stopOnBackground,
     );
   }
+
+  // Переопределение оператора для корректной работы _emit
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is AudioPlayerState &&
+              currentStation == other.currentStation &&
+              isPlaying == other.isPlaying &&
+              isLoading == other.isLoading &&
+              volume == other.volume;
+
+  @override
+  int get hashCode =>
+      currentStation.hashCode ^ isPlaying.hashCode ^ isLoading.hashCode ^ volume.hashCode;
 }

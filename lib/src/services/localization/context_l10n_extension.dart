@@ -5,7 +5,6 @@ extension LocalizationX on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;
 }
 
-// Преобразователь для модели радиостанций
 extension AppLocalizationsX on AppLocalizations {
   String byKey(String key) {
     final map = <String, String>{
