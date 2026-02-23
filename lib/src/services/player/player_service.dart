@@ -1,170 +1,167 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:musicplayer/src/core/error/app_error.dart';
 
-import 'package:musicplayer/src/data/radio/radio_station_model.dart';
-
+import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 import 'audio_player_state.dart';
 
+/*
+  Общая идея:
+  PlayerService управляет воспроизведением аудио и синхронизирует состояние AudioPlayer с состоянием приложения
+  1. Инкапсулирует работу с just_audio
+  2. Подписывается на стримы плеера и обновляет AudioPlayerState
+  3. Предоставляет методы управления воспроизведением
+  4. Уведомляет UI об изменениях через ChangeNotifier
+*/
+
 class PlayerService extends ChangeNotifier {
-  final AudioPlayer _audioPlayer;
-  StreamSubscription<PlayerState>? _playerStateSubscription;
+  final AudioPlayer _audioPlayer; // Низкоуровневый аудиоплеер
 
   PlayerService(this._audioPlayer) {
+    // Подписка на события плеера при создании сервиса
     _listenToPlayer();
   }
 
-  AudioPlayerState _state = AudioPlayerState.empty;
-  AudioPlayerState get state => _state;
+  AudioPlayerState _state = AudioPlayerState.empty; // Текущее состояние плеера
+  AudioPlayerState get state => _state; // Доступ к состоянию для UI
 
+  // Обновление состояния и уведомление слушателей
   void _emit(AudioPlayerState newState) {
-    if (_state == newState) return;
+    if (_state == newState) return; // Защита от лишних notifyListeners при неизменном состоянии
     _state = newState;
     notifyListeners();
   }
 
-  // Подписка и обработка стриа аудио
+  // Подписка на стримы AudioPlayer
+  // Синхронизация внутреннего состояния приложения с состоянием плеера
   void _listenToPlayer() {
-    _playerStateSubscription = _audioPlayer.playerStateStream.listen(
-            (playerState) {
-          final isPlaying = playerState.playing;
-          final processingState = playerState.processingState;
-          final isLoading = processingState == ProcessingState.loading ||
-              processingState == ProcessingState.buffering;
+    _audioPlayer.playerStateStream.listen((playerState) {
+      final isPlaying = playerState.playing;
+      final processingState = playerState.processingState;
 
-          if (processingState == ProcessingState.completed) {
-            _emit(
-              _state.copyWith(
-                isPlaying: false,
-                isLoading: false,
-                errorMessage: null,
-              ),
-            );
-            return;
-          }
+      // Определение состояния загрузки на основе ProcessingState
+      final isLoading = processingState == ProcessingState.loading ||
+          processingState == ProcessingState.buffering;
 
-          _emit(
-            _state.copyWith(
-              isPlaying: isPlaying,
-              isLoading: isLoading,
-              errorMessage: null,
-            ),
-          );
-        },
-        onError: (Object error, StackTrace stackTrace) {
-          _emit(
-            _state.copyWith(
-              isPlaying: false,
-              isLoading: false,
-              errorMessage: error.toString(),
-            ),
-          );
-        }
-    );
-  }
-
-  Future<void> play(RadioStationModel station) async {
-    try {
-      if (_state.currentStation?.id == station.id) {
-        if (!_audioPlayer.playing) await _audioPlayer.play();
+      // Обработка завершения воспроизведения
+      if (processingState == ProcessingState.completed) {
+        _emit(
+          _state.copyWith(
+            isPlaying: false,
+            isLoading: false,
+          ),
+        );
         return;
       }
 
+      // Синхронизация состояния воспроизведения и загрузки
       _emit(
         _state.copyWith(
-          currentStation: station,
-          isLoading: true,
-          errorMessage: null,
+          isPlaying: isPlaying,
+          isLoading: isLoading,
+          error: null,
         ),
       );
+    });
 
+    // Обработка ошибок стрима воспроизведения
+    _audioPlayer.playbackEventStream.listen(
+          (event) {},
+      onError: (e, st) {
+        debugPrint('Playback stream error: $e\n$st');
+
+        _emit(
+          _state.copyWith(
+            isPlaying: false,
+            isLoading: false,
+            error: AppError.playbackStart,
+          ),
+        );
+      },
+    );
+  }
+
+  // Запуск воспроизведения выбранной радиостанции
+  Future<void> play(RadioStation station) async {
+    // Если выбрана та же станция выполняется только возобновление воспроизведения
+    if (_state.currentStation?.id == station.id) {
+      if (!_audioPlayer.playing) {
+        await _audioPlayer.play();
+      }
+      return;
+    }
+
+    // Обновление текущей станции до загрузки потока
+    _emit(
+      _state.copyWith(
+        currentStation: station,
+        error: null,
+      ),
+    );
+
+    try {
+      // Установка URL потока и запуск воспроизведения
       await _audioPlayer.setAudioSource(
         AudioSource.uri(
           station.streamUrl,
           headers: {
-            'User-Agent': 'Mozilla/5.0 (Android)',
-            'Accept': '*/*',
-            'Connection': 'keep-alive',
+            "User-Agent": "Mozilla/5.0 (Android)",
+            "Accept": "*/*",
+            "Connection": "keep-alive",
           },
         ),
       );
 
       await _audioPlayer.play();
-    } catch (error, _) {
+    } catch (e, st) {
+      debugPrint('PlayerService.play error: $e\n$st');
+
+      // Обработка ошибки запуска воспроизведения
       _emit(
         _state.copyWith(
           isPlaying: false,
           isLoading: false,
-          errorMessage: error.toString(),
+          error: AppError.playbackStart,
         ),
       );
     }
   }
 
-  // Переключение пауза/плей
+  // Переключение между паузой и воспроизведением
+  // Логика опирается на реальное состояние AudioPlayer
   Future<void> togglePlayPause() async {
     try {
-      if (_audioPlayer.playing) {
-        await _audioPlayer.pause();
-      } else {
+      if (_audioPlayer.playing) await _audioPlayer.pause();
+      else {
         await _audioPlayer.play();
       }
-    } catch (error, _) {
+    } catch (e, st) {
+      debugPrint('PlayerService.toggle error: $e\n$st');
+
       _emit(
         _state.copyWith(
-          isPlaying: false,
-          isLoading: false,
-          errorMessage: error.toString(),
+          error: AppError.playbackControl,
         ),
       );
     }
   }
 
-  // Остановка плеера
+  // Полная остановка воспроизведения и сброс состояния
   Future<void> stop() async {
-    try {
-      await _audioPlayer.stop();
-      _emit(
-        _state.copyWith(
-          currentStation: null,
-          isPlaying: false,
-          isLoading: false,
-          errorMessage: null,
-        ),
-      );
-    } catch (error, _) {
-      _emit(
-        _state.copyWith(
-          isPlaying: false,
-          isLoading: false,
-          errorMessage: error.toString(),
-        ),
-      );
-    }
+    await _audioPlayer.stop();
+    _emit(AudioPlayerState.empty);
   }
 
-  // Установка громкости
+  // Управление громкостью
   Future<void> setVolume(double volume) async {
-    try {
-      await _audioPlayer.setVolume(volume);
-      _emit(
-        _state.copyWith(
-          volume: volume,
-          errorMessage: null,
-        ),
-      );
-    } catch (error, _) {
-      _emit(
-        _state.copyWith(errorMessage: error.toString()),
-      );
-    }
+    await _audioPlayer.setVolume(volume);
+    _emit(_state.copyWith(volume: volume));
   }
 
-// Очистка ресурсов плеера
+  // Освобождение ресурсов плеера
   @override
   void dispose() {
-    _playerStateSubscription?.cancel();
+    _audioPlayer.dispose();
     super.dispose();
   }
 }

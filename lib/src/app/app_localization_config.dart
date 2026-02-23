@@ -13,6 +13,5 @@ class AppLocalizationConfig {
   static const supportedLocales = [
     Locale('en'),
     Locale('uk'),
-    Locale('ru'),
   ];
 }

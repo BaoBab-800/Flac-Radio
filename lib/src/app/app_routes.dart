@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-// import 'package:musicplayer/src/ui/main/main_page_builder.dart';
-// import 'package:musicplayer/src/ui/settings/settings_page_builder.dart';
-// import 'package:musicplayer/src/ui/about/about.dart';
+import 'package:musicplayer/src/features/main/main_page_builder.dart';
+import 'package:musicplayer/src/features/settings/settings_page_builder.dart';
+import 'package:musicplayer/src/features/about/about.dart';
 
 enum AppRoute {
   main,
@@ -25,8 +25,8 @@ extension AppRoutePath on AppRoute {
 
 class AppRoutes {
   static final routes = <String, WidgetBuilder>{
-    // AppRoute.main.path: (_) => const MainPageBuilder(),
-    // AppRoute.settings.path: (_) => const SettingsPageBuilder(),
-    // AppRoute.about.path: (_) => const About(),
+    AppRoute.main.path: (_) => const MainPageBuilder(),
+    AppRoute.settings.path: (_) => const SettingsPageBuilder(),
+    AppRoute.about.path: (_) => const About(),
   };
 }
