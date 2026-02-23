@@ -15,15 +15,7 @@ class Header extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(height: 20),
-
-          // Горизонтальная линия приколов (я не знаю как это назвать)
-          Row(
-            children: [
-              _LeftSection(), // "Flac Radio"
-              Spacer(), // Разделитель на оставшееся простансво
-              _RightSection(),  // Три точки "больше"
-            ],
-          ),
+          _LeftSection(), // "Flac Radio"
           Divider(),  // Для красоты
         ],
       ),

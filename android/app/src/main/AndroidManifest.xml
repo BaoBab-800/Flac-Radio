@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="musicplayer"
+        android:label="Flac Radio"
         android:name="${applicationName}"
-        android:icon="@drawable/launch_background"
+        android:icon="@mipmap/ic_launcher"
         android:networkSecurityConfig="@xml/network_security_config">
         <activity
             android:name=".MainActivity"

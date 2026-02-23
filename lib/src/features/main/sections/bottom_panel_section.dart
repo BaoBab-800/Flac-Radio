@@ -9,7 +9,6 @@ import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
   1. Реализация панели управления плеером
   2. Отображение текущей станции
   3. Кнопка пауза/плей
-  TODO: Сделать переключение станций
 */
 
 // Логика виджета
@@ -34,9 +33,12 @@ class BottomPanelSection extends StatelessWidget {
           // Непосредственно панель
           return _PanelContents(
             titleKey: station.titleKey,
+            imageUrl: station.imageUrl,
             isPlaying: isPlaying,
             isLoading: isLoading,
             onToggle: player.togglePlayPause,
+            onNext: player.nextStation,
+            onPrev: player.previousStation,
           );
         },
       ),
@@ -48,41 +50,73 @@ class BottomPanelSection extends StatelessWidget {
 class _PanelContents extends StatelessWidget {
   const _PanelContents({
     required this.titleKey,
+    required this.imageUrl,
     required this.isPlaying,
     required this.isLoading,
     required this.onToggle,
+    required this.onNext,
+    required this.onPrev,
   });
 
   final String titleKey;
+  final Uri? imageUrl;
   final bool isPlaying;
   final bool isLoading;
   final VoidCallback onToggle;
+  final VoidCallback onNext;
+  final VoidCallback onPrev;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
       child: Row(
         children: [
-          // Название станции
-          Expanded(
-            child: Text(
-              context.l10n.byKey(titleKey),
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              overflow: TextOverflow.ellipsis,
-            ),
+          // Иконка станции
+          CircleAvatar(
+            backgroundImage: imageUrl != null ? NetworkImage(imageUrl.toString()) : null,
+            child: imageUrl == null ? Icon(Icons.album) : null,
           ),
 
-          isLoading
-              ? const SizedBox(
-            width: 32,
-            height: 32,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          )
-              : IconButton(
-            iconSize: 32,
-            icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
-            onPressed: onToggle,
+          const SizedBox(width: 16),
+
+          // Название станции
+          Text(
+            context.l10n.byKey(titleKey),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            overflow: TextOverflow.ellipsis,
+          ),
+
+          Spacer(),
+
+          // Кнопки управления плеером
+          Row(
+            children: [
+              // Назад
+              IconButton(
+                onPressed: onPrev,
+                icon: Icon(Icons.arrow_left, size: 36),
+              ),
+
+              // Плей/пауза
+              isLoading
+                  ? const SizedBox(
+                width: 32,
+                height: 32,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+                  : IconButton(
+                iconSize: 32,
+                icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                onPressed: onToggle,
+              ),
+
+              // Вперёд
+              IconButton(
+                onPressed: onNext,
+                icon: Icon(Icons.arrow_right, size: 36),
+              ),
+            ],
           ),
         ],
       ),

@@ -50,12 +50,6 @@ class RadioStationFeedViewModel extends ChangeNotifier {
     playerService.play(station);
   }
 
-  // Заглушка для закрепления станции
-  // TODO: Потом сделать полноценно
-  void secureStation(RadioStation station) {
-    debugPrint('Станция закреплена: ${station.titleKey}');
-  }
-
   // Удобное свойство для проверки, что список пуст и загрузка завершена
   bool get isEmpty => !isLoading && (stations == null || stations!.isEmpty);
 }

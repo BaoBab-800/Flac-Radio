@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musicplayer/src/core/error/app_error.dart';
-
 import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 import 'audio_player_state.dart';
 
@@ -24,6 +23,9 @@ class PlayerService extends ChangeNotifier {
 
   AudioPlayerState _state = AudioPlayerState.empty; // Текущее состояние плеера
   AudioPlayerState get state => _state; // Доступ к состоянию для UI
+
+  List<RadioStation> stations = [];
+  int _currentIndex = 0;
 
   // Обновление состояния и уведомление слушателей
   void _emit(AudioPlayerState newState) {
@@ -83,13 +85,16 @@ class PlayerService extends ChangeNotifier {
 
   // Запуск воспроизведения выбранной радиостанции
   Future<void> play(RadioStation station) async {
-    // Если выбрана та же станция выполняется только возобновление воспроизведения
+    // Если выбранная станция уже воспроизводится — просто возобновляем
     if (_state.currentStation?.id == station.id) {
       if (!_audioPlayer.playing) {
         await _audioPlayer.play();
       }
       return;
     }
+
+    // Обновляем текущий индекс станции
+    _currentIndex = stations.indexWhere((s) => s.id == station.id);
 
     // Обновление текущей станции до загрузки потока
     _emit(
@@ -128,13 +133,10 @@ class PlayerService extends ChangeNotifier {
   }
 
   // Переключение между паузой и воспроизведением
-  // Логика опирается на реальное состояние AudioPlayer
   Future<void> togglePlayPause() async {
     try {
       if (_audioPlayer.playing) await _audioPlayer.pause();
-      else {
-        await _audioPlayer.play();
-      }
+      else await _audioPlayer.play();
     } catch (e, st) {
       debugPrint('PlayerService.toggle error: $e\n$st');
 
@@ -156,6 +158,26 @@ class PlayerService extends ChangeNotifier {
   Future<void> setVolume(double volume) async {
     await _audioPlayer.setVolume(volume);
     _emit(_state.copyWith(volume: volume));
+  }
+
+  // Переключение на следующую станцию по кругу
+  void nextStation() {
+    if (stations.isEmpty) return;
+
+    _currentIndex = (_currentIndex + 1) % stations.length;
+
+    // Обновляем текущее состояние станции
+    _emit(_state.copyWith(currentStation: stations[_currentIndex]));
+  }
+
+  // Переключение на предыдущую станцию по кругу
+  void previousStation() {
+    if (stations.isEmpty) return;
+
+    _currentIndex = (_currentIndex - 1 + stations.length) % stations.length;
+
+    // Обновляем текущее состояние станции
+    _emit(_state.copyWith(currentStation: stations[_currentIndex]));
   }
 
   // Освобождение ресурсов плеера

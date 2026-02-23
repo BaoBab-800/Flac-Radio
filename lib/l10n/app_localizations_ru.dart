@@ -54,8 +54,26 @@ class AppLocalizationsRu extends AppLocalizations {
   String get resetSettings => 'Сбросить настройки';
 
   @override
+  String get doYouWantToResetTheSettings => 'Вы хотите сбросить настройки?';
+
+  @override
+  String get yes => 'Да';
+
+  @override
+  String get no => 'Нет';
+
+  @override
+  String get settingsResetWarning => 'Не сбрасывайте настройки 7 раз подряд!';
+
+  @override
   String get stopAudioWhenMinimizingTheApplication => 'Останавливать аудио при сворачивании приложения';
 
   @override
-  String get aboutPageContent => '';
+  String get aboutGreetings => 'Всем привет!';
+
+  @override
+  String get aboutPageContent => 'Меня зовут Иван, я разработчик приложения Flac Radio.\nЯ создал это приложение как учебный проект, по тому что люблю слушать музыку и хочу чтоб музыку слушали все без каких-либо ограничений. Не хочу много тут писать.\nНастаждайтесь музыкой!';
+
+  @override
+  String get aboutSupport => 'А также можете поддержать разработчика копеечкой по ссылке\n(сслыка)';
 }

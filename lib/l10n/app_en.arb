@@ -15,6 +15,12 @@
   "player": "Player",
   "volume": "Volume",
   "resetSettings": "Reset settings",
+  "doYouWantToResetTheSettings": "Do you want to reset the settings?",
+  "yes": "Yes",
+  "no": "No",
+  "settingsResetWarning": "Don't reset the settings 7 times in a row!",
   "stopAudioWhenMinimizingTheApplication": "Stop audio when minimizing the application",
-  "aboutPageContent": ""
+  "aboutGreetings": "Hello everyone!",
+  "aboutPageContent": "My name is Ivan, and I'm the developer of the Flak Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I don't want to write too much here.\nEnjoy the music!",
+  "aboutSupport": "You can also support the developer with a small donation using the link\n(link)"
 }

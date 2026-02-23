@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import 'package:musicplayer/src/app/app_routes.dart';
+
 import 'package:musicplayer/src/services/settings/settings_service.dart';
 import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
@@ -12,9 +16,52 @@ import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 class ResetSection extends StatelessWidget {
   const ResetSection({super.key});
 
+  // Диалог подтверждения
+  void resetConfirmationDialog(BuildContext context) {
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        final settings = context.read<SettingsService>(); // Подписка на изменения глобальных настроек
+
+        return AlertDialog(
+          // Заголовок
+          content: Text(
+            context.l10n.doYouWantToResetTheSettings,
+            style: TextStyle(fontSize: 16),
+          ),
+          // Да/Нет
+          actions: [
+            TextButton(
+              onPressed: () {
+                settings.reset();
+
+                Navigator.of(context).pop();
+
+                // При седьмом сбросе настроек подряд переброс на загадочную страницу
+                if (settings.shouldOpenMysteriousPage) {
+                  Navigator.pushNamed(context, AppRoute.mysteriousPage.path);
+                  settings.resetCounter();
+                }
+              },
+              child: Text(context.l10n.yes),
+            ),
+
+            TextButton(
+              onPressed: () {
+                settings.resetCounter();
+                Navigator.of(context).pop();
+              },
+              child: Text(context.l10n.no),
+            ),
+          ],
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final settings = context.read<SettingsService>(); // Подписка на изменения глобальных настроек
 
     return Column(
       children: [
@@ -27,9 +74,9 @@ class ResetSection extends StatelessWidget {
             style: TextStyle(color: Colors.red),
           ),
 
-          // При нажатии сбрасывает настройки (потом добавить диалог подтверждения)
-          onTap: () async {
-            await settings.reset();
+          // При нажатии вызывает диалог подтверждения
+          onTap: ()  {
+            resetConfirmationDialog(context);
           },
         ),
       ],

@@ -187,17 +187,53 @@ abstract class AppLocalizations {
   /// **'Reset settings'**
   String get resetSettings;
 
+  /// No description provided for @doYouWantToResetTheSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to reset the settings?'**
+  String get doYouWantToResetTheSettings;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @settingsResetWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t reset the settings 7 times in a row!'**
+  String get settingsResetWarning;
+
   /// No description provided for @stopAudioWhenMinimizingTheApplication.
   ///
   /// In en, this message translates to:
   /// **'Stop audio when minimizing the application'**
   String get stopAudioWhenMinimizingTheApplication;
 
+  /// No description provided for @aboutGreetings.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello everyone!'**
+  String get aboutGreetings;
+
   /// No description provided for @aboutPageContent.
   ///
   /// In en, this message translates to:
-  /// **''**
+  /// **'My name is Ivan, and I\'m the developer of the Flak Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I don\'t want to write too much here.\nEnjoy the music!'**
   String get aboutPageContent;
+
+  /// No description provided for @aboutSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'You can also support the developer with a small donation using the link\n(link)'**
+  String get aboutSupport;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

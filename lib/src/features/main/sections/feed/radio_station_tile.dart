@@ -49,26 +49,6 @@ class RadioStationTile extends StatelessWidget {
         child: Icon(Icons.album),
       ),
 
-      // Контекстное меню с дополнительными действиями
-      trailing: PopupMenuButton<_RadioStationActions>(
-        icon: Icon(Icons.more_vert),
-        onSelected: (action) {
-          debugPrint('Выбрано действие: $action для ${station.titleKey}');
-        },
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            value: _RadioStationActions.secure,
-            child: Row(
-              children: [
-                const Icon(Icons.push_pin, size: 20),
-                const SizedBox(width: 10),
-                Text(context.l10n.byKey('secureStation')),
-              ],
-            ),
-          ),
-        ],
-      ),
-
       // Воспроизведение радиостанции по нажатию
       onTap: onTap,
     );

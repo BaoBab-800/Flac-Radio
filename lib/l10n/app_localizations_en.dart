@@ -54,8 +54,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetSettings => 'Reset settings';
 
   @override
+  String get doYouWantToResetTheSettings => 'Do you want to reset the settings?';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get settingsResetWarning => 'Don\'t reset the settings 7 times in a row!';
+
+  @override
   String get stopAudioWhenMinimizingTheApplication => 'Stop audio when minimizing the application';
 
   @override
-  String get aboutPageContent => '';
+  String get aboutGreetings => 'Hello everyone!';
+
+  @override
+  String get aboutPageContent => 'My name is Ivan, and I\'m the developer of the Flak Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I don\'t want to write too much here.\nEnjoy the music!';
+
+  @override
+  String get aboutSupport => 'You can also support the developer with a small donation using the link\n(link)';
 }

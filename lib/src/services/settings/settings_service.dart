@@ -33,6 +33,10 @@ class SettingsService extends ChangeNotifier {
   // Доступ к настройкам плеера
   PlayerSettings get player => _state.player;
 
+  // Магическое число
+  int _mysteriousCounter = 0;
+  bool get shouldOpenMysteriousPage => _mysteriousCounter == 7;
+
   // Инициализация сервиса с загрузкой настроек из репозитория
   Future<void> init() async {
     _state = await _repository.load();
@@ -63,8 +67,14 @@ class SettingsService extends ChangeNotifier {
 
   // Сброс настроек к значениям по умолчанию и очистка репозитория
   Future<void> reset() async {
+    _mysteriousCounter++;
     _state = SettingsDto.defaults;
     await _repository.reset();
     notifyListeners();
+  }
+
+  // Сброс магического числа
+  void resetCounter() {
+    _mysteriousCounter = 0;
   }
 }
