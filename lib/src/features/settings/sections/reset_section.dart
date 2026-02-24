@@ -65,7 +65,7 @@ class ResetSection extends StatelessWidget {
 
     return Column(
       children: [
-        Divider(),
+        const Divider(indent: 6, endIndent: 6),
 
         ListTile(
           // Заголовок

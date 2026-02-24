@@ -5,6 +5,7 @@ enum AppThemeMode { light, dark }
 
 // модель темы приложения
 // хранит основные цвета и тип темы
+// цвета будут проксироваться через ThemeExtension (AppColors).
 class AppTheme {
   final AppThemeMode type;  // тип темы для логики переключения
   final Color primaryColor; // основной цвет интерфейса

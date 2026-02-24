@@ -72,8 +72,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get aboutGreetings => 'Всем привет!';
 
   @override
-  String get aboutPageContent => 'Меня зовут Иван, я разработчик приложения Flac Radio.\nЯ создал это приложение как учебный проект, по тому что люблю слушать музыку и хочу чтоб музыку слушали все без каких-либо ограничений. Не хочу много тут писать.\nНастаждайтесь музыкой!';
+  String get aboutPageContent => 'Меня зовут Иван, я разработчик приложения Flac Radio.\nЯ создал это приложение как учебный проект, по тому что люблю слушать музыку и хочу чтоб музыку слушали все без каких-либо ограничений. Не хочу много тут писать.';
 
   @override
-  String get aboutSupport => 'А также можете поддержать разработчика копеечкой по ссылке\n(сслыка)';
+  String get aboutEnjoy => 'Настаждайтесь музыкой!';
+
+  @override
+  String get aboutLinks => 'Ссылки:';
+
+  @override
+  String get abourGithub => 'GitHub проекта';
+
+  @override
+  String get aboutSupport => 'Поддержите проект на Patreon';
 }

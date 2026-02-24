@@ -22,7 +22,7 @@ class AppearanceSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Divider(),
+        const Divider(indent: 6, endIndent: 6),
 
         // Верх колонки
         ListTile(

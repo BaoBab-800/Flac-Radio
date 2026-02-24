@@ -33,11 +33,11 @@ class _DrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 26, top: 32, right: 12, bottom: 6), // внутренние отступы
+      padding: EdgeInsets.only(left: 24, top: 28, right: 12, bottom: 4), // внутренние отступы
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(context.l10n.menu, style: TextStyle(fontSize: 24)), // Заголовок
+          Text(context.l10n.menu, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500)), // Заголовок
 
           // Кнопка закрытия меню
           IconButton(

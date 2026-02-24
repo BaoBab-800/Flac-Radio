@@ -18,6 +18,7 @@ dependencies:
   provider: ^6.0.5
   shared_preferences: ^2.2.1
   collection: ^1.18.0
+  url_launcher: ^6.2.5
   flutter_localizations:
     sdk: flutter
 
@@ -38,4 +39,4 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    - assets/images/sem.jpg
+    - assets/images/

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
-enum _RadioStationActions { secure }
-
 /*
   Общая идея:
   RadioStationTile расширенный виджет для отображения радиостанции в списке
@@ -42,9 +40,9 @@ class RadioStationTile extends StatelessWidget {
       // Аватар радиостанции:
       // Если задан imageUrl отображается изображение из сети
       // Если нет показывается иконка по умолчанию
-      leading: station.imageUrl != null
+      leading: station.imagePath != null
           ? CircleAvatar(
-        backgroundImage: NetworkImage(station.imageUrl.toString()),
+        backgroundImage: AssetImage(station.imagePath!),
       ) : const CircleAvatar(
         child: Icon(Icons.album),
       ),

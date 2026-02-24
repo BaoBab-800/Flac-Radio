@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicplayer/src/core/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 
 import 'package:musicplayer/src/services/player/player_service.dart';
@@ -18,6 +19,8 @@ class BottomPanelSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      color: context.colors.onBackground,
+
       child: Consumer<PlayerService>(
         builder: (context, player, child) {
           // Параметры панели
@@ -33,7 +36,7 @@ class BottomPanelSection extends StatelessWidget {
           // Непосредственно панель
           return _PanelContents(
             titleKey: station.titleKey,
-            imageUrl: station.imageUrl,
+            imagePath: station.imagePath,
             isPlaying: isPlaying,
             isLoading: isLoading,
             onToggle: player.togglePlayPause,
@@ -50,7 +53,7 @@ class BottomPanelSection extends StatelessWidget {
 class _PanelContents extends StatelessWidget {
   const _PanelContents({
     required this.titleKey,
-    required this.imageUrl,
+    required this.imagePath,
     required this.isPlaying,
     required this.isLoading,
     required this.onToggle,
@@ -59,7 +62,7 @@ class _PanelContents extends StatelessWidget {
   });
 
   final String titleKey;
-  final Uri? imageUrl;
+  final String? imagePath;
   final bool isPlaying;
   final bool isLoading;
   final VoidCallback onToggle;
@@ -69,13 +72,14 @@ class _PanelContents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
+      padding: const EdgeInsets.only(left: 2, right: 2),
+
       child: Row(
         children: [
           // Иконка станции
           CircleAvatar(
-            backgroundImage: imageUrl != null ? NetworkImage(imageUrl.toString()) : null,
-            child: imageUrl == null ? Icon(Icons.album) : null,
+            backgroundImage: imagePath != null ? AssetImage(imagePath!) : null,
+            child: imagePath == null ? Icon(Icons.album) : null,
           ),
 
           const SizedBox(width: 16),
@@ -97,6 +101,7 @@ class _PanelContents extends StatelessWidget {
                 onPressed: onPrev,
                 icon: Icon(Icons.arrow_left, size: 36),
               ),
+              const SizedBox(width: 4),
 
               // Плей/пауза
               isLoading
@@ -106,10 +111,11 @@ class _PanelContents extends StatelessWidget {
                 child: CircularProgressIndicator(strokeWidth: 2),
               )
                   : IconButton(
-                iconSize: 32,
+                iconSize: 34,
                 icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
                 onPressed: onToggle,
               ),
+              const SizedBox(width: 4),
 
               // Вперёд
               IconButton(

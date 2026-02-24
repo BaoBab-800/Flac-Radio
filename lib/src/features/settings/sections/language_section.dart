@@ -29,7 +29,7 @@ class LanguageSection extends StatelessWidget {
 
     return Column(
       children: [
-        const Divider(),
+        const Divider(indent: 6, endIndent: 6),
 
         // Секция выбора языка
         ListTile(

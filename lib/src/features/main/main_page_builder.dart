@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicplayer/src/core/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 
 import 'package:musicplayer/src/services/player/player_service.dart';
@@ -13,6 +14,8 @@ class MainPageBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.colors.background,
+
       // Кастомный Drawer
       drawerEnableOpenDragGesture: false,
       drawer: MainPageDrawer(),
@@ -24,6 +27,7 @@ class MainPageBuilder extends StatelessWidget {
           Expanded(child: RadioStationFeed()),
         ],
       ),
+
       // Нижняя панель управления плеером
       bottomNavigationBar: context.watch<PlayerService>().state.currentStation == null
           ? null

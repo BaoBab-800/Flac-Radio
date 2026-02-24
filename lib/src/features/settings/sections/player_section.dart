@@ -21,7 +21,7 @@ class PlayerSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Divider(),
+        const Divider(indent: 6, endIndent: 6),
 
         // Заголовок секции
         ListTile(

@@ -18,7 +18,7 @@ class LocalRadioStationRepository implements RadioStationRepository {
       id: 'rock',
       titleKey: 'rockRadio',
       streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
-      imageUrl: Uri.parse('https://e7.pngegg.com/pngimages/72/807/png-clipart-guitar-hero-rock-logo-bass-guitar-guitar-text-logo-thumbnail.png'),
+      imagePath: 'assets/images/rock_icon.png',
     ),
     // Metal
     RadioStation(
@@ -31,6 +31,7 @@ class LocalRadioStationRepository implements RadioStationRepository {
       id: 'jazz',
       titleKey: 'jazzRadio',
       streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
+      imagePath: 'assets/images/jazz_icon.png'
     ),
     // Pop
     RadioStation(

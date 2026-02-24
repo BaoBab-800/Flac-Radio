@@ -72,8 +72,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutGreetings => 'Hello everyone!';
 
   @override
-  String get aboutPageContent => 'My name is Ivan, and I\'m the developer of the Flak Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I don\'t want to write too much here.\nEnjoy the music!';
+  String get aboutPageContent => 'My name is Ivan, and I\'m the developer of the Flak Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I don\'t want to write too much here.';
 
   @override
-  String get aboutSupport => 'You can also support the developer with a small donation using the link\n(link)';
+  String get aboutEnjoy => 'Enjoy the music!';
+
+  @override
+  String get aboutLinks => 'Links:';
+
+  @override
+  String get abourGithub => 'Project GitHub';
+
+  @override
+  String get aboutSupport => 'Support the project on Patreon';
 }

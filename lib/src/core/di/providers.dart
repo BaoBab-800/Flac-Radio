@@ -1,14 +1,15 @@
 import 'package:just_audio/just_audio.dart';
-import 'package:musicplayer/src/services/theme/theme_service.dart';
+import 'package:musicplayer/src/services/theme/theme_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import 'package:musicplayer/src/data/radio/repository/local_radio_station_repository.dart';
 import 'package:musicplayer/src/features/main/sections/feed/radio_station_feed_vm.dart';
 import 'package:musicplayer/src/core/settings/settings_repository.dart';
 import 'package:musicplayer/src/core/settings/shared_prefs_settings_repository.dart';
 import 'package:musicplayer/src/services/player/player_service.dart';
 import 'package:musicplayer/src/services/settings/settings_service.dart';
-import 'package:musicplayer/src/data/radio/repository/local_radio_station_repository.dart';
+import 'package:musicplayer/src/services/url/url_launcher_service.dart';
 import 'package:musicplayer/src/services/settings/app_lifecycle_service.dart';
 
 /*
@@ -63,6 +64,11 @@ final List<SingleChildWidget> appProviders = [
       repository: context.read<LocalRadioStationRepository>(),
       playerService: context.read<PlayerService>(),
     ),
+  ),
+
+  // Провайдер сервиса url-ов
+  Provider<UrlLauncherService>(
+    create: (_) => UrlLauncherService(),
   ),
 
   // AppLifecycleService без ChangeNotifier, просто как Provider

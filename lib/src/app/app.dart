@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'app_routes.dart';
+
 import 'app_localization_config.dart';
-import 'package:musicplayer/src/services/theme/theme_service.dart';
+
+import 'package:musicplayer/src/core/theme/app_theme.dart';
+import 'package:musicplayer/src/core/theme/app_theme_catalog.dart';
+import 'package:musicplayer/src/core/theme/theme_data_factory.dart';
+import 'package:musicplayer/src/services/theme/theme_controller.dart';
+
 import 'package:musicplayer/src/services/settings/settings_service.dart';
 
 /*
@@ -30,9 +36,10 @@ class FlacRadioApp extends StatelessWidget {
       supportedLocales: AppLocalizationConfig.supportedLocales,
       locale: Locale(context.watch<SettingsService>().global.localeCode),
 
-      theme: ThemeData.light(), // Светлая тема
-      darkTheme: ThemeData.dark(), // Тёмная тема
-      themeMode: themeService.flutterThemeMode, // Динамический выбор темы из ThemeService
+      // Светлая и тёмная темы
+      theme: ThemeDataFactory.fromAppTheme(AppThemes.byType(AppThemeMode.light)),
+      darkTheme: ThemeDataFactory.fromAppTheme(AppThemes.byType(AppThemeMode.dark)),
+      themeMode: themeService.flutterThemeMode, // Динамический выбор темы из ThemeController
 
       initialRoute: AppRoute.main.path,
       routes: AppRoutes.routes,

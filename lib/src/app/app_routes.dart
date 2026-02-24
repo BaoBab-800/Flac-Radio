@@ -5,13 +5,15 @@ import 'package:musicplayer/src/features/settings/settings_page_builder.dart';
 import 'package:musicplayer/src/features/about/about.dart';
 import 'package:musicplayer/src/features/mysterious_page.dart';
 
+// Список маршрутов
 enum AppRoute {
   main,
   settings,
   about,
-  mysteriousPage
+  mysteriousPage,
 }
 
+// Свич для удобства
 extension AppRoutePath on AppRoute {
   String get path {
     switch (this) {
@@ -27,6 +29,7 @@ extension AppRoutePath on AppRoute {
   }
 }
 
+// Инициализация путей
 class AppRoutes {
   static final routes = <String, WidgetBuilder>{
     AppRoute.main.path: (_) => const MainPageBuilder(),

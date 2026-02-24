@@ -9,7 +9,7 @@ import 'audio_player_state.dart';
   PlayerService управляет воспроизведением аудио и синхронизирует состояние AudioPlayer с состоянием приложения
   1. Инкапсулирует работу с just_audio
   2. Подписывается на стримы плеера и обновляет AudioPlayerState
-  3. Предоставляет методы управления воспроизведением
+  3. Предоставляет методы управления воспроизведением и переключением станций
   4. Уведомляет UI об изменениях через ChangeNotifier
 */
 
@@ -160,24 +160,22 @@ class PlayerService extends ChangeNotifier {
     _emit(_state.copyWith(volume: volume));
   }
 
-  // Переключение на следующую станцию по кругу
-  void nextStation() {
+  // Переключение станций по кругу вперёд
+  Future<void> nextStation() async {
     if (stations.isEmpty) return;
 
     _currentIndex = (_currentIndex + 1) % stations.length;
 
-    // Обновляем текущее состояние станции
-    _emit(_state.copyWith(currentStation: stations[_currentIndex]));
+    await play(stations[_currentIndex]);
   }
 
-  // Переключение на предыдущую станцию по кругу
-  void previousStation() {
+  // И назад
+  Future<void> previousStation() async {
     if (stations.isEmpty) return;
 
     _currentIndex = (_currentIndex - 1 + stations.length) % stations.length;
 
-    // Обновляем текущее состояние станции
-    _emit(_state.copyWith(currentStation: stations[_currentIndex]));
+    await play(stations[_currentIndex]);
   }
 
   // Освобождение ресурсов плеера

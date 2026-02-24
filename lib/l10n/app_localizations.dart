@@ -226,13 +226,31 @@ abstract class AppLocalizations {
   /// No description provided for @aboutPageContent.
   ///
   /// In en, this message translates to:
-  /// **'My name is Ivan, and I\'m the developer of the Flak Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I don\'t want to write too much here.\nEnjoy the music!'**
+  /// **'My name is Ivan, and I\'m the developer of the Flak Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I don\'t want to write too much here.'**
   String get aboutPageContent;
+
+  /// No description provided for @aboutEnjoy.
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoy the music!'**
+  String get aboutEnjoy;
+
+  /// No description provided for @aboutLinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Links:'**
+  String get aboutLinks;
+
+  /// No description provided for @abourGithub.
+  ///
+  /// In en, this message translates to:
+  /// **'Project GitHub'**
+  String get abourGithub;
 
   /// No description provided for @aboutSupport.
   ///
   /// In en, this message translates to:
-  /// **'You can also support the developer with a small donation using the link\n(link)'**
+  /// **'Support the project on Patreon'**
   String get aboutSupport;
 }
 
