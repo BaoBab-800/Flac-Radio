@@ -163,6 +163,18 @@ abstract class AppLocalizations {
   /// **'Theme'**
   String get theme;
 
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
   /// No description provided for @language.
   ///
   /// In en, this message translates to:
@@ -226,7 +238,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutPageContent.
   ///
   /// In en, this message translates to:
-  /// **'My name is Ivan, and I\'m the developer of the Flak Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I don\'t want to write too much here.'**
+  /// **'My name is Ivan, and I\'m the developer of the Flac Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I don\'t want to write too much here.'**
   String get aboutPageContent;
 
   /// No description provided for @aboutEnjoy.

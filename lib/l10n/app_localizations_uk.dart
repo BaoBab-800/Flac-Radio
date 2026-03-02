@@ -42,13 +42,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get theme => 'Тема';
 
   @override
+  String get themeLight => 'Світла';
+
+  @override
+  String get themeDark => 'Темна';
+
+  @override
   String get language => 'Мова';
 
   @override
   String get player => 'Плеер';
 
   @override
-  String get volume => 'Обсяг';
+  String get volume => 'Гучність';
 
   @override
   String get resetSettings => 'Скинути налаштування';
@@ -75,7 +81,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get aboutPageContent => 'Мене звуть Іван, я розробник програми Flac Radio.\nЯ створив цю програму як навчальний проект, тому що люблю слухати музику і хочу щоб музику слухали всі без жодних обмежень. Не хочу тут багато писати.';
 
   @override
-  String get aboutEnjoy => 'Настоюйтеся музикою!';
+  String get aboutEnjoy => 'Насолоджуйтесь музикою!';
 
   @override
   String get aboutLinks => 'Посилання:';

@@ -17,7 +17,6 @@ class MainPageBuilder extends StatelessWidget {
       backgroundColor: context.colors.background,
 
       // Кастомный Drawer
-      drawerEnableOpenDragGesture: false,
       drawer: MainPageDrawer(),
 
       // Содержимое страницы ёмаё

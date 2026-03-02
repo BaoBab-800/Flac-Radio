@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicplayer/src/core/theme/app_theme_catalog.dart';
 import 'package:provider/provider.dart';
 import 'package:musicplayer/src/services/settings/settings_service.dart';
 import 'package:musicplayer/src/core/theme/app_theme.dart';
@@ -35,7 +36,7 @@ class AppearanceSection extends StatelessWidget {
         // Тайлы выбора темы
         for (final mode in AppThemeMode.values)  // foreach для каждой темы из enum
           RadioListTile<AppThemeMode>(
-            title: Text(mode.name),
+            title: Text(mode.label(context)),
             value: mode,
             groupValue: current,
 

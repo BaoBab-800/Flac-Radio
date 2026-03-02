@@ -9,7 +9,6 @@ import 'package:musicplayer/src/services/player/player_service.dart';
   1. Загружает список радиостанций из репозитория
   2. Хранит состояние загрузки, ошибки и список станций
   3. Обеспечивает взаимодействие с PlayerService для воспроизведения выбранной станции
-  4. Предоставляет удобные свойства для UI: isEmpty, isLoading, error
 */
 
 class RadioStationFeedViewModel extends ChangeNotifier {
@@ -35,9 +34,11 @@ class RadioStationFeedViewModel extends ChangeNotifier {
 
     try {
       stations = await repository.getAllStations();
+      playerService.stations = stations!;
       error = null; // Сброс ошибок при успешной загрузке
     } catch (e) {
       stations = null; // Очистка списка при ошибке
+      playerService.stations = const [];
       error = e;       // Сохранение ошибки
     } finally {
       isLoading = false;

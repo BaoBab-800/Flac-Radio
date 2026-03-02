@@ -42,6 +42,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get theme => 'Theme';
 
   @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
   String get language => 'Language';
 
   @override
@@ -72,7 +78,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutGreetings => 'Hello everyone!';
 
   @override
-  String get aboutPageContent => 'My name is Ivan, and I\'m the developer of the Flak Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I don\'t want to write too much here.';
+  String get aboutPageContent => 'My name is Ivan, and I\'m the developer of the Flac Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I don\'t want to write too much here.';
 
   @override
   String get aboutEnjoy => 'Enjoy the music!';

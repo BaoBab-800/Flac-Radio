@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
+
+import 'audio_player_state.dart';
 import 'package:musicplayer/src/core/error/app_error.dart';
 import 'package:musicplayer/src/data/radio/models/radio_station.dart';
-import 'audio_player_state.dart';
 
 /*
   Общая идея:
@@ -20,6 +21,8 @@ class PlayerService extends ChangeNotifier {
     // Подписка на события плеера при создании сервиса
     _listenToPlayer();
   }
+
+  AudioPlayer get audioPlayer => _audioPlayer;
 
   AudioPlayerState _state = AudioPlayerState.empty; // Текущее состояние плеера
   AudioPlayerState get state => _state; // Доступ к состоянию для UI

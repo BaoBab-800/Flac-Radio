@@ -11,6 +11,8 @@
   "settings": "Настройки",
   "about": "О приложении",
   "theme": "Тема",
+  "themeLight": "Светлая",
+  "themeDark": "Тёмная",
   "language": "Язык",
   "player": "Плеер",
   "volume": "Громкость",

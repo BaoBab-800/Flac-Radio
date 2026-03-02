@@ -25,6 +25,7 @@ class LocalRadioStationRepository implements RadioStationRepository {
       id: 'metal',
       titleKey: 'metalRadio',
       streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
+      imagePath: 'assets/images/metal_icon.png',
     ),
     // Jazz
     RadioStation(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:musicplayer/src/app/app_routes.dart';
@@ -10,7 +9,7 @@ import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 /*
   Общая идея:
   Сбрасывает настройки
-  Ну и всё
+  Ну и всё)
 */
 
 class ResetSection extends StatelessWidget {
@@ -18,7 +17,6 @@ class ResetSection extends StatelessWidget {
 
   // Диалог подтверждения
   void resetConfirmationDialog(BuildContext context) {
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -34,6 +32,14 @@ class ResetSection extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
+                settings.resetCounter();
+                Navigator.of(context).pop();
+              },
+              child: Text(context.l10n.no),
+            ),
+
+            TextButton(
+              onPressed: () {
                 settings.reset();
 
                 Navigator.of(context).pop();
@@ -46,14 +52,6 @@ class ResetSection extends StatelessWidget {
               },
               child: Text(context.l10n.yes),
             ),
-
-            TextButton(
-              onPressed: () {
-                settings.resetCounter();
-                Navigator.of(context).pop();
-              },
-              child: Text(context.l10n.no),
-            ),
           ],
         );
       }
@@ -62,7 +60,6 @@ class ResetSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         const Divider(indent: 6, endIndent: 6),
