@@ -87,7 +87,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutLinks => 'Links:';
 
   @override
-  String get abourGithub => 'Project GitHub';
+  String get aboutGithub => 'Project GitHub';
 
   @override
   String get aboutSupport => 'Support the project on Patreon';

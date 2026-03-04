@@ -167,7 +167,7 @@ class _AboutState extends State<About> {
           style: const TextStyle(fontSize: 18),
         ),
         LinkText(
-          text: context.l10n.abourGithub,
+          text: context.l10n.aboutGithub,
           url: 'https://github.com/BaoBab-800/Flac-Radio',
         ),
         LinkText(

@@ -5,26 +5,48 @@ extension LocalizationX on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;
 }
 
-// Преобразователь для модели радиостанций
+// Преобразователь для удобства
 extension AppLocalizationsX on AppLocalizations {
   String byKey(String key) {
     final map = <String, String>{
+      'appTitle': appTitle,
+
       'rockRadio': rockRadio,
       'metalRadio': metalRadio,
       'jazzRadio': jazzRadio,
       'popRadio': popRadio,
-      'theme': theme,
-      'language': language,
+
       'sorting': sorting,
       'secureStation': secureStation,
+
       'menu': menu,
       'settings': settings,
       'about': about,
+
+      'theme': theme,
+      'themeLight': themeLight,
+      'themeDark': themeDark,
+
+      'language': language,
+
       'player': player,
       'volume': volume,
+
       'resetSettings': resetSettings,
-      'stopAudioWhenMinimizingTheApplication': stopAudioWhenMinimizingTheApplication,
+      'doYouWantToResetTheSettings': doYouWantToResetTheSettings,
+      'yes': yes,
+      'no': no,
+      'settingsResetWarning': settingsResetWarning,
+
+      'stopAudioWhenMinimizingTheApplication':
+      stopAudioWhenMinimizingTheApplication,
+
+      'aboutGreetings': aboutGreetings,
       'aboutPageContent': aboutPageContent,
+      'aboutEnjoy': aboutEnjoy,
+      'aboutLinks': aboutLinks,
+      'aboutGithub': aboutGithub,
+      'aboutSupport': aboutSupport,
     };
     return map[key] ?? key;
   }

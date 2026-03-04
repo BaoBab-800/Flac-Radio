@@ -87,7 +87,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get aboutLinks => 'Посилання:';
 
   @override
-  String get abourGithub => 'Проект GitHub';
+  String get aboutGithub => 'Project GitHub';
 
   @override
   String get aboutSupport => 'Підтримайте проект на Patreon';

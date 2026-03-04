@@ -253,11 +253,11 @@ abstract class AppLocalizations {
   /// **'Links:'**
   String get aboutLinks;
 
-  /// No description provided for @abourGithub.
+  /// No description provided for @aboutGithub.
   ///
   /// In en, this message translates to:
   /// **'Project GitHub'**
-  String get abourGithub;
+  String get aboutGithub;
 
   /// No description provided for @aboutSupport.
   ///

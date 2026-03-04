@@ -87,7 +87,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get aboutLinks => 'Ссылки:';
 
   @override
-  String get abourGithub => 'GitHub проекта';
+  String get aboutGithub => 'Project GitHub';
 
   @override
   String get aboutSupport => 'Поддержите проект на Patreon';

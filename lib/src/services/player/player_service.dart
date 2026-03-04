@@ -86,13 +86,22 @@ class PlayerService extends ChangeNotifier {
     );
   }
 
+  // Сеттер для теста
+  @visibleForTesting
+  void setCurrentStationForTest(RadioStation station) {
+    _state = _state.copyWith(currentStation: station);
+  }
+
   // Запуск воспроизведения выбранной радиостанции
   Future<void> play(RadioStation station) async {
-    // Если выбранная станция уже воспроизводится — просто возобновляем
-    if (_state.currentStation?.id == station.id) {
-      if (!_audioPlayer.playing) {
-        await _audioPlayer.play();
-      }
+    // Если выбранная станция уже воспроизводится ничего не делать
+    if (_state.currentStation?.id == station.id && _audioPlayer.playing) {
+      return;
+    }
+
+    // Если станция уже выбрана, плеер не играет
+    if (_state.currentStation?.id == station.id && !_audioPlayer.playing) {
+      await _audioPlayer.play();
       return;
     }
 
