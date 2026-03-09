@@ -24,10 +24,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get popRadio => 'Поп радіо';
 
   @override
-  String get sorting => 'Сортування';
+  String get electronicRadio => 'Електронне радіо';
 
   @override
-  String get secureStation => 'Закріпити';
+  String get copyLink => 'Скопіювати посилання';
 
   @override
   String get menu => 'Меню';
@@ -78,7 +78,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get aboutGreetings => 'Всім привіт!';
 
   @override
-  String get aboutPageContent => 'Мене звуть Іван, я розробник програми Flac Radio.\nЯ створив цю програму як навчальний проект, тому що люблю слухати музику і хочу щоб музику слухали всі без жодних обмежень. Не хочу тут багато писати.';
+  String get aboutPageContent => 'Мене звуть Іван, я розробник програми Flac Radio.\nЯ створив цю програму як навчальний проект, тому що люблю слухати музику і хочу щоб музику слухали всі без жодних обмежень. Також я хочу висловити подяку своєму братові за сервер із музикою. Не хочу тут багато писати.';
 
   @override
   String get aboutEnjoy => 'Насолоджуйтесь музикою!';

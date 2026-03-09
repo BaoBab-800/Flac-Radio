@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:just_audio/just_audio.dart';
 
-import 'package:musicplayer/src/app/app_routes.dart';
 import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 import 'package:musicplayer/src/services/url/url_launcher_service.dart';
 
@@ -17,6 +17,9 @@ class _AboutState extends State<About> {
   int _strangeCounter = 0;
   bool _fromLongPress = false;
   bool _argsLoaded = false;
+
+  // Плеер для одной вещи...
+  final player = AudioPlayer();
 
   // Загрузка arguments
   @override
@@ -47,25 +50,28 @@ class _AboutState extends State<About> {
 
           // "Ок" c непонятной функцией...
           actions: [
-            TextButton(
+            TextButton (
               // Проверка + скрытие диалога
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pop(dialogContext);
 
-                setState(() {
-                  _strangeCounter++;
+                _strangeCounter++;
 
-                  // При 10 нажатиях + длинном нажатии пункта в Drawer переход на странную страницу...
-                  if (_strangeCounter >= 10 && _fromLongPress) {
-                    _strangeCounter = 0;
-                    // При 10 нажатиях + длинном нажатии пункта в Drawer переход на странную страницу...
+                // При 10 нажатиях + длинном нажатии пункта в Drawer переход на странную страницу...
+                if (_strangeCounter >= 2 && _fromLongPress) {
+                  _strangeCounter = 0;
 
-                    Navigator.pushNamed(
-                      context,
-                      AppRoute.developerRoom.path,
-                    );
-                  }
-                });
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/developerRoomStart',
+                      (route) => false,
+                  );
+                  // Запуск фоновой музыки
+                  await player.stop();
+                  await player.setAsset('assets/music/mainDeveloper.mp3');
+                  await player.setLoopMode(LoopMode.one);
+                  await player.play();
+                }
               },
 
               // Сама кнопка

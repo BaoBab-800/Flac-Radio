@@ -20,6 +20,9 @@ class LanguageSection extends StatelessWidget {
     'en': 'English',
     'uk': 'Українська',
     'ru': 'Русский',
+    'de': 'Deutsch',
+    'es': 'Español',
+    'fr': 'Français',
   };
 
   @override

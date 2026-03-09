@@ -82,16 +82,16 @@ class _PanelContents extends StatelessWidget {
             child: imagePath == null ? Icon(Icons.album) : null,
           ),
 
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
 
           // Название станции
-          Text(
-            context.l10n.byKey(titleKey),
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            overflow: TextOverflow.ellipsis,
+          Expanded(
+            child: Text(
+              context.l10n.byKey(titleKey),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-
-          Spacer(),
 
           // Кнопки управления плеером
           Row(
@@ -101,7 +101,7 @@ class _PanelContents extends StatelessWidget {
                 onPressed: onPrev,
                 icon: Icon(Icons.arrow_left, size: 36),
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: 2),
 
               // Плей/пауза
               isLoading
@@ -115,7 +115,7 @@ class _PanelContents extends StatelessWidget {
                 icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
                 onPressed: onToggle,
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: 2),
 
               // Вперёд
               IconButton(

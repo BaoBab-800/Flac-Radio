@@ -40,6 +40,12 @@ class LocalRadioStationRepository implements RadioStationRepository {
       titleKey: 'popRadio',
       streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
     ),
+    // Electronic
+    RadioStation(
+      id: 'electronic',
+      titleKey: 'electronicRadio',
+      streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
+    ),
   ]);
 
   // Получение всех радиостанций

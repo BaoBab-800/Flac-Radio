@@ -24,10 +24,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get popRadio => 'Pop radio';
 
   @override
-  String get sorting => 'Sorting';
+  String get electronicRadio => 'Electronic Radio';
 
   @override
-  String get secureStation => 'Pin it';
+  String get copyLink => 'Copy link';
 
   @override
   String get menu => 'Menu';
@@ -78,7 +78,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutGreetings => 'Hello everyone!';
 
   @override
-  String get aboutPageContent => 'My name is Ivan, and I\'m the developer of the Flac Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I don\'t want to write too much here.';
+  String get aboutPageContent => 'My name is Ivan, and I\'m the developer of the Flac Radio app.\nI created this app as a learning project because I love listening to music and want everyone to be able to listen to it without any restrictions. I also want to express my gratitude to my brother for the music server. I don\'t want to write too much here.';
 
   @override
   String get aboutEnjoy => 'Enjoy the music!';

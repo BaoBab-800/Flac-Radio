@@ -15,9 +15,9 @@ extension AppLocalizationsX on AppLocalizations {
       'metalRadio': metalRadio,
       'jazzRadio': jazzRadio,
       'popRadio': popRadio,
+      'electronicRadio': electronicRadio,
 
-      'sorting': sorting,
-      'secureStation': secureStation,
+      'copyLink': copyLink,
 
       'menu': menu,
       'settings': settings,
@@ -38,8 +38,7 @@ extension AppLocalizationsX on AppLocalizations {
       'no': no,
       'settingsResetWarning': settingsResetWarning,
 
-      'stopAudioWhenMinimizingTheApplication':
-      stopAudioWhenMinimizingTheApplication,
+      'stopAudioWhenMinimizingTheApplication': stopAudioWhenMinimizingTheApplication,
 
       'aboutGreetings': aboutGreetings,
       'aboutPageContent': aboutPageContent,

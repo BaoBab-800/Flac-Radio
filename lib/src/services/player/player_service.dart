@@ -16,19 +16,24 @@ import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 
 class PlayerService extends ChangeNotifier {
   final AudioPlayer _audioPlayer; // Низкоуровневый аудиоплеер
+  List<RadioStation> stations = [];
+  int _currentIndex = 0;
 
   PlayerService(this._audioPlayer) {
     // Подписка на события плеера при создании сервиса
     _listenToPlayer();
   }
 
-  AudioPlayer get audioPlayer => _audioPlayer;
-
-  AudioPlayerState _state = AudioPlayerState.empty; // Текущее состояние плеера
+  AudioPlayer get audioPlayer => _audioPlayer;  // Доступ к плееру
   AudioPlayerState get state => _state; // Доступ к состоянию для UI
+  AudioPlayerState _state = AudioPlayerState.empty; // Текущее состояние плеера
 
-  List<RadioStation> stations = [];
-  int _currentIndex = 0;
+  int get currentIndex => _currentIndex;  // Индекс текущей станции
+  set currentIndex(int index) {
+    if (index >= 0 && index < stations.length) {
+      _currentIndex = index;
+    }
+  }
 
   // Обновление состояния и уведомление слушателей
   void _emit(AudioPlayerState newState) {
@@ -95,9 +100,7 @@ class PlayerService extends ChangeNotifier {
   // Запуск воспроизведения выбранной радиостанции
   Future<void> play(RadioStation station) async {
     // Если выбранная станция уже воспроизводится ничего не делать
-    if (_state.currentStation?.id == station.id && _audioPlayer.playing) {
-      return;
-    }
+    if (_state.currentStation?.id == station.id && _audioPlayer.playing) return;
 
     // Если станция уже выбрана, плеер не играет
     if (_state.currentStation?.id == station.id && !_audioPlayer.playing) {
@@ -142,6 +145,11 @@ class PlayerService extends ChangeNotifier {
         ),
       );
     }
+  }
+
+  // Пауза (вынесена в отдельную функцию для тестов)
+  Future<void> pause() async {
+    await _audioPlayer.pause();
   }
 
   // Переключение между паузой и воспроизведением

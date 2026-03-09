@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
-
-// Список действий для трёх точек
-enum _MenuAction { sort, }
 
 // Класс-сборщик "Шапки"
 class Header extends StatelessWidget {
@@ -46,32 +42,6 @@ class _LeftSection extends StatelessWidget {
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
-        ),
-      ],
-    );
-  }
-}
-
-// Три точки "больше"
-class _RightSection extends StatelessWidget {
-  const _RightSection();
-
-  @override
-  Widget build(BuildContext context) {
-    // Пока только кнока "Сортировка"
-    return PopupMenuButton<_MenuAction>(
-      onSelected: (action) {
-        switch (action) {
-          case _MenuAction.sort:
-          // TODO: сделать меню сортировки
-            break;
-        }
-      },
-      itemBuilder: (context) => [
-        // Сортировка
-        PopupMenuItem(
-          value: _MenuAction.sort,
-          child: Text(context.l10n.sorting),
         ),
       ],
     );

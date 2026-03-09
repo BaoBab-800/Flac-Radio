@@ -15,5 +15,8 @@ class AppLocalizationConfig {
     Locale('en'),
     Locale('uk'),
     Locale('ru'),
+    Locale('de'),
+    Locale('es'),
+    Locale('fr'),
   ];
 }
