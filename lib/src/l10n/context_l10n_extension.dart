@@ -18,6 +18,7 @@ extension AppLocalizationsX on AppLocalizations {
       'electronicRadio': electronicRadio,
 
       'copyLink': copyLink,
+      'linkCopied': linkCopied,
 
       'menu': menu,
       'settings': settings,

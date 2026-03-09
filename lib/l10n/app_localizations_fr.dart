@@ -30,6 +30,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get copyLink => 'Copier le lien';
 
   @override
+  String get linkCopied => 'Lien copié';
+
+  @override
   String get menu => 'Menu';
 
   @override

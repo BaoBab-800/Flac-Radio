@@ -1,27 +1,36 @@
 {
   "@@locale": "uk",
+
   "appTitle": "Flac Radio",
   "rockRadio": "Рок радіо",
   "metalRadio": "Метал радіо",
   "jazzRadio": "Джаз радіо",
   "popRadio": "Поп радіо",
   "electronicRadio": "Електронне радіо",
+
   "copyLink": "Скопіювати посилання",
+  "linkCopied": "Посилання скопійоване",
+
   "menu": "Меню",
   "settings": "Налаштування",
   "about": "Про додаток",
+
   "theme": "Тема",
   "themeLight": "Світла",
   "themeDark": "Темна",
   "language": "Мова",
+
   "player": "Плеер",
   "volume": "Гучність",
+
   "resetSettings": "Скинути налаштування",
   "doYouWantToResetTheSettings": "Ви хочете скинути налаштування?",
   "yes": "Так",
   "no": "Ні",
   "settingsResetWarning": "Не скидайте налаштування 7 разів поспіль!",
+
   "stopAudioWhenMinimizingTheApplication": "Зупинити звук під час згортання програми",
+
   "aboutGreetings": "Всім привіт!",
   "aboutPageContent": "Мене звуть Іван, я розробник програми Flac Radio.\nЯ створив цю програму як навчальний проект, тому що люблю слухати музику і хочу щоб музику слухали всі без жодних обмежень. Також я хочу висловити подяку своєму братові за сервер із музикою. Не хочу тут багато писати.",
   "aboutEnjoy": "Насолоджуйтесь музикою!",

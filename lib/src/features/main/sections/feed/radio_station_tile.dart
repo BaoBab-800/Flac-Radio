@@ -25,74 +25,91 @@ class RadioStationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(
-        vertical: 8,
-        horizontal: 12,
-      ),
-
-      // Название радиостанции
-      title: Text(
-        context.l10n.byKey(station.titleKey),
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-
-      // Аватар радиостанции:
-      // Если задан imageUrl отображается изображение из сети
-      // Если нет показывается иконка по умолчанию
-      leading: station.imagePath != null
-          ? CircleAvatar(
-        backgroundImage: AssetImage(station.imagePath!),
-      ) : const CircleAvatar(
-        child: Icon(Icons.album),
-      ),
-
-      // Три точки справа
-      trailing: PopupMenuButton<String>(
-        icon: const Icon(Icons.more_vert),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      // Тень
+      decoration: BoxDecoration(
         color: context.colors.onBackground,
-
-        // Пока только скопировать ссылку
-        onSelected: (value) {
-          if (value == 'copy') {
-            // Копирование
-            Clipboard.setData(
-              ClipboardData(text: station.streamUrl.toString()),
-            );
-
-            // Сообщение о успешном копировании
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Ссылка скопирована'),
-                behavior: SnackBarBehavior.floating,
-
-                margin: EdgeInsets.only(
-                  bottom: 12,
-                  left: 16,
-                  right: 16,
-                ),
-
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            );
-          }
-        },
-
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            value: 'copy',
-            child: Text(context.l10n.copyLink),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 6,
+            offset: Offset(0, 3), // смещение тени
           ),
         ],
       ),
 
-      // Воспроизведение радиостанции по нажатию
-      onTap: onTap,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 8,
+          horizontal: 12,
+        ),
+
+        // Название радиостанции
+        title: Text(
+          context.l10n.byKey(station.titleKey),
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        // Аватар радиостанции:
+        // Если задан imageUrl отображается изображение из сети
+        // Если нет показывается иконка по умолчанию
+        leading: station.imagePath != null
+            ? CircleAvatar(
+          backgroundImage: AssetImage(station.imagePath!),
+        ) : const CircleAvatar(
+          child: Icon(Icons.album),
+        ),
+
+        // Три точки справа
+        trailing: PopupMenuButton<String>(
+          icon: const Icon(Icons.more_vert),
+          color: context.colors.onBackground,
+
+          // Пока только скопировать ссылку
+          onSelected: (value) {
+            if (value == 'copy') {
+              // Копирование
+              Clipboard.setData(
+                ClipboardData(text: station.streamUrl.toString()),
+              );
+
+              // Сообщение о успешном копировании
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(context.l10n.linkCopied),
+                  behavior: SnackBarBehavior.floating,
+
+                  margin: EdgeInsets.only(
+                    bottom: 12,
+                    left: 16,
+                    right: 16,
+                  ),
+
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              );
+            }
+          },
+
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: 'copy',
+              child: Text(context.l10n.copyLink),
+            ),
+          ],
+        ),
+
+        // Воспроизведение радиостанции по нажатию
+        onTap: onTap,
+      ),
     );
   }
 }

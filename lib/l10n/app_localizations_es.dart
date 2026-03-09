@@ -30,6 +30,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get copyLink => 'Copiar enlace';
 
   @override
+  String get linkCopied => 'Enlace copiado';
+
+  @override
   String get menu => 'Menú';
 
   @override

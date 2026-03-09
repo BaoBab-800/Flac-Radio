@@ -1,27 +1,37 @@
 {
   "@@locale": "de",
+
   "appTitle": "Flac Radio",
   "rockRadio": "Rock-Radio",
   "metalRadio": "Metal-Radio",
   "jazzRadio": "Jazz-Radio",
   "popRadio": "Pop-Radio",
   "electronicRadio": "Elektronisches-Radio",
+
   "copyLink": "Link kopieren",
+  "linkCopied": "Link kopiert",
+
   "menu": "Menü",
   "settings": "Einstellungen",
   "about": "Über",
+
   "theme": "Thema",
   "themeLight": "Hell",
   "themeDark": "Dunkel",
+
   "language": "Sprache",
+
   "player": "Player",
   "volume": "Lautstärke",
+
   "resetSettings": "Einstellungen zurücksetzen",
   "doYouWantToResetTheSettings": "Möchten Sie die Einstellungen zurücksetzen?",
   "yes": "Ja",
   "no": "Nein",
   "settingsResetWarning": "Setzen Sie die Einstellungen nicht 7 Mal hintereinander zurück!",
+
   "stopAudioWhenMinimizingTheApplication": "Audio stoppen, wenn die Anwendung minimiert wird",
+
   "aboutGreetings": "Hallo zusammen!",
   "aboutPageContent": "Mein Name ist Ivan und ich bin der Entwickler der Flac Radio App.\nIch habe diese App als Lernprojekt erstellt, weil ich gerne Musik höre und möchte, dass jeder sie ohne Einschränkungen hören kann. Ich möchte auch meinem Bruder für den Musikserver danken. Ich möchte hier nicht zu viel schreiben.",
   "aboutEnjoy": "Viel Spaß mit der Musik!",

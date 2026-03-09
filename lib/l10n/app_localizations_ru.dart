@@ -30,6 +30,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get copyLink => 'Скопировать ссылку';
 
   @override
+  String get linkCopied => 'Ссылка скопирована';
+
+  @override
   String get menu => 'Меню';
 
   @override

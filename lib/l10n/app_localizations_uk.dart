@@ -30,6 +30,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get copyLink => 'Скопіювати посилання';
 
   @override
+  String get linkCopied => 'Посилання скопійоване';
+
+  @override
   String get menu => 'Меню';
 
   @override

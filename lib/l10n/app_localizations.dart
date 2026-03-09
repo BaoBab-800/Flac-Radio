@@ -145,6 +145,12 @@ abstract class AppLocalizations {
   /// **'Copy link'**
   String get copyLink;
 
+  /// No description provided for @linkCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied'**
+  String get linkCopied;
+
   /// No description provided for @menu.
   ///
   /// In en, this message translates to:

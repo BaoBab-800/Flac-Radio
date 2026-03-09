@@ -71,61 +71,76 @@ class _PanelContents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 2, right: 2),
+    return Material(
+      elevation: 2,
+      borderRadius: BorderRadius.circular(14),
 
-      child: Row(
-        children: [
-          // Иконка станции
-          CircleAvatar(
-            backgroundImage: imagePath != null ? AssetImage(imagePath!) : null,
-            child: imagePath == null ? Icon(Icons.album) : null,
-          ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
 
-          const SizedBox(width: 12),
-
-          // Название станции
-          Expanded(
-            child: Text(
-              context.l10n.byKey(titleKey),
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              overflow: TextOverflow.ellipsis,
+        child: Row(
+          children: [
+            // Иконка станции
+            CircleAvatar(
+              radius: 22,
+              backgroundImage: imagePath != null ? AssetImage(imagePath!) : null,
+              child: imagePath == null ? const Icon(Icons.album) : null,
             ),
-          ),
 
-          // Кнопки управления плеером
-          Row(
-            children: [
-              // Назад
-              IconButton(
-                onPressed: onPrev,
-                icon: Icon(Icons.arrow_left, size: 36),
-              ),
-              const SizedBox(width: 2),
+            const SizedBox(width: 12),
 
-              // Плей/пауза
-              isLoading
-                  ? const SizedBox(
-                width: 32,
-                height: 32,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              )
-                  : IconButton(
-                iconSize: 34,
-                icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
-                onPressed: onToggle,
+            // Название станции
+            Expanded(
+              child: Text(
+                context.l10n.byKey(titleKey),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(width: 2),
+            ),
 
-              // Вперёд
-              IconButton(
-                onPressed: onNext,
-                icon: Icon(Icons.arrow_right, size: 36),
-              ),
-            ],
-          ),
-        ],
+            // Кнопки управления плеером
+            _buildControls(context),
+          ],
+        ),
       ),
+    );
+  }
+
+  // Кнопки управления плеером
+  Widget _buildControls(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Назад
+        IconButton(
+          onPressed: onPrev,
+          icon: const Icon(Icons.skip_previous),
+          iconSize: 30,
+        ),
+
+        // Пауза/плей
+        isLoading
+            ? const SizedBox(
+          width: 28,
+          height: 28,
+          child: CircularProgressIndicator(strokeWidth: 2),
+        )
+            : IconButton(
+          iconSize: 34,
+          icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+          onPressed: onToggle,
+        ),
+
+        // Вперёд
+        IconButton(
+          onPressed: onNext,
+          icon: const Icon(Icons.skip_next),
+          iconSize: 30,
+        ),
+      ],
     );
   }
 }
