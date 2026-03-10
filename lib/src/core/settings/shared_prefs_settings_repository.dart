@@ -59,4 +59,5 @@ class SharedPrefsSettingsRepository implements SettingsRepository {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_settingsKey);
   }
+  // Кто-то реально это читает?
 }

@@ -1,9 +1,10 @@
-import 'package:musicplayer/src/core/error/app_error.dart';
-import 'package:musicplayer/src/data/radio/models/radio_station.dart';
-import 'package:musicplayer/src/services/player/audio_player_state.dart';
 import 'package:test/test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:just_audio/just_audio.dart';
+
+import 'package:musicplayer/src/core/error/app_error.dart';
+import 'package:musicplayer/src/data/radio/models/radio_station.dart';
+import 'package:musicplayer/src/services/player/audio_player_state.dart';
 
 import 'package:musicplayer/src/services/player/player_service.dart';
 
@@ -247,5 +248,62 @@ void main() {
   test('Dispose', () {
     service.dispose();
     verify(() => mockAudioPlayer.dispose()).called(1);
+  });
+
+  group('AudioPlayerState', () {
+    // Дефолтные значения
+    test('Empty state has correct default values', () {
+      const state = AudioPlayerState.empty;
+
+      expect(state.isPlaying, false);
+      expect(state.isLoading, false);
+      expect(state.currentStation, null);
+      expect(state.volume, 1);
+      expect(state.error, null);
+    });
+
+    // --- Тесты copyWith ---
+
+    // Изменяются ли поля
+    test('copyWith changes provided values', () {
+      const state = AudioPlayerState.empty;
+
+      final newState = state.copyWith(
+        isPlaying: true,
+        volume: 0.5,
+      );
+
+      expect(newState.isPlaying, true);
+      expect(newState.volume, 0.5);
+    });
+
+    // Сохраняет ли старые значения
+    test('copyWith keeps old values if null', () {
+      const state = AudioPlayerState(
+        isPlaying: true,
+        isLoading: false,
+        volume: 0.8,
+      );
+
+      final newState = state.copyWith();
+
+      expect(newState.isPlaying, true);
+      expect(newState.isLoading, false);
+      expect(newState.volume, 0.8);
+    });
+
+    // Сбрасывает ли ошибку
+    test('copyWith can reset error', () {
+      const state = AudioPlayerState(
+        isPlaying: false,
+        isLoading: false,
+        volume: 1,
+        error: AppError.playbackStart,
+      );
+
+      final newState = state.copyWith(error: null);
+
+      expect(newState.error, null);
+    });
   });
 }

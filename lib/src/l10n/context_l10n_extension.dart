@@ -48,6 +48,7 @@ extension AppLocalizationsX on AppLocalizations {
       'aboutGithub': aboutGithub,
       'aboutSupport': aboutSupport,
     };
+    // Привет неизвестный читатель! Как ты дошёл до того что читаешь мой код? Да, иногда выглядит действительно не очень
     return map[key] ?? key;
   }
 }
