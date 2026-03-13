@@ -151,6 +151,17 @@ void main() {
       expect(notifications, 7);
     });
 
+    test('Reset clears changed settings', () async {
+      await service.updateGlobal(const GlobalSettings(
+        localeCode: 'fr',
+        themeMode: AppThemeMode.dark,
+      ));
+
+      await service.reset();
+
+      expect(service.state, SettingsDto.defaults);
+    });
+
     // Не обращайте внимание
     test('ResetCounter clears mysterious counter', () async {
       for (var i = 0; i < 7; i++) {
