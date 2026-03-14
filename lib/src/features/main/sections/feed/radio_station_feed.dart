@@ -20,19 +20,16 @@ class RadioStationFeed extends StatelessWidget {
     return Consumer<RadioStationFeedViewModel>(
       builder: (context, viewModel, child) {
         // Индикатор загрузки при ожидании данных
-        if (viewModel.isLoading) {
+        if (viewModel.isLoading)
           return const Center(child: CircularProgressIndicator());
-        }
 
         // Отображение ошибки при загрузке
-        if (viewModel.error != null) {
+        if (viewModel.error != null)
           return Center(child: Text('Ошибка: ${viewModel.error}'));
-        }
 
         // Сообщение о пустом списке станций
-        if (viewModel.isEmpty) {
+        if (viewModel.isEmpty)
           return const Center(child: Text('Нет станций'));
-        }
 
         // Список радиостанций
         return ListView.builder(
@@ -43,6 +40,7 @@ class RadioStationFeed extends StatelessWidget {
 
             return RadioStationTile(
               station: station,
+              isSelected: station.id == viewModel.selectedStationId,
               // Вызов воспроизведения через ViewModel
               onTap: () => viewModel.playStation(station),
             );

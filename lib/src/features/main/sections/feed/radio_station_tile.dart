@@ -16,21 +16,34 @@ import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 class RadioStationTile extends StatelessWidget {
   final RadioStation station;                 // Модель радиостанции
   final VoidCallback onTap;                   // Callback при нажатии на элемент
+  final bool isSelected;
 
   const RadioStationTile({
     super.key,
     required this.station,
     required this.onTap,
+    this.isSelected = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      // Тень
       decoration: BoxDecoration(
-        color: context.colors.onBackground,
+        // Выделение выбраной станции
+        color: isSelected
+            ? context.colors.primary.withOpacity(0.18)
+            : context.colors.onBackground,
+
         borderRadius: BorderRadius.circular(12),
+        // Выделение границ выбраной станции
+        border: isSelected
+            ? Border.all(
+          color: context.colors.primary,
+          width: 2,
+        ) : null,
+
+        // Тень под тайлом
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),

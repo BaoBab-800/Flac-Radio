@@ -51,6 +51,8 @@ class RadioStationFeedViewModel extends ChangeNotifier {
     playerService.play(station);
   }
 
+  String? get selectedStationId => playerService.state.currentStation?.id;
+
   // Удобное свойство для проверки, что список пуст и загрузка завершена
   bool get isEmpty => !isLoading && (stations == null || stations!.isEmpty);
 }
