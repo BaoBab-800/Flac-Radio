@@ -58,7 +58,7 @@ class _AboutState extends State<About> {
                 _strangeCounter++;
 
                 // При 10 нажатиях + длинном нажатии пункта в Drawer переход на странную страницу...
-                if (_strangeCounter >= 2 && _fromLongPress) {
+                if (_strangeCounter >= 10 && _fromLongPress) {
                   _strangeCounter = 0;
 
                   Navigator.pushNamedAndRemoveUntil(

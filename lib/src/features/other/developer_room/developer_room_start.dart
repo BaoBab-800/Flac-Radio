@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musicplayer/src/features/other/developer_room/developer_main/developer_main.dart';
 
-import 'developer_main/quote_page.dart';
-
-// Приветствие, пердупреждение и кнопка продолжить
 class DeveloperRoomStart extends StatelessWidget {
   const DeveloperRoomStart({super.key});
 
@@ -30,29 +26,12 @@ class DeveloperRoomStart extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
 
-                Text('Вы не сможете выйти отсюда не перезапустив приложение, раз уж нашли — идите до конца.\n',
-                  style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.w700),
+                Text('На данный момент это место ещё не готово. Ожидайте.',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                   textAlign: TextAlign.center,
                 ),
               ],
             ),
-          ),
-
-          // Кнопка продолжить
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) =>
-                    QuotePage(
-                      quote: '«В каждом человеке есть что-то, что он не покажет даже самому себе.»\nФёдор Достоевский',
-                      nextPage: DeveloperMain(),
-                    ),
-                )
-              );
-            },
-
-            child: Text('Продолжить'),
           ),
         ],
       ),

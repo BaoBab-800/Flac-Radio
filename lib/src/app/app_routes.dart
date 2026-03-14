@@ -7,8 +7,6 @@ import 'package:musicplayer/src/features/other/mysterious_page.dart';
 import 'package:musicplayer/src/features/other/test_page.dart';
 
 import 'package:musicplayer/src/features/other/developer_room/developer_room_start.dart';
-import 'package:musicplayer/src/features/other/developer_room/developer_main/developer_main.dart';
-import 'package:musicplayer/src/features/other/developer_room/chapters/chapter_bird.dart';
 
 // Список маршрутов
 enum AppRoute {
@@ -18,8 +16,6 @@ enum AppRoute {
   mysteriousPage,
   testPage,
   developerRoomStart,
-  developerMain,
-  chapterBird,
 }
 
 // Свич для удобства
@@ -38,10 +34,6 @@ extension AppRoutePath on AppRoute {
         return '/testPage';
       case AppRoute.developerRoomStart:
         return '/developerRoomStart';
-      case AppRoute.developerMain:
-        return '/developerMain';
-      case AppRoute.chapterBird:
-        return 'chapterBird';
     }
   }
 }
@@ -55,7 +47,5 @@ class AppRoutes {
     AppRoute.mysteriousPage.path: (_) => const MysteriousPage(),
     AppRoute.testPage.path: (_) => const TestPage(),
     AppRoute.developerRoomStart.path: (_) => const DeveloperRoomStart(),
-    AppRoute.developerMain.path: (_) => const DeveloperMain(),
-    AppRoute.chapterBird.path: (_) => const ChapterBird(),
   };
 }
