@@ -61,16 +61,19 @@ class _AboutState extends State<About> {
                 if (_strangeCounter >= 10 && _fromLongPress) {
                   _strangeCounter = 0;
 
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/developerRoomStart',
-                      (route) => false,
-                  );
                   // Запуск фоновой музыки
+                  /*
                   await player.stop();
                   await player.setAsset('assets/music/mainDeveloper.mp3');
                   await player.setLoopMode(LoopMode.one);
                   await player.play();
+                  */
+                  if (!mounted) return;
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/developerRoomStart',
+                        (route) => false,
+                  );
                 }
               },
 
