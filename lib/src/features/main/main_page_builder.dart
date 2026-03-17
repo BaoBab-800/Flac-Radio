@@ -25,6 +25,14 @@ class MainPageBuilder extends StatelessWidget {
         children: [
           const Header(), // "шапка" экрана
           Expanded(child: RadioStationFeed()),
+
+          ElevatedButton(
+            onPressed: () {
+              throw Exception("Test Crash");
+            },
+
+            child: Text('Error'),
+          )
         ],
       ),
 

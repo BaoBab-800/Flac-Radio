@@ -82,3 +82,9 @@ jobs:
           sentry-cli releases new ${{ github.ref_name }}
           sentry-cli releases files ${{ github.ref_name }} upload-sourcemaps build/app/outputs/flutter/release
           sentry-cli releases finalize ${{ github.ref_name }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17

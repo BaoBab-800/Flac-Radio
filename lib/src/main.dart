@@ -1,22 +1,31 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'core/di/providers.dart';
 import 'app/app.dart';
 
-/*
-  Общая идея:
-  Точка входа в приложение
-  1. Инициализирует все глобальные провайдеры через MultiProvider
-  2. Подключает FlacRadioApp как корневой виджет приложения
-  3. Обеспечивает доступ к сервисам и состояниям через Provider
-*/
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
-  runApp(
-    MultiProvider(
-      providers: appProviders, // Список глобальных провайдеров приложения
-      child: const FlacRadioApp(), // Корневой виджет приложения
-    ),
+  await Firebase.initializeApp();
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+  runZonedGuarded(() {
+      runApp(
+        MultiProvider(
+          providers: appProviders,
+          child: const FlacRadioApp(),
+        ),
+      );
+    },
+        (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    },
   );
 }
