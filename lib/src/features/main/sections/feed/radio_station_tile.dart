@@ -32,7 +32,7 @@ class RadioStationTile extends StatelessWidget {
       decoration: BoxDecoration(
         // Выделение выбраной станции
         color: isSelected
-            ? context.colors.primary.withOpacity(0.18)
+            ? context.colors.primary.withValues(alpha: 0.18)
             : context.colors.onBackground,
 
         borderRadius: BorderRadius.circular(12),
@@ -46,7 +46,7 @@ class RadioStationTile extends StatelessWidget {
         // Тень под тайлом
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             spreadRadius: 1,
             blurRadius: 6,
             offset: Offset(0, 3), // смещение тени
