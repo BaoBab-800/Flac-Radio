@@ -59,6 +59,12 @@ void main() {
     // Установка источника аудио
     when(() => mockAudioPlayer.setAudioSource(any()))
         .thenAnswer((_) async => Duration.zero);
+    when(
+          () => mockAudioPlayer.setAudioSource(
+        any(),
+        initialIndex: any(named: 'initialIndex'),
+      ),
+    ).thenAnswer((_) async => Duration.zero);
 
     // Установка громкости
     when(() => mockAudioPlayer.setVolume(any()))
@@ -79,6 +85,8 @@ void main() {
 
     when(() => mockAudioPlayer.playbackEventStream)
         .thenAnswer((_) => const Stream.empty());
+    when(() => mockAudioPlayer.currentIndexStream)
+        .thenAnswer((_) => const Stream<int?>.empty());
 
     // Сервис
     service = PlayerService(mockAudioPlayer);
@@ -92,7 +100,12 @@ void main() {
     test('Start player', () async {
       await service.play(station1);
 
-      verify(() => mockAudioPlayer.setAudioSource(any())).called(1);
+      verify(
+            () => mockAudioPlayer.setAudioSource(
+          any(),
+          initialIndex: any(named: 'initialIndex'),
+        ),
+      ).called(1);
       verify(() => mockAudioPlayer.play()).called(1);
 
       expect(service.state.currentStation, station1);
@@ -108,7 +121,12 @@ void main() {
       await service.play(station1);
 
       verify(() => mockAudioPlayer.play()).called(1);
-      verifyNever(() => mockAudioPlayer.setAudioSource(any()));
+      verifyNever(
+            () => mockAudioPlayer.setAudioSource(
+          any(),
+          initialIndex: any(named: 'initialIndex'),
+        ),
+      );
       expect(service.state.currentStation, station1);
     });
 
@@ -121,7 +139,12 @@ void main() {
 
       // Проверка на бездействие
       verifyNever(() => mockAudioPlayer.play());
-      verifyNever(() => mockAudioPlayer.setAudioSource(any()));
+      verifyNever(
+            () => mockAudioPlayer.setAudioSource(
+          any(),
+          initialIndex: any(named: 'initialIndex'),
+        ),
+      );
 
       // Станция остаётся прежней
       expect(service.state.currentStation, station1);
@@ -137,12 +160,22 @@ void main() {
       // Проверка что play вызвался,
       verify(() => mockAudioPlayer.play()).called(1);
       // а setAudioSource нет
-      verifyNever(() => mockAudioPlayer.setAudioSource(any()));
+      verifyNever(
+            () => mockAudioPlayer.setAudioSource(
+          any(),
+          initialIndex: any(named: 'initialIndex'),
+        ),
+      );
     });
 
     // Обработка ошибки старта плеера
     test('Play error sets state.error', () async {
-      when(() => mockAudioPlayer.setAudioSource(any())).thenThrow(Exception());
+      when(
+            () => mockAudioPlayer.setAudioSource(
+          any(),
+          initialIndex: any(named: 'initialIndex'),
+        ),
+      ).thenThrow(Exception());
       await service.play(station1);
       expect(service.state.error, AppError.playbackStart);
     });

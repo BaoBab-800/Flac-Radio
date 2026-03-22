@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -12,6 +13,13 @@ import 'app/app.dart';
 void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    await JustAudioBackground.init(
+      androidNotificationChannelId: 'com.example.musicplayer.channel.audio',
+      androidNotificationChannelName: 'Flac Radio playback',
+      androidNotificationOngoing: true,
+      androidStopForegroundOnPause: false,
+    );
 
     await Firebase.initializeApp();
 

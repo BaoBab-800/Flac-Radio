@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 
 import 'audio_player_state.dart';
 import 'package:musicplayer/src/core/error/app_error.dart';
@@ -89,6 +90,16 @@ class PlayerService extends ChangeNotifier {
         );
       },
     );
+
+    _audioPlayer.currentIndexStream.listen((index) {
+      if (index == null || index < 0 || index >= stations.length) return;
+      _currentIndex = index;
+      _emit(
+        _state.copyWith(
+          currentStation: stations[index],
+        ),
+      );
+    });
   }
 
   // Сеттер для теста
@@ -110,6 +121,7 @@ class PlayerService extends ChangeNotifier {
 
     // Обновляем текущий индекс станции
     _currentIndex = stations.indexWhere((s) => s.id == station.id);
+    if (_currentIndex < 0) _currentIndex = 0;
 
     // Обновление текущей станции до загрузки потока
     _emit(
@@ -120,16 +132,14 @@ class PlayerService extends ChangeNotifier {
     );
 
     try {
-      // Установка URL потока и запуск воспроизведения
+      final playlist = stations.isEmpty ? [station] : stations;
+
+      // Установка плейлиста для системного уведомления + запуск воспроизведения
       await _audioPlayer.setAudioSource(
-        AudioSource.uri(
-          station.streamUrl,
-          headers: {
-            "User-Agent": "Mozilla/5.0 (Android)",
-            "Accept": "*/*",
-            "Connection": "keep-alive",
-          },
+        ConcatenatingAudioSource(
+          children: playlist.map(_stationSource).toList(),
         ),
+        initialIndex: _currentIndex,
       );
 
       await _audioPlayer.play();
@@ -143,6 +153,21 @@ class PlayerService extends ChangeNotifier {
         ),
       );
     }
+  }
+
+  AudioSource _stationSource(RadioStation station) {
+    return AudioSource.uri(
+      station.streamUrl,
+      tag: MediaItem(
+        id: station.id,
+        title: station.titleKey,
+      ),
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Android)",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+      },
+    );
   }
 
   // Пауза (вынесена в отдельную функцию для тестов)
