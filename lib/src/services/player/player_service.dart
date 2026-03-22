@@ -133,7 +133,7 @@ class PlayerService extends ChangeNotifier {
       );
 
       await _audioPlayer.play();
-    } catch (e, st) {
+    } catch (e) {
       // Обработка ошибки запуска воспроизведения
       _emit(
         _state.copyWith(
@@ -142,8 +142,6 @@ class PlayerService extends ChangeNotifier {
           error: AppError.playbackStart,
         ),
       );
-
-      throw Exception('PlayerService.play error: $e\n$st');
     }
   }
 
