@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'radio_station_feed_vm.dart';
 import 'radio_station_tile.dart';
+
+import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 /*
   Общая идея:
@@ -41,8 +44,13 @@ class RadioStationFeed extends StatelessWidget {
             return RadioStationTile(
               station: station,
               isSelected: station.id == viewModel.selectedStationId,
-              // Вызов воспроизведения через ViewModel
-              onTap: () => viewModel.playStation(station),
+              onTap: () {
+                // Сначала локализуем название
+                final localizedTitle = context.l10n.byKey(station.titleKey);
+
+                // Передаем локализованное название в ViewModel
+                viewModel.playStation(station, localizedTitle: localizedTitle);
+              },
             );
           },
         );

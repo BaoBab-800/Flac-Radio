@@ -10,17 +10,27 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'core/di/providers.dart';
 import 'app/app.dart';
+import 'services/player/player_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb) {
-    await JustAudioBackground.init(
-      androidNotificationChannelId: 'com.example.musicplayer.channel.audio',
-      androidNotificationChannelName: 'Flac Radio playback',
-      androidNotificationOngoing: true,
-      androidStopForegroundOnPause: true,
-    );
+    try {
+      await JustAudioBackground.init(
+        androidNotificationChannelId: 'com.example.musicplayer.channel.audio',
+        androidNotificationChannelName: 'Flac Radio playback',
+        androidNotificationOngoing: true,
+        androidStopForegroundOnPause: true,
+      );
+      PlayerService.backgroundAudioEnabled = true;
+    } catch (error, stackTrace) {
+      PlayerService.backgroundAudioEnabled = false;
+      debugPrint('JustAudioBackground.init failed: $error');
+      debugPrintStack(stackTrace: stackTrace);
+    }
+  } else {
+    PlayerService.backgroundAudioEnabled = false;
   }
 
   FlutterError.onError = (FlutterErrorDetails details) {
@@ -31,14 +41,12 @@ void main() async {
     FlutterError.presentError(details);
   };
 
-  runZonedGuarded(
-        () => runApp(
+  runZonedGuarded(() => runApp(
       MultiProvider(
         providers: appProviders,
         child: const FlacRadioApp(),
       ),
-    ),
-        (error, stack) {
+    ), (error, stack) {
       if (Firebase.apps.isNotEmpty) {
         FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
         return;

@@ -44,7 +44,7 @@ class LocalRadioStationRepository implements RadioStationRepository {
     RadioStation(
       id: 'electronic',
       titleKey: 'electronicRadio',
-      streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
+      streamUrl: Uri.parse('https://music.youtube.com/watch?v=wz1ca1-_-MY&list=OLAK5uy_n1sOLxWCfeedpeiN-YS7H5xJq5Qptac-M'),
     ),
   ]);
 

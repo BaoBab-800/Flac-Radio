@@ -16,6 +16,7 @@ import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 */
 
 class PlayerService extends ChangeNotifier {
+  static bool backgroundAudioEnabled = true;
   final AudioPlayer _audioPlayer; // Низкоуровневый аудиоплеер
   List<RadioStation> stations = [];
   int _currentIndex = 0;
@@ -109,7 +110,7 @@ class PlayerService extends ChangeNotifier {
   }
 
   // Запуск воспроизведения выбранной радиостанции
-  Future<void> play(RadioStation station) async {
+  Future<void> play(RadioStation station, {String? localizedTitle}) async {
     // Если выбранная станция уже воспроизводится ничего не делать
     if (_state.currentStation?.id == station.id && _audioPlayer.playing) return;
 
@@ -137,7 +138,9 @@ class PlayerService extends ChangeNotifier {
       // Установка плейлиста для системного уведомления + запуск воспроизведения
       await _audioPlayer.setAudioSource(
         ConcatenatingAudioSource(
-          children: playlist.map(_stationSource).toList(),
+          children: playlist.map(
+                (s) => _stationSource(s, localizedTitle: localizedTitle ?? station.titleKey),
+          ).toList(),
         ),
         initialIndex: _currentIndex,
       );
@@ -155,13 +158,14 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
-  AudioSource _stationSource(RadioStation station) {
+  AudioSource _stationSource(RadioStation station, {required String localizedTitle}) {
     return AudioSource.uri(
       station.streamUrl,
-      tag: MediaItem(
+      tag: backgroundAudioEnabled
+          ? MediaItem(
         id: station.id,
-        title: station.titleKey,
-      ),
+        title: localizedTitle,
+      ) : null,
       headers: {
         "User-Agent": "Mozilla/5.0 (Android)",
         "Accept": "*/*",
