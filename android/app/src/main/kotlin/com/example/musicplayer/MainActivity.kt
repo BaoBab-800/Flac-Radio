@@ -1,4 +1,4 @@
-package com.example.musicplayer
+package com.zavarkastudio.flacradio
 
 import com.ryanheise.audioservice.AudioServiceActivity
 

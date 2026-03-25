@@ -23,7 +23,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.example.musicplayer"
+    namespace = "com.zavarkastudio.flacradio"
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
@@ -37,7 +37,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.musicplayer"
+        applicationId = "com.zavarkastudio.flacradio"
         minSdk = flutter.minSdkVersion
         targetSdk = 36
         versionCode = flutter.versionCode

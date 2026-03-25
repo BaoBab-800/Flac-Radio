@@ -34,17 +34,12 @@ class LocalRadioStationRepository implements RadioStationRepository {
       streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
       imagePath: 'assets/images/jazz_icon.png'
     ),
-    // Pop
-    RadioStation(
-      id: 'pop',
-      titleKey: 'popRadio',
-      streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
-    ),
     // Electronic
     RadioStation(
       id: 'electronic',
       titleKey: 'electronicRadio',
       streamUrl: Uri.parse('https://flacradio.duckdns.org/listen/flac_radio/radio.flac'),
+      imagePath: 'assets/images/electronic_icon.png'
     ),
   ]);
 

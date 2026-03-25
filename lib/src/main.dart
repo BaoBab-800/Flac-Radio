@@ -25,11 +25,13 @@ Future<void> main() async {
   // Инициализация Flutter
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp();
+
   // Настройка фонового воспроизведения (не для Web)
   if (!kIsWeb) {
     try {
       await JustAudioBackground.init(
-        androidNotificationChannelId: 'com.example.musicplayer.channel.audio',
+        androidNotificationChannelId: 'com.zavarkastudio.flacradio.channel.audio',
         androidNotificationChannelName: 'Flac Radio playback',
         androidNotificationOngoing: true,
         androidStopForegroundOnPause: true,
