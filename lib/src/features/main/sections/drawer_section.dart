@@ -74,14 +74,6 @@ class _DrawerContent extends StatelessWidget {
           route: AppRoute.about,
           supportsLongPress: true,
         ),
-
-        // Страница тестов
-        // DrawerItem(
-        //   icon: Icons.build_circle_outlined,
-        //   titleKey: 'test',
-        //   route: AppRoute.testPage,
-        //   supportsLongPress: false,
-        // ),
       ],
     );
   }

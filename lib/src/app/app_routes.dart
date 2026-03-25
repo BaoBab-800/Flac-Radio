@@ -7,7 +7,6 @@ import 'package:musicplayer/src/features/other/mysterious_page.dart';
 
 import 'package:musicplayer/src/features/other/developer_room/developer_room_start.dart';
 
-// Список маршрутов
 enum AppRoute {
   main,
   settings,
@@ -16,7 +15,7 @@ enum AppRoute {
   developerRoomStart,
 }
 
-// Свич для удобства
+// Преобразование маршрута в строковый путь
 extension AppRoutePath on AppRoute {
   String get path {
     switch (this) {
@@ -34,7 +33,7 @@ extension AppRoutePath on AppRoute {
   }
 }
 
-// Инициализация путей
+// Таблица маршрутов для MaterialApp
 class AppRoutes {
   static final routes = <String, WidgetBuilder>{
     AppRoute.main.path: (_) => const MainPageBuilder(),

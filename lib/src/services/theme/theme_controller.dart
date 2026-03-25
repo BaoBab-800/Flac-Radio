@@ -15,7 +15,7 @@ class ThemeController extends ChangeNotifier {
   final SettingsService _settingsService;
   AppThemeMode _themeMode;
 
-  // Инициализация с текущей темой из глобальных настроек и подписка на их изменения
+  // Инициализация с текущей темой из глобальных настроек и подписка на изменения
   ThemeController(this._settingsService)
       : _themeMode = _settingsService.global.themeMode {
     _settingsService.addListener(_handleSettingsChanged);
@@ -24,29 +24,23 @@ class ThemeController extends ChangeNotifier {
   // Текущий режим темы
   AppThemeMode get themeMode => _themeMode;
 
-  // Преобразование темы в формат, который понимает Flutter (light/dark)
-  ThemeMode get flutterThemeMode =>
-      _themeMode == AppThemeMode.dark
-          ? ThemeMode.dark
-          : ThemeMode.light;
+  // Преобразование темы в ThemeMode для Flutter
+  ThemeMode get flutterThemeMode => _themeMode == AppThemeMode.dark ? ThemeMode.dark : ThemeMode.light;
 
-  // Переключение темы между светлой и тёмной, сохранение в настройках
+  // Переключение темы между светлой и тёмной и сохранение в настройках
   Future<void> toggleTheme() async {
-    final newMode =
-    _themeMode == AppThemeMode.light
-        ? AppThemeMode.dark
-        : AppThemeMode.light;
+    final newMode = _themeMode == AppThemeMode.light ? AppThemeMode.dark : AppThemeMode.light;
 
     _themeMode = newMode;
     notifyListeners();
 
-    // Обновление глобальных настроек через SettingsService
+    // Сохранение нового режима темы в глобальные настройки
     await _settingsService.updateGlobal(
       _settingsService.global.copyWith(themeMode: newMode),
     );
   }
 
-  // Обработка изменений глобальных настроек, синхронизация локального состояния
+  // Синхронизация локального состояния с глобальными настройками
   void _handleSettingsChanged() {
     final nextMode = _settingsService.global.themeMode;
     if (_themeMode == nextMode) return;

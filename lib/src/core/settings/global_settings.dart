@@ -3,30 +3,28 @@ import 'package:musicplayer/src/core/theme/app_theme.dart';
 /*
   Общая идея:
   GlobalSettings хранит глобальные настройки приложения
-  1. Управляет темой приложения через ThemeMode
-  2. Управляет локалью приложения через localeCode
-  3. Предоставляет методы для копирования с изменениями (copyWith)
-  4. Поддерживает сериализацию в JSON и восстановление из JSON
-  5. Определяет значения по умолчанию через defaults
+  1. Управляет темой и локалью приложения
+  2. Предоставляет методы copyWith для копирования с изменениями
+  3. Поддерживает сериализацию в JSON и восстановление из JSON
+  4. Определяет значения по умолчанию через defaults
 */
 
 class GlobalSettings {
   final String localeCode;
   final AppThemeMode themeMode;
 
-  // Конструктор с обязательными параметрами
   const GlobalSettings({
     required this.localeCode,
     required this.themeMode,
   });
 
-  // Значения по умолчанию для глобальных настроек
+  // Значения по умолчанию
   static const defaults = GlobalSettings(
     localeCode: 'en',
     themeMode: AppThemeMode.light,
   );
 
-  // Создание копии объекта с выборочным изменением полей
+  // Копия с изменёнными полями
   GlobalSettings copyWith({
     String? localeCode,
     AppThemeMode? themeMode,
@@ -37,7 +35,7 @@ class GlobalSettings {
     );
   }
 
-  // Сериализация глобальных настроек в Map для хранения или передачи
+  // Преобразование в Map для хранения или передачи
   Map<String, dynamic> toJson() {
     return {
       'localeCode': localeCode,
@@ -45,7 +43,7 @@ class GlobalSettings {
     };
   }
 
-  // Восстановление глобальных настроек из Map (JSON)
+  // Восстановление из Map
   factory GlobalSettings.fromJson(Map<String, dynamic> json) {
     return GlobalSettings(
       localeCode: json['localeCode'] as String? ?? defaults.localeCode,

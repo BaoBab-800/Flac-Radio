@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'app_theme.dart';
 import 'app_colors.dart';
 
+/*
+  Общая идея:
+  ThemeDataFactory создаёт ThemeData на основе AppTheme
+  1. Настраивает яркость, primaryColor и ColorScheme
+  2. Добавляет расширение AppColors с дополнительными цветами
+  3. Определяет цвет onBackground в зависимости от типа темы
+*/
+
 class ThemeDataFactory {
-  // Создание ThemeData на основе переданной темы приложения
   static ThemeData fromAppTheme(AppTheme theme) {
-    // Инициализация объекта AppColors для хранения основных цветов темы
     final colors = AppColors(
       primary: theme.primaryColor,
       accent: theme.accentColor,
@@ -16,21 +22,18 @@ class ThemeDataFactory {
     );
 
     return ThemeData(
-      // Установка яркости темы в зависимости от типа темы (светлая или тёмная)
       brightness: theme.type == AppThemeMode.dark ? Brightness.dark : Brightness.light,
-      // Основной цвет приложения
       primaryColor: theme.primaryColor,
-      // Настройка схемы цветов с учётом типа темы
+
       colorScheme: theme.type == AppThemeMode.dark
           ? ColorScheme.dark(
         secondary: theme.accentColor,
         surface: theme.backgroundColor,
-      )
-          : ColorScheme.light(
+      ) : ColorScheme.light(
         secondary: theme.accentColor,
         surface: theme.backgroundColor,
       ),
-      // Добавление расширений с дополнительными цветами для темы
+
       extensions: [colors],
     );
   }

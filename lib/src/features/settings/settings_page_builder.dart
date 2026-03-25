@@ -23,10 +23,10 @@ class SettingsPageBuilder extends StatelessWidget {
 
       body: ListView(
         children: const [
-          AppearanceSection(),  // Секция с выбором темы
-          LanguageSection(),    // Секция с выбором языка
-          PlayerSection(),      // Секция с настроками плеера
-          ResetSection(),       // Секция с кнопкой сброса настроек
+          AppearanceSection(),  // Выбор темы
+          LanguageSection(),    // Выбор языка
+          PlayerSection(),      // Настроки плеера
+          ResetSection(),       // Кнопки сброса настроек
         ],
       ),
     );

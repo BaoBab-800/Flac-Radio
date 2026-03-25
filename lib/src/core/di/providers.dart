@@ -14,51 +14,45 @@ import 'package:musicplayer/src/services/settings/app_lifecycle_service.dart';
 
 /*
   Общая идея:
-  appProviders собирает все провайдеры для приложения
-  1. Создаёт и управляет жизненным циклом объектов AudioPlayer и сервисов
-  2. Делает сервисы доступными через контекст Provider
-  3. Обеспечивает инициализацию SettingsService с загрузкой настроек
+  Список провайдеров приложения
+  1. Создаёт и связывает сервисы и репозитории
+  2. Управляет жизненным циклом зависимостей
+  3. Обеспечивает доступ к зависимостям через Provider
 */
 
 final List<SingleChildWidget> appProviders = [
-  // Провайдер аудиоплеера с автоматическим освобождением ресурсов
   Provider<AudioPlayer>(
     create: (_) => AudioPlayer(),
     dispose: (_, player) => player.dispose(),
   ),
 
-  // Провайдер сервиса плеера, получает AudioPlayer через контекст
   ChangeNotifierProvider<PlayerService>(
     create: (context) => PlayerService(
       context.read<AudioPlayer>(),
     ),
   ),
 
-  // Провайдер репозитория радиостанций
   Provider<LocalRadioStationRepository>(
     create: (_) => LocalRadioStationRepository(),
   ),
 
-  // Провайдер репозитория настроек через SharedPreferences
   Provider<SettingsRepository>(
     create: (_) => const SharedPrefsSettingsRepository(),
   ),
 
-  // Провайдер SettingsService с инициализацией и уведомлением слушателей
+  // Инициализация настроек при создании
   ChangeNotifierProvider<SettingsService>(
     create: (context) => SettingsService(
       context.read<SettingsRepository>(),
     )..init(),
   ),
 
-  // Провайдер контроллера темы, синхронизированного с глобальными настройками
   ChangeNotifierProvider<ThemeController>(
     create: (context) => ThemeController(
       context.read<SettingsService>(),
     ),
   ),
 
-  // Провайдер ViewModel для ленты радиостанций
   ChangeNotifierProvider<RadioStationFeedViewModel>(
     create: (context) => RadioStationFeedViewModel(
       repository: context.read<LocalRadioStationRepository>(),
@@ -66,18 +60,17 @@ final List<SingleChildWidget> appProviders = [
     ),
   ),
 
-  // Провайдер сервиса url-ов
   Provider<UrlLauncherService>(
     create: (_) => UrlLauncherService(),
   ),
 
-  // AppLifecycleService без ChangeNotifier, просто как Provider
+  // Создание при старте приложения
   Provider(
     create: (context) => AppLifecycleService(
       context.read<PlayerService>(),
       context.read<SettingsService>(),
     ),
     dispose: (_, service) => service.dispose(),
-    lazy: false, // чтобы создался сразу, а не при первом обращении
+    lazy: false,
   ),
 ];

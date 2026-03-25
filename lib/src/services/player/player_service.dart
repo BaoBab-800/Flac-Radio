@@ -17,20 +17,22 @@ import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 
 class PlayerService extends ChangeNotifier {
   static bool backgroundAudioEnabled = true;
-  final AudioPlayer _audioPlayer; // Низкоуровневый аудиоплеер
+
+  final AudioPlayer _audioPlayer;
   List<RadioStation> stations = [];
   int _currentIndex = 0;
 
   PlayerService(this._audioPlayer) {
-    // Подписка на события плеера при создании сервиса
+    // Подписка на стримы плеера
     _listenToPlayer();
   }
 
-  AudioPlayer get audioPlayer => _audioPlayer;  // Доступ к плееру
-  AudioPlayerState get state => _state; // Доступ к состоянию для UI
-  AudioPlayerState _state = AudioPlayerState.empty; // Текущее состояние плеера
+  AudioPlayer get audioPlayer => _audioPlayer;
+  AudioPlayerState get state => _state;
 
-  int get currentIndex => _currentIndex;  // Индекс текущей станции
+  AudioPlayerState _state = AudioPlayerState.empty;
+
+  int get currentIndex => _currentIndex;
   set currentIndex(int index) {
     if (index >= 0 && index < stations.length) {
       _currentIndex = index;
@@ -39,19 +41,18 @@ class PlayerService extends ChangeNotifier {
 
   // Обновление состояния и уведомление слушателей
   void _emit(AudioPlayerState newState) {
-    if (_state == newState) return; // Защита от лишних notifyListeners при неизменном состоянии
+    if (_state == newState) return;
     _state = newState;
     notifyListeners();
   }
 
-  // Подписка на стримы AudioPlayer
-  // Синхронизация внутреннего состояния приложения с состоянием плеера
+  // Синхронизация состояния плеера с состоянием приложения
   void _listenToPlayer() {
     _audioPlayer.playerStateStream.listen((playerState) {
       final isPlaying = playerState.playing;
       final processingState = playerState.processingState;
 
-      // Определение состояния загрузки на основе ProcessingState
+      // Определение состояния загрузки
       final isLoading = processingState == ProcessingState.loading ||
           processingState == ProcessingState.buffering;
 
@@ -66,7 +67,7 @@ class PlayerService extends ChangeNotifier {
         return;
       }
 
-      // Синхронизация состояния воспроизведения и загрузки
+      // Обновление состояния воспроизведения
       _emit(
         _state.copyWith(
           isPlaying: isPlaying,
@@ -76,7 +77,7 @@ class PlayerService extends ChangeNotifier {
       );
     });
 
-    // Обработка ошибок стрима воспроизведения
+    // Обработка ошибок воспроизведения
     _audioPlayer.playbackEventStream.listen(
           (event) {},
       onError: (e, st) {
@@ -92,9 +93,12 @@ class PlayerService extends ChangeNotifier {
       },
     );
 
+    // Синхронизация текущей станции по индексу плеера
     _audioPlayer.currentIndexStream.listen((index) {
       if (index == null || index < 0 || index >= stations.length) return;
+
       _currentIndex = index;
+
       _emit(
         _state.copyWith(
           currentStation: stations[index],
@@ -103,28 +107,27 @@ class PlayerService extends ChangeNotifier {
     });
   }
 
-  // Сеттер для теста
   @visibleForTesting
   void setCurrentStationForTest(RadioStation station) {
     _state = _state.copyWith(currentStation: station);
   }
 
-  // Запуск воспроизведения выбранной радиостанции
+  // Запуск воспроизведения станции
   Future<void> play(RadioStation station, {String? localizedTitle}) async {
-    // Если выбранная станция уже воспроизводится ничего не делать
+    // Повторный запуск уже играющей станции
     if (_state.currentStation?.id == station.id && _audioPlayer.playing) return;
 
-    // Если станция уже выбрана, плеер не играет
+    // Продолжение воспроизведения текущей станции
     if (_state.currentStation?.id == station.id && !_audioPlayer.playing) {
       await _audioPlayer.play();
       return;
     }
 
-    // Обновляем текущий индекс станции
+    // Обновление текущего индекса станции
     _currentIndex = stations.indexWhere((s) => s.id == station.id);
     if (_currentIndex < 0) _currentIndex = 0;
 
-    // Обновление текущей станции до загрузки потока
+    // Установка текущей станции до загрузки потока
     _emit(
       _state.copyWith(
         currentStation: station,
@@ -135,11 +138,14 @@ class PlayerService extends ChangeNotifier {
     try {
       final playlist = stations.isEmpty ? [station] : stations;
 
-      // Установка плейлиста для системного уведомления + запуск воспроизведения
+      // Установка плейлиста и запуск воспроизведения
       await _audioPlayer.setAudioSource(
         ConcatenatingAudioSource(
           children: playlist.map(
-                (s) => _stationSource(s, localizedTitle: localizedTitle ?? station.titleKey),
+                (s) => _stationSource(
+              s,
+              localizedTitle: localizedTitle ?? station.titleKey,
+            ),
           ).toList(),
         ),
         initialIndex: _currentIndex,
@@ -147,7 +153,7 @@ class PlayerService extends ChangeNotifier {
 
       await _audioPlayer.play();
     } catch (e) {
-      // Обработка ошибки запуска воспроизведения
+      // Обработка ошибки запуска
       _emit(
         _state.copyWith(
           isPlaying: false,
@@ -158,7 +164,10 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
-  AudioSource _stationSource(RadioStation station, {required String localizedTitle}) {
+  AudioSource _stationSource(
+      RadioStation station, {
+        required String localizedTitle,
+      }) {
     return AudioSource.uri(
       station.streamUrl,
       tag: backgroundAudioEnabled
@@ -174,16 +183,19 @@ class PlayerService extends ChangeNotifier {
     );
   }
 
-  // Пауза (вынесена в отдельную функцию для тестов)
+  // Пауза воспроизведения
   Future<void> pause() async {
     await _audioPlayer.pause();
   }
 
-  // Переключение между паузой и воспроизведением
+  // Переключение состояния воспроизведения
   Future<void> togglePlayPause() async {
     try {
-      if (_audioPlayer.playing) await _audioPlayer.pause();
-      else await _audioPlayer.play();
+      if (_audioPlayer.playing) {
+        await _audioPlayer.pause();
+      } else {
+        await _audioPlayer.play();
+      }
     } catch (e, st) {
       debugPrint('PlayerService.toggle error: $e\n$st');
 
@@ -195,19 +207,19 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
-  // Полная остановка воспроизведения и сброс состояния
+  // Полная остановка и сброс состояния
   Future<void> stop() async {
     await _audioPlayer.stop();
     _emit(AudioPlayerState.empty);
   }
 
-  // Управление громкостью
+  // Изменение громкости
   Future<void> setVolume(double volume) async {
     await _audioPlayer.setVolume(volume);
     _emit(_state.copyWith(volume: volume));
   }
 
-  // Переключение станций по кругу вперёд
+  // Переключение на следующую станцию
   Future<void> nextStation() async {
     if (stations.isEmpty) return;
 
@@ -216,7 +228,7 @@ class PlayerService extends ChangeNotifier {
     await play(stations[_currentIndex]);
   }
 
-  // И назад
+  // Переключение на предыдущую станцию
   Future<void> previousStation() async {
     if (stations.isEmpty) return;
 
@@ -225,7 +237,7 @@ class PlayerService extends ChangeNotifier {
     await play(stations[_currentIndex]);
   }
 
-  // Освобождение ресурсов плеера
+  // Освобождение ресурсов
   @override
   void dispose() {
     _audioPlayer.dispose();

@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:musicplayer/src/core/theme/app_theme.dart';
 import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
-// Колекция и получение тем
+/*
+  Общая идея:
+  AppThemes хранит и предоставляет конфигурации тем приложения
+  1. Определяет коллекцию доступных тем по AppThemeMode
+  2. Предоставляет метод получения темы с fallback на светлую
+  3. Расширение AppThemeModeX возвращает локализованную метку темы
+*/
+
 class AppThemes {
-  // Коллекция всех доступных тем приложения, сгруппированных по типу темы
+  // Коллекция всех тем по типу
   static final Map<AppThemeMode, AppTheme> all = {
-    // Конфигурация тёмной темы
     AppThemeMode.dark: AppTheme(
       type: AppThemeMode.dark,
       primaryColor: Colors.blue[300]!,
       accentColor: Colors.white,
       backgroundColor: Color(0xFF0F0F0F),
     ),
-    // Конфигурация светлой темы
     AppThemeMode.light: AppTheme(
       type: AppThemeMode.light,
       primaryColor: Colors.blue[300]!,
@@ -22,13 +27,11 @@ class AppThemes {
     ),
   };
 
-  // Получение темы по её типу с fallback на светлую тему,
-  // если запрошенный тип отсутствует в коллекции
-  static AppTheme byType(AppThemeMode type) =>
-      all[type] ?? all[AppThemeMode.light]!;
+  // Получение темы по типу с fallback на светлую
+  static AppTheme byType(AppThemeMode type) => all[type] ?? all[AppThemeMode.light]!;
 }
 
-// Помощник для локализации
+// Получение локализованной метки темы
 extension AppThemeModeX on AppThemeMode {
   String label(BuildContext context) {
     final l10n = context.l10n;

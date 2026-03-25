@@ -8,53 +8,60 @@ import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 /*
   Общая идея:
-  Сбрасывает настройки
-  Ну и всё)
+  ResetSection предоставляет возможность сброса настроек
+  1. Показывает диалог подтверждения
+  2. Выполняет сброс через SettingsService
+  3. Содержит скрытую логику перехода на таинственную страницу
 */
 
 class ResetSection extends StatelessWidget {
   const ResetSection({super.key});
 
-  // Диалог подтверждения
+  // Диалог подтверждения сброса настроек
   void resetConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        final settings = context.read<SettingsService>(); // Подписка на изменения глобальных настроек
+      builder: (dialogContext) {
+        final settings = dialogContext.read<SettingsService>();
 
         return AlertDialog(
-          // Заголовок
           content: Text(
-            context.l10n.doYouWantToResetTheSettings,
-            style: TextStyle(fontSize: 16),
+            dialogContext.l10n.doYouWantToResetTheSettings,
+            style: const TextStyle(fontSize: 16),
           ),
-          // Да/Нет
+
           actions: [
+            // Нет
             TextButton(
               onPressed: () {
                 settings.resetCounter();
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
               },
-              child: Text(context.l10n.no),
+              child: Text(dialogContext.l10n.no),
             ),
 
+            // Да
             TextButton(
               onPressed: () {
                 settings.reset();
 
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
 
-                // При седьмом сбросе настроек подряд переброс на загадочную страницу
+                // Седьмой сброс открывает таинственную страницу
                 if (settings.shouldOpenMysteriousPage) {
-                  Navigator.pushNamed(context, AppRoute.mysteriousPage.path);
+                  Navigator.pushNamed(
+                    dialogContext,
+                    AppRoute.mysteriousPage.path,
+                  );
+
                   settings.resetCounter();
                 }
               },
-              child: Text(context.l10n.yes),
+              child: Text(dialogContext.l10n.yes),
             ),
           ],
         );
-      }
+      },
     );
   }
 
@@ -65,14 +72,13 @@ class ResetSection extends StatelessWidget {
         const Divider(indent: 6, endIndent: 6),
 
         ListTile(
-          // Заголовок
           title: Text(
             context.l10n.resetSettings,
-            style: TextStyle(color: Colors.red),
+            style: const TextStyle(color: Colors.red),
           ),
 
-          // При нажатии вызывает диалог подтверждения
-          onTap: ()  {
+          // Открытие диалога подтверждения
+          onTap: () {
             resetConfirmationDialog(context);
           },
         ),

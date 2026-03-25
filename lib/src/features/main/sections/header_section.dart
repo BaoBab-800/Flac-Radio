@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 
-// Класс-сборщик "Шапки"
+/*
+  Общая идея:
+  Header отображает верхнюю часть экрана
+  1. Содержит кнопку открытия Drawer
+  2. Отображает название приложения
+*/
+
 class Header extends StatelessWidget {
   const Header({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+
       child: Column(
         children: [
-          SizedBox(height: 20),
-          _LeftSection(), // "Flac Radio"
-          Divider(),  // Для красоты
+          const SizedBox(height: 20),
+
+          const _LeftSection(),
+
+          const Divider(),
         ],
       ),
     );
   }
 }
 
-// "Flac Radio"
 class _LeftSection extends StatelessWidget {
   const _LeftSection();
 
@@ -27,17 +35,16 @@ class _LeftSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // Иконка меню
+        // Открытие Drawer
         IconButton(
           onPressed: () {
             Scaffold.of(context).openDrawer();
           },
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
         ),
 
-        // "Flac Radio"
         const Text(
-          "Flac Radio",
+          'Flac Radio',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,

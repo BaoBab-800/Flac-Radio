@@ -5,31 +5,32 @@ import 'settings_service.dart';
 
 /*
   Общая идея:
-  1. Слушает изменения жизненного цикла приложения
-  2. Координирует поведение сервисов при смене состояния
+  AppLifecycleService наблюдает за жизненным циклом приложения
+  1. Слушает смену состояния приложения (foreground/background)
+  2. Координирует поведение сервисов при уходе приложения в фон
 */
 
 class AppLifecycleService with WidgetsBindingObserver {
-  // Сервисы плеера и настроек
   final PlayerService _player;
   final SettingsService _settings;
 
-  // Конструктор регистрирует сервис как наблюдатель жизненного цикла приложения
+  // Регистрация observer при создании сервиса
   AppLifecycleService(this._player, this._settings) {
     WidgetsBinding.instance.addObserver(this);
   }
 
-  // Просмотр ухода приложения в фон
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // Если приложение уходит в фон и в настройках включено останавливать в фоне
+    // Если приложение уходит в фон и включена опция stopOnBackground
     if (state == AppLifecycleState.paused &&
         _settings.player.stopOnBackground) {
-      // Останавливается плеер
+      // Асинхронная остановка плеера без ожидания результата
       unawaited(_player.stop());
     }
   }
 
-  // Удаляет observer
-  void dispose() { WidgetsBinding.instance.removeObserver(this); }
+  // Удаление observer при уничтожении сервиса
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+  }
 }

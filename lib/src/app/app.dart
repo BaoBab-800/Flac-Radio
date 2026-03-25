@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'app_routes.dart';
-
 import 'app_localization_config.dart';
 
 import 'package:musicplayer/src/core/theme/app_theme.dart';
@@ -15,9 +14,10 @@ import 'package:musicplayer/src/services/settings/settings_service.dart';
 /*
   Общая идея:
   Корневой виджет приложения
-  1. Подключает MaterialApp с конфигурацией темы и названия приложения
-  2. Использует ThemeController (ThemeService) для динамического управления ThemeMode
-  3. Подключение Provider позволяет автоматически обновлять UI при смене темы
+  1. Настраивает MaterialApp и маршрутизацию
+  2. Подключает локализацию
+  3. Управляет темой через ThemeController
+  4. Обновляет UI при изменении настроек через Provider
 */
 
 class FlacRadioApp extends StatelessWidget {
@@ -25,21 +25,21 @@ class FlacRadioApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Получение текущего сервиса темы из контекста
-    final themeService = context.watch<ThemeController>();
+    final themeController = context.watch<ThemeController>();
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false, // Отключение баннера дебага
-      title: 'Flac Radio', // Название приложения
+      debugShowCheckedModeBanner: false,
+      title: 'Flac Radio',
 
       localizationsDelegates: AppLocalizationConfig.localizationsDelegates,
       supportedLocales: AppLocalizationConfig.supportedLocales,
       locale: Locale(context.watch<SettingsService>().global.localeCode),
 
-      // Светлая и тёмная темы
       theme: ThemeDataFactory.fromAppTheme(AppThemes.byType(AppThemeMode.light)),
       darkTheme: ThemeDataFactory.fromAppTheme(AppThemes.byType(AppThemeMode.dark)),
-      themeMode: themeService.flutterThemeMode, // Динамический выбор темы из ThemeController
+
+      // Выбор текущего режима темы
+      themeMode: themeController.flutterThemeMode,
 
       initialRoute: AppRoute.main.path,
       routes: AppRoutes.routes,

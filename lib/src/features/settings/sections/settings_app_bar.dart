@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 */
 
 class SettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
-
   const SettingsAppBar({
     super.key,
     required this.title,
@@ -29,9 +28,8 @@ class SettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
     final canPop = Navigator.of(context).canPop();
 
     return AppBar(
-      // Кнопка "Назад" отображается только если:
-      // 1. showBackButton == true
-      // 2. В навигационном стеке есть предыдущий экран
+      // Кнопка "Назад" отображается только если showBackButton == true
+      // и в навигационном стеке есть предыдущий экран
       leading: (showBackButton && canPop)
           ? IconButton(
         icon: const Icon(Icons.arrow_back),

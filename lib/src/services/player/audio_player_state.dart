@@ -3,31 +3,21 @@ import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 
 /*
   Общая идея:
-  AudioPlayerState хранит состояние аудиоплеера в приложении
-  1. Отслеживает текущую выбранную радиостанцию
-  2. Хранит флаги воспроизведения и загрузки потока
-  3. Позволяет передавать информацию об ошибках через AppError
+  AudioPlayerState хранит состояние аудиоплеера
+  1. Содержит текущую выбранную радиостанцию и флаги воспроизведения и загрузки
+  2. Управляет уровнем громкости
+  3. Передаёт информацию об ошибках через AppError
   4. Поддерживает создание изменённых копий через copyWith
   5. Используется PlayerService и UI для синхронизации состояния плеера
 */
 
 class AudioPlayerState {
-  // Текущая выбранная радиостанция
   final RadioStation? currentStation;
-
-  // Признак активного воспроизведения
   final bool isPlaying;
-
-  // Признак процесса загрузки или инициализации потока
   final bool isLoading;
-
-  // Громкость
   final double volume;
-
-  // Сообщение об ошибке для отображения в UI
   final AppError? error;
 
-  // Конструктор с обязательными флагами и необязательными полями
   const AudioPlayerState({
     this.currentStation,
     required this.isPlaying,
@@ -36,7 +26,6 @@ class AudioPlayerState {
     this.error,
   });
 
-  // Пустое состояние плеера по умолчанию
   static const empty = AudioPlayerState(
     isPlaying: false,
     isLoading: false,
@@ -46,6 +35,7 @@ class AudioPlayerState {
   );
 
   // Создание копии состояния с выборочным изменением полей
+  // Передача null в error сбрасывает сообщение об ошибке
   AudioPlayerState copyWith({
     bool? isPlaying,
     bool? isLoading,
@@ -58,7 +48,7 @@ class AudioPlayerState {
       isLoading: isLoading ?? this.isLoading,
       currentStation: currentStation ?? this.currentStation,
       volume: volume ?? this.volume,
-      error: error, // Если передан null, сбрасывает ошибку
+      error: error,
     );
   }
 }

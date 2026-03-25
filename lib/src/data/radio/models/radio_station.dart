@@ -13,7 +13,6 @@ class RadioStation {
   final Uri streamUrl;
   final String? imagePath;
 
-  // Конструктор с обязательными и необязательными полями
   const RadioStation({
     required this.id,
     required this.titleKey,
