@@ -20,6 +20,7 @@ class PlayerService extends ChangeNotifier {
 
   final AudioPlayer _audioPlayer;
   List<RadioStation> stations = [];
+  Map<String, String> _localizedTitlesByKey = const {};
   int _currentIndex = 0;
 
   PlayerService(this._audioPlayer) {
@@ -113,7 +114,14 @@ class PlayerService extends ChangeNotifier {
   }
 
   // Запуск воспроизведения станции
-  Future<void> play(RadioStation station, {String? localizedTitle}) async {
+  Future<void> play(
+      RadioStation station, {
+        String? localizedTitle,
+        Map<String, String>? localizedTitlesByKey,
+      }) async {
+    if (localizedTitlesByKey != null) {
+      _localizedTitlesByKey = localizedTitlesByKey;
+    }
     // Повторный запуск уже играющей станции
     if (_state.currentStation?.id == station.id && _audioPlayer.playing) return;
 
@@ -144,7 +152,10 @@ class PlayerService extends ChangeNotifier {
           children: playlist.map(
                 (s) => _stationSource(
               s,
-              localizedTitle: localizedTitle ?? station.titleKey,
+              localizedTitle:
+              _localizedTitlesByKey[s.titleKey] ??
+                  localizedTitle ??
+                  s.titleKey,
             ),
           ).toList(),
         ),

@@ -45,11 +45,19 @@ class RadioStationFeed extends StatelessWidget {
               station: station,
               isSelected: station.id == viewModel.selectedStationId,
               onTap: () {
-                // Сначала локализуем название
+                // Сначала локализация названия
                 final localizedTitle = context.l10n.byKey(station.titleKey);
+                final localizedTitlesByKey = {
+                  for (final item in viewModel.stations!)
+                    item.titleKey: context.l10n.byKey(item.titleKey),
+                };
 
-                // Передаем локализованное название в ViewModel
-                viewModel.playStation(station, localizedTitle: localizedTitle);
+                // Передача локализованного названия в ViewModel
+                viewModel.playStation(
+                  station,
+                  localizedTitle: localizedTitle,
+                  localizedTitlesByKey: localizedTitlesByKey,
+                );
               },
             );
           },

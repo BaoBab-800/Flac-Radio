@@ -47,8 +47,16 @@ class RadioStationFeedViewModel extends ChangeNotifier {
   }
 
   // Запуск воспроизведения выбранной радиостанции
-  Future<void> playStation(RadioStation station, {required String localizedTitle}) async {
-    await playerService.play(station, localizedTitle: localizedTitle);
+  Future<void> playStation(
+      RadioStation station, {
+        required String localizedTitle,
+        required Map<String, String> localizedTitlesByKey,
+      }) async {
+    await playerService.play(
+      station,
+      localizedTitle: localizedTitle,
+      localizedTitlesByKey: localizedTitlesByKey,
+    );
   }
 
   String? get selectedStationId => playerService.state.currentStation?.id;
