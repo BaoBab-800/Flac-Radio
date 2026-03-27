@@ -1,11 +1,14 @@
 class PlayerMetadata {
-  final String? title;
-  final String? artist;
+  final String title;
 
-  const PlayerMetadata({
-    this.title,
-    this.artist,
+  PlayerMetadata({
+    required this.title,
   });
 
-  bool get isEmpty => title == null && artist == null;
+  factory PlayerMetadata.fromJson(Map<String, dynamic> json) {
+    final song = json['song'] ?? {};
+    return PlayerMetadata(
+      title: song['title'] ?? 'Неизвестно',
+    );
+  }
 }

@@ -29,9 +29,7 @@ class BottomPanelSection extends StatelessWidget {
           final isLoading = player.state.isLoading;
 
           // Если станция не запущена пустая панель
-          if (station == null) {
-            return const SizedBox.shrink();
-          }
+          if (station == null) return const SizedBox.shrink();
 
           // Непосредственно панель
           return _PanelContents(
@@ -42,6 +40,7 @@ class BottomPanelSection extends StatelessWidget {
             onToggle: player.togglePlayPause,
             onNext: player.nextStation,
             onPrev: player.previousStation,
+            songTitle: player.state.currentSong?.title,
           );
         },
       ),
@@ -59,6 +58,7 @@ class _PanelContents extends StatelessWidget {
     required this.onToggle,
     required this.onNext,
     required this.onPrev,
+    this.songTitle,
   });
 
   final String titleKey;
@@ -68,9 +68,14 @@ class _PanelContents extends StatelessWidget {
   final VoidCallback onToggle;
   final VoidCallback onNext;
   final VoidCallback onPrev;
+  final String? songTitle;
 
   @override
   Widget build(BuildContext context) {
+    final displayTitle = songTitle?.isNotEmpty == true
+        ? songTitle!
+        : context.l10n.byKey(titleKey);
+
     return Material(
       elevation: 2,
       borderRadius: BorderRadius.circular(14),
@@ -92,7 +97,7 @@ class _PanelContents extends StatelessWidget {
             // Название станции
             Expanded(
               child: Text(
-                context.l10n.byKey(titleKey),
+                displayTitle,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
