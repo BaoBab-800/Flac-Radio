@@ -93,19 +93,6 @@ class PlayerService extends ChangeNotifier {
         );
       },
     );
-
-    // Синхронизация текущей станции по индексу плеера
-    _audioPlayer.currentIndexStream.listen((index) {
-      if (index == null || index < 0 || index >= stations.length) return;
-
-      _currentIndex = index;
-
-      _emit(
-        _state.copyWith(
-          currentStation: stations[index],
-        ),
-      );
-    });
   }
 
   @visibleForTesting
@@ -144,26 +131,26 @@ class PlayerService extends ChangeNotifier {
     );
 
     try {
-      final playlist = stations.isEmpty ? [station] : stations;
-
       // Установка плейлиста и запуск воспроизведения
       await _audioPlayer.setAudioSource(
         ConcatenatingAudioSource(
-          children: playlist.map(
-                (s) => _stationSource(
-              s,
+          children: [
+            _stationSource(
+              station,
               localizedTitle:
-              _localizedTitlesByKey[s.titleKey] ??
+              _localizedTitlesByKey[station.titleKey] ??
                   localizedTitle ??
-                  s.titleKey,
+                  station.titleKey,
             ),
-          ).toList(),
+          ],
         ),
-        initialIndex: _currentIndex,
+        initialIndex: 0,
       );
 
       await _audioPlayer.play();
     } catch (e) {
+      debugPrint("Playback start error");
+
       // Обработка ошибки запуска
       _emit(
         _state.copyWith(
@@ -186,11 +173,6 @@ class PlayerService extends ChangeNotifier {
         id: station.id,
         title: localizedTitle,
       ) : null,
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Android)",
-        "Accept": "*/*",
-        "Connection": "keep-alive",
-      },
     );
   }
 
