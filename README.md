@@ -1,5 +1,5 @@
 # Flac-Radio
-Flac-Radio is an open-source radio app developed as an educational project in Flutter. While still under development, the app already plays music and supports basic player functionality.
+Flac-Radio is an open-source radio app developed as an educational project in Flutter.
 
 ---
 
@@ -18,8 +18,8 @@ Flac-Radio is an open-source radio app developed as an educational project in Fl
 ---
 
 ### Contribution to the project
-The project is open to constructive feConstructive criticism is welcomeedback and pull requests.
-Constructive criticism is welcome
+The project is open to constructive feedback and pull requests.
+Constructive criticism is welcome.
 
 ---
 
