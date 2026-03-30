@@ -40,7 +40,6 @@ class BottomPanelSection extends StatelessWidget {
             onToggle: player.togglePlayPause,
             onNext: player.nextStation,
             onPrev: player.previousStation,
-            songTitle: player.state.currentSong?.title,
           );
         },
       ),
@@ -58,7 +57,6 @@ class _PanelContents extends StatelessWidget {
     required this.onToggle,
     required this.onNext,
     required this.onPrev,
-    this.songTitle,
   });
 
   final String titleKey;
@@ -68,13 +66,10 @@ class _PanelContents extends StatelessWidget {
   final VoidCallback onToggle;
   final VoidCallback onNext;
   final VoidCallback onPrev;
-  final String? songTitle;
 
   @override
   Widget build(BuildContext context) {
-    final displayTitle = songTitle?.isNotEmpty == true
-        ? songTitle!
-        : context.l10n.byKey(titleKey);
+    final displayTitle = context.l10n.byKey(titleKey);
 
     return Material(
       elevation: 2,

@@ -36,6 +36,7 @@ class RadioStationTile extends StatelessWidget {
             : context.colors.onBackground,
 
         borderRadius: BorderRadius.circular(12),
+
         // Выделение границ выбраной станции
         border: isSelected
             ? Border.all(

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -7,7 +5,6 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'audio_player_state.dart';
 import 'package:musicplayer/src/core/error/app_error.dart';
 import 'package:musicplayer/src/data/radio/models/radio_station.dart';
-import 'package:musicplayer/src/services/url/now_playing_service.dart';
 
 /*
   Общая идея:
@@ -22,16 +19,13 @@ class PlayerService extends ChangeNotifier {
   static bool backgroundAudioEnabled = true;
 
   final AudioPlayer _audioPlayer;
-  final NowPlayingService _nowPlayingService = NowPlayingService();
   List<RadioStation> stations = [];
   Map<String, String> _localizedTitlesByKey = const {};
   int _currentIndex = 0;
-  Timer? _timer;
 
   PlayerService(this._audioPlayer) {
     // Подписка на стримы плеера
     _listenToPlayer();
-    _startPollingCurrentSong();
   }
 
   AudioPlayer get audioPlayer => _audioPlayer;
@@ -117,19 +111,6 @@ class PlayerService extends ChangeNotifier {
   @visibleForTesting
   void setCurrentStationForTest(RadioStation station) {
     _state = _state.copyWith(currentStation: station);
-  }
-
-  void _startPollingCurrentSong() {
-    _fetchCurrentSong();
-    _timer = Timer.periodic(Duration(seconds: 10), (_) => _fetchCurrentSong());
-  }
-
-  Future<void> _fetchCurrentSong() async {
-    final song = await _nowPlayingService.fetchCurrentSong();
-    if (song != null) {
-      _state = _state.copyWith(currentSong: song);
-      notifyListeners();
-    }
   }
 
   // Запуск воспроизведения станции
@@ -271,7 +252,6 @@ class PlayerService extends ChangeNotifier {
   @override
   void dispose() {
     _audioPlayer.dispose();
-    _timer?.cancel();
     super.dispose();
   }
 }

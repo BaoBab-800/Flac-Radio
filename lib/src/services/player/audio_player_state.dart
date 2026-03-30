@@ -1,6 +1,5 @@
 import 'package:musicplayer/src/core/error/app_error.dart';
 import 'package:musicplayer/src/data/radio/models/radio_station.dart';
-import 'package:musicplayer/src/data/radio/models/player_metadata.dart';
 
 /*
   Общая идея:
@@ -17,7 +16,6 @@ class AudioPlayerState {
   final bool isPlaying;
   final bool isLoading;
   final double volume;
-  final PlayerMetadata? currentSong;
   final AppError? error;
 
   const AudioPlayerState({
@@ -25,7 +23,6 @@ class AudioPlayerState {
     required this.isPlaying,
     required this.isLoading,
     required this.volume,
-    this.currentSong,
     this.error,
   });
 
@@ -34,7 +31,6 @@ class AudioPlayerState {
     isLoading: false,
     currentStation: null,
     volume: 1,
-    currentSong: null,
     error: null,
   );
 
@@ -44,7 +40,6 @@ class AudioPlayerState {
     bool? isPlaying,
     bool? isLoading,
     RadioStation? currentStation,
-    PlayerMetadata? currentSong,
     double? volume,
     AppError? error,
   }) {
@@ -52,7 +47,6 @@ class AudioPlayerState {
       isPlaying: isPlaying ?? this.isPlaying,
       isLoading: isLoading ?? this.isLoading,
       currentStation: currentStation ?? this.currentStation,
-      currentSong: currentSong ?? this.currentSong,
       volume: volume ?? this.volume,
       error: error,
     );
