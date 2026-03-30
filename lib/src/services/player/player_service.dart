@@ -106,9 +106,8 @@ class PlayerService extends ChangeNotifier {
         String? localizedTitle,
         Map<String, String>? localizedTitlesByKey,
       }) async {
-    if (localizedTitlesByKey != null) {
-      _localizedTitlesByKey = localizedTitlesByKey;
-    }
+    if (localizedTitlesByKey != null) _localizedTitlesByKey = localizedTitlesByKey;
+
     // Повторный запуск уже играющей станции
     if (_state.currentStation?.id == station.id && _audioPlayer.playing) return;
 
@@ -162,6 +161,7 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
+  // Установщик url
   AudioSource _stationSource(
       RadioStation station, {
         required String localizedTitle,
@@ -184,11 +184,8 @@ class PlayerService extends ChangeNotifier {
   // Переключение состояния воспроизведения
   Future<void> togglePlayPause() async {
     try {
-      if (_audioPlayer.playing) {
-        await _audioPlayer.pause();
-      } else {
-        await _audioPlayer.play();
-      }
+      if (_audioPlayer.playing) await _audioPlayer.pause();
+      else await _audioPlayer.play();
     } catch (e, st) {
       debugPrint('PlayerService.toggle error: $e\n$st');
 
