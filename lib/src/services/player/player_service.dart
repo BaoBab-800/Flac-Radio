@@ -3,29 +3,34 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
 import 'audio_player_state.dart';
+import 'player_stream_observer.dart';
+import 'station_playlist_controller.dart';
 import 'package:musicplayer/src/core/error/app_error.dart';
 import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 
 /*
   Общая идея:
-  PlayerService управляет воспроизведением аудио и синхронизирует состояние AudioPlayer с состоянием приложения
-  1. Инкапсулирует работу с just_audio
-  2. Подписывается на стримы плеера и обновляет AudioPlayerState
-  3. Предоставляет методы управления воспроизведением и переключением станций
-  4. Уведомляет UI об изменениях через ChangeNotifier
+  PlayerService управляет сценариями управления плеером.
+  1. Делегирует синхронизацию стримов PlayerStreamObserver
+  2. Делегирует навигацию по станциям StationPlaylistController
+  3. Содержит сценарии play/pause/stop/toggle и эмит состояния
 */
 
 class PlayerService extends ChangeNotifier {
   static bool backgroundAudioEnabled = true;
 
   final AudioPlayer _audioPlayer;
-  List<RadioStation> stations = [];
+  final StationPlaylistController _playlist = StationPlaylistController();
+  late final PlayerStreamObserver _streamObserver;
+
   Map<String, String> _localizedTitlesByKey = const {};
-  int _currentIndex = 0;
 
   PlayerService(this._audioPlayer) {
-    // Подписка на стримы плеера
-    _listenToPlayer();
+    _streamObserver = PlayerStreamObserver(
+      _audioPlayer,
+      readState: () => _state,
+      emit: _emit,
+    )..start();
   }
 
   AudioPlayer get audioPlayer => _audioPlayer;
@@ -33,66 +38,17 @@ class PlayerService extends ChangeNotifier {
 
   AudioPlayerState _state = AudioPlayerState.empty;
 
-  int get currentIndex => _currentIndex;
-  set currentIndex(int index) {
-    if (index >= 0 && index < stations.length) {
-      _currentIndex = index;
-    }
-  }
+  List<RadioStation> get stations => _playlist.stations;
+  set stations(List<RadioStation> value) => _playlist.stations = value;
+
+  int get currentIndex => _playlist.currentIndex;
+  set currentIndex(int index) => _playlist.setCurrentIndex(index);
 
   // Обновление состояния и уведомление слушателей
   void _emit(AudioPlayerState newState) {
     if (_state == newState) return;
     _state = newState;
     notifyListeners();
-  }
-
-  // Синхронизация состояния плеера с состоянием приложения
-  void _listenToPlayer() {
-    _audioPlayer.playerStateStream.listen((playerState) {
-      final isPlaying = playerState.playing;
-      final processingState = playerState.processingState;
-
-      // Определение состояния загрузки
-      final isLoading = processingState == ProcessingState.loading ||
-          processingState == ProcessingState.buffering;
-
-      // Обработка завершения воспроизведения
-      if (processingState == ProcessingState.completed) {
-        _emit(
-          _state.copyWith(
-            isPlaying: false,
-            isLoading: false,
-          ),
-        );
-        return;
-      }
-
-      // Обновление состояния воспроизведения
-      _emit(
-        _state.copyWith(
-          isPlaying: isPlaying,
-          isLoading: isLoading,
-          error: null,
-        ),
-      );
-    });
-
-    // Обработка ошибок воспроизведения
-    _audioPlayer.playbackEventStream.listen(
-          (event) {},
-      onError: (e, st) {
-        debugPrint('Playback stream error: $e\n$st');
-
-        _emit(
-          _state.copyWith(
-            isPlaying: false,
-            isLoading: false,
-            error: AppError.playbackStart,
-          ),
-        );
-      },
-    );
   }
 
   @visibleForTesting
@@ -117,9 +73,7 @@ class PlayerService extends ChangeNotifier {
       return;
     }
 
-    // Обновление текущего индекса станции
-    _currentIndex = stations.indexWhere((s) => s.id == station.id);
-    if (_currentIndex < 0) _currentIndex = 0;
+    _playlist.syncCurrentIndexWith(station);
 
     // Установка текущей станции до загрузки потока
     _emit(
@@ -136,8 +90,7 @@ class PlayerService extends ChangeNotifier {
           children: [
             _stationSource(
               station,
-              localizedTitle:
-              _localizedTitlesByKey[station.titleKey] ??
+              localizedTitle: _localizedTitlesByKey[station.titleKey] ??
                   localizedTitle ??
                   station.titleKey,
             ),
@@ -148,7 +101,7 @@ class PlayerService extends ChangeNotifier {
 
       await _audioPlayer.play();
     } catch (e) {
-      debugPrint("Playback start error");
+      debugPrint('Playback start error');
 
       // Обработка ошибки запуска
       _emit(
@@ -211,25 +164,24 @@ class PlayerService extends ChangeNotifier {
 
   // Переключение на следующую станцию
   Future<void> nextStation() async {
-    if (stations.isEmpty) return;
+    final station = _playlist.next();
+    if (station == null) return;
 
-    _currentIndex = (_currentIndex + 1) % stations.length;
-
-    await play(stations[_currentIndex]);
+    await play(station);
   }
 
   // Переключение на предыдущую станцию
   Future<void> previousStation() async {
-    if (stations.isEmpty) return;
+    final station = _playlist.previous();
+    if (station == null) return;
 
-    _currentIndex = (_currentIndex - 1 + stations.length) % stations.length;
-
-    await play(stations[_currentIndex]);
+    await play(station);
   }
 
   // Освобождение ресурсов
   @override
   void dispose() {
+    _streamObserver.dispose();
     _audioPlayer.dispose();
     super.dispose();
   }
