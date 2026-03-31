@@ -11,6 +11,7 @@ import 'package:musicplayer/src/services/player/player_service.dart';
 import 'package:musicplayer/src/services/settings/settings_service.dart';
 import 'package:musicplayer/src/services/url/url_launcher_service.dart';
 import 'package:musicplayer/src/services/settings/app_lifecycle_service.dart';
+import 'package:musicplayer/src/services/settings/mysterious_page_service.dart';
 
 /*
   Общая идея:
@@ -62,6 +63,10 @@ final List<SingleChildWidget> appProviders = [
 
   Provider<UrlLauncherService>(
     create: (_) => UrlLauncherService(),
+  ),
+
+  Provider<MysteriousPageService>(
+    create: (_) => MysteriousPageService(),
   ),
 
   // Создание при старте приложения

@@ -133,22 +133,15 @@ void main() {
       expect(notifications, 2);
     });
 
-    test('Reset returns defaults, increments counter and calls repository.reset', () async {
+    test('Reset returns defaults and calls repository.reset', () async {
       var notifications = 0;
       service.addListener(() => notifications++);
-
-      for (var i = 0; i < 6; i++) {
-        await service.reset();
-      }
-
-      expect(service.shouldOpenMysteriousPage, false);
 
       await service.reset();
 
       expect(service.state, SettingsDto.defaults);
-      expect(repository.resetCalls, 7);
-      expect(service.shouldOpenMysteriousPage, true);
-      expect(notifications, 7);
+      expect(repository.resetCalls, 1);
+      expect(notifications, 1);
     });
 
     test('Reset clears changed settings', () async {
@@ -160,19 +153,6 @@ void main() {
       await service.reset();
 
       expect(service.state, SettingsDto.defaults);
-    });
-
-    // Не обращайте внимание
-    test('ResetCounter clears mysterious counter', () async {
-      for (var i = 0; i < 7; i++) {
-        await service.reset();
-      }
-
-      expect(service.shouldOpenMysteriousPage, true);
-
-      service.resetCounter();
-
-      expect(service.shouldOpenMysteriousPage, false);
     });
   });
 }

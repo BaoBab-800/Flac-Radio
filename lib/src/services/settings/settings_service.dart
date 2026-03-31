@@ -7,7 +7,7 @@ import 'package:musicplayer/src/data/settings/settings_dto.dart';
 
 /*
   Общая идея:
-  SettingsService управляет состоянием всех настроек приложения
+  SettingsService управляет состоянием настроек приложения
   1. Сохраняет текущие настройки в формате SettingsDto
   2. Предоставляет доступ к глобальным и плеерным настройкам
   3. Сохраняет изменения через SettingsRepository
@@ -24,10 +24,6 @@ class SettingsService extends ChangeNotifier {
   SettingsDto get state => _state;
   GlobalSettings get global => _state.global;
   PlayerSettings get player => _state.player;
-
-  // Счётчик для открытия таинственной страницы
-  int _mysteriousCounter = 0;
-  bool get shouldOpenMysteriousPage => _mysteriousCounter == 7;
 
   // Инициализация с загрузкой настроек из репозитория
   Future<void> init() async {
@@ -58,14 +54,8 @@ class SettingsService extends ChangeNotifier {
 
   // Сброс настроек
   Future<void> reset() async {
-    _mysteriousCounter++;
     _state = SettingsDto.defaults;
     await _repository.reset();
     notifyListeners();
-  }
-
-  // Сброс счётчика
-  void resetCounter() {
-    _mysteriousCounter = 0;
   }
 }

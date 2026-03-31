@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:musicplayer/src/app/app_routes.dart';
 
 import 'package:musicplayer/src/services/settings/settings_service.dart';
+import 'package:musicplayer/src/services/settings/mysterious_page_service.dart';
 import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 /*
@@ -23,6 +24,7 @@ class ResetSection extends StatelessWidget {
       context: context,
       builder: (dialogContext) {
         final settings = dialogContext.read<SettingsService>();
+        final mysteriousPageService = dialogContext.read<MysteriousPageService>();
 
         return AlertDialog(
           content: Text(
@@ -34,7 +36,7 @@ class ResetSection extends StatelessWidget {
             // Нет
             TextButton(
               onPressed: () {
-                settings.resetCounter();
+                mysteriousPageService.resetCounter();
                 Navigator.of(dialogContext).pop();
               },
               child: Text(dialogContext.l10n.no),
@@ -48,13 +50,15 @@ class ResetSection extends StatelessWidget {
                 Navigator.of(dialogContext).pop();
 
                 // Седьмой сброс открывает таинственную страницу
-                if (settings.shouldOpenMysteriousPage) {
+                mysteriousPageService.registerResetAttempt();
+
+                if (mysteriousPageService.shouldOpenMysteriousPage) {
                   Navigator.pushNamed(
                     dialogContext,
                     AppRoute.mysteriousPage.path,
                   );
 
-                  settings.resetCounter();
+                  mysteriousPageService.resetCounter();
                 }
               },
               child: Text(dialogContext.l10n.yes),
