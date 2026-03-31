@@ -1,31 +1,41 @@
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 
 import 'audio_player_state.dart';
 import 'player_stream_observer.dart';
+import 'player_error_mapper.dart';
+import 'station_audio_source_factory.dart';
 import 'station_playlist_controller.dart';
-import 'package:musicplayer/src/core/error/app_error.dart';
 import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 
 /*
   Общая идея:
-  PlayerService управляет сценариями управления плеером.
-  1. Делегирует синхронизацию стримов PlayerStreamObserver
-  2. Делегирует навигацию по станциям StationPlaylistController
-  3. Содержит сценарии play/pause/stop/toggle и эмит состояния
+  PlayerService управляет только сценариями воспроизведения и состоянием плеера.
+  1. Делегирует синхронизацию стримов в PlayerStreamObserver
+  2. Делегирует навигацию по станциям в StationPlaylistController
+  3. Делегирует сборку AudioSource в StationAudioSourceFactory
+  4. Делегирует маппинг ошибок в PlayerErrorMapper
 */
 
 class PlayerService extends ChangeNotifier {
   static bool backgroundAudioEnabled = true;
 
   final AudioPlayer _audioPlayer;
-  final StationPlaylistController _playlist = StationPlaylistController();
+  final StationPlaylistController _playlist;
+  final StationAudioSourceFactory _sourceFactory;
+  final PlayerErrorMapper _errorMapper;
   late final PlayerStreamObserver _streamObserver;
 
   Map<String, String> _localizedTitlesByKey = const {};
 
-  PlayerService(this._audioPlayer) {
+  PlayerService(
+      this._audioPlayer, {
+        StationPlaylistController? playlist,
+        StationAudioSourceFactory? sourceFactory,
+        PlayerErrorMapper? errorMapper,
+      }) : _playlist = playlist ?? StationPlaylistController(),
+        _sourceFactory = sourceFactory ?? const StationAudioSourceFactory(),
+        _errorMapper = errorMapper ?? const PlayerErrorMapper() {
     _streamObserver = PlayerStreamObserver(
       _audioPlayer,
       readState: () => _state,
@@ -88,11 +98,12 @@ class PlayerService extends ChangeNotifier {
       await _audioPlayer.setAudioSource(
         ConcatenatingAudioSource(
           children: [
-            _stationSource(
-              station,
+            _sourceFactory.build(
+              station: station,
               localizedTitle: _localizedTitlesByKey[station.titleKey] ??
                   localizedTitle ??
                   station.titleKey,
+              backgroundAudioEnabled: backgroundAudioEnabled,
             ),
           ],
         ),
@@ -101,32 +112,17 @@ class PlayerService extends ChangeNotifier {
 
       await _audioPlayer.play();
     } catch (e) {
-      debugPrint('Playback start error');
+      debugPrint('Playback start error: $e');
 
       // Обработка ошибки запуска
       _emit(
         _state.copyWith(
           isPlaying: false,
           isLoading: false,
-          error: AppError.playbackStart,
+          error: _errorMapper.mapStartError(e),
         ),
       );
     }
-  }
-
-  // Установщик url
-  AudioSource _stationSource(
-      RadioStation station, {
-        required String localizedTitle,
-      }) {
-    return AudioSource.uri(
-      station.streamUrl,
-      tag: backgroundAudioEnabled
-          ? MediaItem(
-        id: station.id,
-        title: localizedTitle,
-      ) : null,
-    );
   }
 
   // Пауза воспроизведения
@@ -144,7 +140,7 @@ class PlayerService extends ChangeNotifier {
 
       _emit(
         _state.copyWith(
-          error: AppError.playbackControl,
+          error: _errorMapper.mapControlError(e),
         ),
       );
     }
