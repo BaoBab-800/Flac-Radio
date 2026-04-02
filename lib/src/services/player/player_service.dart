@@ -18,8 +18,7 @@ import 'package:musicplayer/src/data/radio/models/radio_station.dart';
   4. Делегирует маппинг ошибок в PlayerErrorMapper
 */
 
-class PlayerService extends ChangeNotifier
-    implements PlayerStateReader, PlayerControls {
+class PlayerService extends ChangeNotifier implements PlayerStateReader, PlayerControls {
   final AudioPlayer _audioPlayer;
   final StationPlaylistController _playlist;
   final StationAudioSourceFactory _sourceFactory;
