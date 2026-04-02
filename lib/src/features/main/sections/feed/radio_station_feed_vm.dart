@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:musicplayer/src/data/radio/models/radio_station.dart';
-import 'package:musicplayer/src/data/radio/repository/local_radio_station_repository.dart';
+import 'package:musicplayer/src/data/radio/repository/radio_station_repository.dart';
 import 'package:musicplayer/src/services/player/player_service.dart';
 
 /*
@@ -12,7 +12,7 @@ import 'package:musicplayer/src/services/player/player_service.dart';
 */
 
 class RadioStationFeedViewModel extends ChangeNotifier {
-  final LocalRadioStationRepository repository; // Источник данных радиостанций
+  final RadioStationRepository repository; // Источник данных радиостанций
   final PlayerService playerService;             // Сервис управления плеером
 
   List<RadioStation>? stations; // Список загруженных радиостанций
