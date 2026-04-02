@@ -89,7 +89,10 @@ void main() {
         .thenAnswer((_) => const Stream<int?>.empty());
 
     // Сервис
-    service = PlayerService(mockAudioPlayer);
+    service = PlayerService(
+      mockAudioPlayer,
+      backgroundAudioEnabled: true,
+    );
 
     // Список станций
     service.stations = [station1, station2];

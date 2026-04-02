@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:musicplayer/src/services/settings/settings_service.dart';
-import 'package:musicplayer/src/services/player/player_service.dart';
+import 'package:musicplayer/src/services/player/player_contracts.dart';
 
 /*
   Общая идея:
@@ -51,11 +51,11 @@ class PlayerSection extends StatelessWidget {
         ListTile(
           title: Text(context.l10n.volume),
           subtitle: Slider(
-            value: context.watch<PlayerService>().state.volume,
+            value: context.watch<PlayerStateReader>().state.volume,
             min: 0,
             max: 1,
             onChanged: (value) {
-              context.read<PlayerService>().setVolume(value);
+              context.read<PlayerControls>().setVolume(value);
             },
           ),
         ),

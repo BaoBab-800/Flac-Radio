@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 
 import 'audio_player_state.dart';
+import 'player_contracts.dart';
 import 'player_stream_observer.dart';
 import 'player_error_mapper.dart';
 import 'station_audio_source_factory.dart';
@@ -17,13 +18,13 @@ import 'package:musicplayer/src/data/radio/models/radio_station.dart';
   4. Делегирует маппинг ошибок в PlayerErrorMapper
 */
 
-class PlayerService extends ChangeNotifier {
-  static bool backgroundAudioEnabled = true;
-
+class PlayerService extends ChangeNotifier
+    implements PlayerStateReader, PlayerControls {
   final AudioPlayer _audioPlayer;
   final StationPlaylistController _playlist;
   final StationAudioSourceFactory _sourceFactory;
   final PlayerErrorMapper _errorMapper;
+  final bool _backgroundAudioEnabled;
   late final PlayerStreamObserver _streamObserver;
 
   Map<String, String> _localizedTitlesByKey = const {};
@@ -33,9 +34,11 @@ class PlayerService extends ChangeNotifier {
         StationPlaylistController? playlist,
         StationAudioSourceFactory? sourceFactory,
         PlayerErrorMapper? errorMapper,
+        required bool backgroundAudioEnabled,
       }) : _playlist = playlist ?? StationPlaylistController(),
         _sourceFactory = sourceFactory ?? const StationAudioSourceFactory(),
-        _errorMapper = errorMapper ?? const PlayerErrorMapper() {
+        _errorMapper = errorMapper ?? const PlayerErrorMapper(),
+        _backgroundAudioEnabled = backgroundAudioEnabled {
     _streamObserver = PlayerStreamObserver(
       _audioPlayer,
       readState: () => _state,
@@ -103,7 +106,7 @@ class PlayerService extends ChangeNotifier {
               localizedTitle: _localizedTitlesByKey[station.titleKey] ??
                   localizedTitle ??
                   station.titleKey,
-              backgroundAudioEnabled: backgroundAudioEnabled,
+              backgroundAudioEnabled: _backgroundAudioEnabled,
             ),
           ],
         ),

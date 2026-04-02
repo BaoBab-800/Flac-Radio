@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:musicplayer/src/core/theme/app_colors.dart';
-import 'package:musicplayer/src/services/player/player_service.dart';
+import 'package:musicplayer/src/services/player/player_contracts.dart';
 import 'sections/header_section.dart';
 import 'sections/drawer_section.dart';
 import 'sections/feed/radio_station_feed.dart';
@@ -14,6 +14,8 @@ class MainPageBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasCurrentStation = context.watch<PlayerStateReader>().state.currentStation != null;
+
     return Scaffold(
       backgroundColor: context.colors.background,
 
@@ -29,9 +31,7 @@ class MainPageBuilder extends StatelessWidget {
       ),
 
       // Нижняя панель управления плеером
-      bottomNavigationBar: context.watch<PlayerService>().state.currentStation == null
-          ? null
-          : const BottomPanelSection(),
+      bottomNavigationBar: hasCurrentStation ? const BottomPanelSection() : null,
     );
   }
 }

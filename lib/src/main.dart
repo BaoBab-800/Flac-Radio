@@ -11,7 +11,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'core/di/providers.dart';
 import 'app/app.dart';
-import 'services/player/player_service.dart';
 
 /*
   Общая идея:
@@ -30,6 +29,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  var backgroundAudioEnabled = false;
+
   // Настройка фонового воспроизведения (не для Web)
   if (!kIsWeb) {
     try {
@@ -41,16 +42,14 @@ Future<void> main() async {
       );
 
       // Разрешение фонового аудио
-      PlayerService.backgroundAudioEnabled = true;
+      backgroundAudioEnabled = true;
     } catch (error, stackTrace) {
-      PlayerService.backgroundAudioEnabled = false;
+      backgroundAudioEnabled = false;
 
       // Логирование ошибок и стека
       debugPrint('JustAudioBackground.init failed: $error');
       debugPrintStack(stackTrace: stackTrace);
     }
-  } else {
-    PlayerService.backgroundAudioEnabled = false;
   }
 
   // Глобальная обработка ошибок Flutter
@@ -65,7 +64,9 @@ Future<void> main() async {
   // Запуск приложения с обработкой ошибок через runZonedGuarded
   runZonedGuarded(() => runApp(
       MultiProvider(
-        providers: appProviders,
+        providers: buildAppProviders(
+          backgroundAudioEnabled: backgroundAudioEnabled,
+        ),
         child: const FlacRadioApp(),
       ),
     ), (error, stack) {

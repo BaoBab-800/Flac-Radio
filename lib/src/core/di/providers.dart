@@ -9,6 +9,7 @@ import 'package:musicplayer/src/features/main/sections/feed/radio_station_feed_v
 import 'package:musicplayer/src/core/settings/settings_repository.dart';
 import 'package:musicplayer/src/core/settings/shared_prefs_settings_repository.dart';
 import 'package:musicplayer/src/services/player/player_service.dart';
+import 'package:musicplayer/src/services/player/player_contracts.dart';
 import 'package:musicplayer/src/services/settings/settings_service.dart';
 import 'package:musicplayer/src/services/url/url_launcher_service.dart';
 import 'package:musicplayer/src/services/settings/app_lifecycle_service.dart';
@@ -23,7 +24,9 @@ import 'package:musicplayer/src/services/settings/background_playback_policy.dar
   3. Обеспечивает доступ к зависимостям через Provider
 */
 
-final List<SingleChildWidget> appProviders = [
+List<SingleChildWidget> buildAppProviders({
+  required bool backgroundAudioEnabled,
+}) => [
   Provider<AudioPlayer>(
     create: (_) => AudioPlayer(),
     dispose: (_, player) => player.dispose(),
@@ -32,7 +35,16 @@ final List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider<PlayerService>(
     create: (context) => PlayerService(
       context.read<AudioPlayer>(),
+      backgroundAudioEnabled: backgroundAudioEnabled,
     ),
+  ),
+
+  ListenableProvider<PlayerStateReader>(
+    create: (context) => context.read<PlayerService>(),
+  ),
+
+  Provider<PlayerControls>(
+    create: (context) => context.read<PlayerService>(),
   ),
 
   Provider<RadioStationRepository>(
@@ -84,7 +96,7 @@ final List<SingleChildWidget> appProviders = [
   // Создание при старте приложения
   Provider(
     create: (context) => AppLifecycleService(
-      context.read<PlayerService>(),
+      context.read<PlayerControls>(),
       context.read<BackgroundPlaybackPolicy>(),
     ),
     dispose: (_, service) => service.dispose(),

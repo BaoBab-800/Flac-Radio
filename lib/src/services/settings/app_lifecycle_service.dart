@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
-import 'package:musicplayer/src/services/player/player_service.dart';
+import 'package:musicplayer/src/services/player/player_contracts.dart';
 import 'background_playback_policy.dart';
 
 /*
@@ -11,7 +11,7 @@ import 'background_playback_policy.dart';
 */
 
 class AppLifecycleService with WidgetsBindingObserver {
-  final PlayerService _player;
+  final PlayerControls _player;
   final BackgroundPlaybackPolicy _backgroundPlaybackPolicy;
 
   // Регистрация observer при создании сервиса
