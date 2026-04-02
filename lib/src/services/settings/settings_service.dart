@@ -33,29 +33,33 @@ class SettingsService extends ChangeNotifier {
 
   // Обновление глобальных настроек и сохранение
   Future<void> updateGlobal(GlobalSettings globalSettings) async {
-    _state = _state.copyWith(global: globalSettings);
-    await _repository.save(_state);
-    notifyListeners();
+    await _updateAndSave(_state.copyWith(global: globalSettings));
   }
 
   // Обновление настроек плеера и сохранение
   Future<void> updatePlayer(PlayerSettings playerSettings) async {
-    _state = _state.copyWith(player: playerSettings);
-    await _repository.save(_state);
-    notifyListeners();
+    await _updateAndSave(_state.copyWith(player: playerSettings));
   }
 
   // Установка языка
   Future<void> setLocale(String localeCode) async {
-    _state = _state.copyWith(global: _state.global.copyWith(localeCode: localeCode));
-    await _repository.save(_state);
-    notifyListeners();
+    await _updateAndSave(
+      _state.copyWith(
+        global: _state.global.copyWith(localeCode: localeCode),
+      ),
+    );
   }
 
   // Сброс настроек
   Future<void> reset() async {
     _state = SettingsDto.defaults;
     await _repository.reset();
+    notifyListeners();
+  }
+
+  Future<void> _updateAndSave(SettingsDto nextState) async {
+    _state = nextState;
+    await _repository.save(_state);
     notifyListeners();
   }
 }

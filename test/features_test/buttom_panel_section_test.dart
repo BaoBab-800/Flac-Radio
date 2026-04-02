@@ -8,6 +8,7 @@ import 'package:musicplayer/src/core/theme/theme_data_factory.dart';
 import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 import 'package:musicplayer/src/features/main/sections/bottom_panel_section.dart';
 import 'package:musicplayer/src/services/player/audio_player_state.dart';
+import 'package:musicplayer/src/services/player/player_contracts.dart';
 import 'package:musicplayer/src/services/player/player_service.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +24,11 @@ void main() {
   );
 
   Widget createWidgetUnderTest() {
-    return ChangeNotifierProvider<PlayerService>.value(
-      value: playerService,
+    return MultiProvider(
+      providers: [
+        Provider<PlayerStateReader>.value(value: playerService),
+        Provider<PlayerControls>.value(value: playerService),
+      ],
       child: MaterialApp(
         locale: const Locale('en'),
         supportedLocales: AppLocalizations.supportedLocales,

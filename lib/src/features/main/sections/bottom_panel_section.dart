@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musicplayer/src/core/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 
-import 'package:musicplayer/src/services/player/player_service.dart';
+import 'package:musicplayer/src/services/player/player_contracts.dart';
 import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 /*
@@ -21,12 +21,13 @@ class BottomPanelSection extends StatelessWidget {
     return BottomAppBar(
       color: context.colors.onBackground,
 
-      child: Consumer<PlayerService>(
-        builder: (context, player, child) {
+      child: Consumer<PlayerStateReader>(
+        builder: (context, playerState, child) {
+          final controls = context.read<PlayerControls>();
           // Параметры панели
-          final station = player.state.currentStation;
-          final isPlaying = player.state.isPlaying;
-          final isLoading = player.state.isLoading;
+          final station = playerState.state.currentStation;
+          final isPlaying = playerState.state.isPlaying;
+          final isLoading = playerState.state.isLoading;
 
           // Если станция не запущена пустая панель
           if (station == null) return const SizedBox.shrink();
@@ -37,9 +38,9 @@ class BottomPanelSection extends StatelessWidget {
             imagePath: station.imagePath,
             isPlaying: isPlaying,
             isLoading: isLoading,
-            onToggle: player.togglePlayPause,
-            onNext: player.nextStation,
-            onPrev: player.previousStation,
+            onToggle: controls.togglePlayPause,
+            onNext: controls.nextStation,
+            onPrev: controls.previousStation,
           );
         },
       ),
