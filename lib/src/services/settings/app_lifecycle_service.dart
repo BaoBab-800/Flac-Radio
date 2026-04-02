@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:musicplayer/src/services/player/player_service.dart';
-import 'settings_service.dart';
+import 'background_playback_policy.dart';
 
 /*
   Общая идея:
@@ -12,19 +12,17 @@ import 'settings_service.dart';
 
 class AppLifecycleService with WidgetsBindingObserver {
   final PlayerService _player;
-  final SettingsService _settings;
+  final BackgroundPlaybackPolicy _backgroundPlaybackPolicy;
 
   // Регистрация observer при создании сервиса
-  AppLifecycleService(this._player, this._settings) {
+  AppLifecycleService(this._player, this._backgroundPlaybackPolicy) {
     WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // Если приложение уходит в фон и включена опция stopOnBackground
     if (state == AppLifecycleState.paused &&
-        _settings.player.stopOnBackground) {
-      // Асинхронная остановка плеера без ожидания результата
+        _backgroundPlaybackPolicy.shouldStopOnPaused()) {
       unawaited(_player.stop());
     }
   }

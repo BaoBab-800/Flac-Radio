@@ -13,6 +13,7 @@ import 'package:musicplayer/src/services/settings/settings_service.dart';
 import 'package:musicplayer/src/services/url/url_launcher_service.dart';
 import 'package:musicplayer/src/services/settings/app_lifecycle_service.dart';
 import 'package:musicplayer/src/services/settings/mysterious_page_service.dart';
+import 'package:musicplayer/src/services/settings/background_playback_policy.dart';
 
 /*
   Общая идея:
@@ -70,11 +71,21 @@ final List<SingleChildWidget> appProviders = [
     create: (_) => MysteriousPageService(),
   ),
 
+  Provider<MysteriousPageService>(
+    create: (_) => MysteriousPageService(),
+  ),
+
+  Provider<BackgroundPlaybackPolicy>(
+    create: (context) => SettingsBackgroundPlaybackPolicy(
+      context.read<SettingsService>(),
+    ),
+  ),
+
   // Создание при старте приложения
   Provider(
     create: (context) => AppLifecycleService(
       context.read<PlayerService>(),
-      context.read<SettingsService>(),
+      context.read<BackgroundPlaybackPolicy>(),
     ),
     dispose: (_, service) => service.dispose(),
     lazy: false,
