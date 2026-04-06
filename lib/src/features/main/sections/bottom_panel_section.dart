@@ -3,6 +3,7 @@ import 'package:musicplayer/src/core/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 
 import 'package:musicplayer/src/services/player/player_contracts.dart';
+import 'package:musicplayer/src/services/player/player_service.dart';
 import 'package:musicplayer/src/l10n/context_l10n_extension.dart';
 
 /*
@@ -23,7 +24,8 @@ class BottomPanelSection extends StatelessWidget {
 
       child: Consumer<PlayerStateReader>(
         builder: (context, playerState, child) {
-          final controls = context.read<PlayerControls>();
+          final controls = context.read<PlayerService>();
+
           // Параметры панели
           final station = playerState.state.currentStation;
           final isPlaying = playerState.state.isPlaying;

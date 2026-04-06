@@ -13,13 +13,16 @@ import 'package:musicplayer/src/data/radio/models/radio_station.dart';
 import 'package:musicplayer/src/features/main/sections/bottom_panel_section.dart';
 import 'package:musicplayer/src/services/player/audio_player_state.dart';
 import 'package:musicplayer/src/services/player/player_contracts.dart';
+import 'package:musicplayer/src/services/player/player_service.dart';
 
 class MockPlayerStateReader extends Mock with ChangeNotifier implements PlayerStateReader {}
+class MockPlayerService extends Mock with ChangeNotifier implements PlayerService {}
 class MockPlayerControls extends Mock implements PlayerControls {}
 
 void main() {
   late MockPlayerStateReader playerStateReader;
   late MockPlayerControls playerControls;
+  late MockPlayerService playerService;
 
   final station = RadioStation(
     id: '1',
@@ -30,14 +33,16 @@ void main() {
   Widget createWidgetUnderTest() {
     return MultiProvider(
       providers: [
-        ListenableProvider<PlayerStateReader>.value(value: playerStateReader),
-        Provider<PlayerControls>.value(value: playerControls),
+        ChangeNotifierProvider<PlayerService>.value(value: playerService),
+        ListenableProvider<PlayerStateReader>.value(value: playerService),
       ],
       child: MaterialApp(
         locale: const Locale('en'),
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
-        theme: ThemeDataFactory.fromAppTheme(AppThemes.byType(AppThemeMode.light)),
+        theme: ThemeDataFactory.fromAppTheme(
+          AppThemes.byType(AppThemeMode.light),
+        ),
         home: const Scaffold(
           bottomNavigationBar: BottomPanelSection(),
         ),
@@ -48,9 +53,15 @@ void main() {
   setUp(() {
     playerStateReader = MockPlayerStateReader();
     playerControls = MockPlayerControls();
+    playerService = MockPlayerService();
+
     when(() => playerControls.togglePlayPause()).thenAnswer((_) async {});
     when(() => playerControls.nextStation()).thenAnswer((_) async {});
     when(() => playerControls.previousStation()).thenAnswer((_) async {});
+
+    when(() => playerService.togglePlayPause()).thenAnswer((_) async {});
+    when(() => playerService.nextStation()).thenAnswer((_) async {});
+    when(() => playerService.previousStation()).thenAnswer((_) async {});
   });
 
   testWidgets('Renders empty panel when no current station', (tester) async {
