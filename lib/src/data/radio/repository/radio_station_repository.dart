@@ -1,9 +1,11 @@
-import 'package:musicplayer/src/data/radio/models/radio_station.dart';
+import '../models/radio_station.dart';
 
 abstract class RadioStationRepository {
-  // Получение полного списка радиостанций
-  Future<List<RadioStation>> getAllStations();
+  Future<List<RadioStation>> getAllBaseStations();
 
-  // Получение радиостанции по уникальному идентификатору
-  Future<RadioStation?> getById(String id);
+  Future<List<RadioStation>> getAllLocalStations();
+
+  Future<RadioStation?> getBaseStationById(String id);
+
+  Future<RadioStation?> getLocalStationById(String id);
 }

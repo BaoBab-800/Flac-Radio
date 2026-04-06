@@ -46,6 +46,8 @@ class PlayerService extends ChangeNotifier implements PlayerStateReader, PlayerC
   }
 
   AudioPlayer get audioPlayer => _audioPlayer;
+
+  @override
   AudioPlayerState get state => _state;
 
   AudioPlayerState _state = AudioPlayerState.empty;
@@ -133,6 +135,7 @@ class PlayerService extends ChangeNotifier implements PlayerStateReader, PlayerC
   }
 
   // Переключение состояния воспроизведения
+  @override
   Future<void> togglePlayPause() async {
     try {
       if (_audioPlayer.playing) await _audioPlayer.pause();
@@ -149,18 +152,21 @@ class PlayerService extends ChangeNotifier implements PlayerStateReader, PlayerC
   }
 
   // Полная остановка и сброс состояния
+  @override
   Future<void> stop() async {
     await _audioPlayer.stop();
     _emit(AudioPlayerState.empty);
   }
 
   // Изменение громкости
+  @override
   Future<void> setVolume(double volume) async {
     await _audioPlayer.setVolume(volume);
     _emit(_state.copyWith(volume: volume));
   }
 
   // Переключение на следующую станцию
+  @override
   Future<void> nextStation() async {
     final station = _playlist.next();
     if (station == null) return;
@@ -169,6 +175,7 @@ class PlayerService extends ChangeNotifier implements PlayerStateReader, PlayerC
   }
 
   // Переключение на предыдущую станцию
+  @override
   Future<void> previousStation() async {
     final station = _playlist.previous();
     if (station == null) return;

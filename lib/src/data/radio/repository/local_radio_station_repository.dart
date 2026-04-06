@@ -1,4 +1,4 @@
-import 'package:musicplayer/src/data/radio/models/radio_station.dart';
+import '../models/radio_station.dart';
 import 'radio_station_repository.dart';
 
 /*
@@ -12,7 +12,7 @@ import 'radio_station_repository.dart';
 
 class LocalRadioStationRepository implements RadioStationRepository {
   // Локальный список радиостанций, защищённый от изменений
-  final List<RadioStation> _stations = List.unmodifiable([
+  final List<RadioStation> _baseStations = List.unmodifiable([
     // Rock
     RadioStation(
       id: 'rock',
@@ -43,18 +43,41 @@ class LocalRadioStationRepository implements RadioStationRepository {
     ),
   ]);
 
-  // Получение всех радиостанций
+  final List<RadioStation> _localStations = [
+    RadioStation(
+      id: 'user',
+      titleKey: 'userKey',
+      streamUrl: Uri.parse('https://user/radio.flac'),
+    )
+  ];
+
+  // Получение всех базовых радиостанций
   @override
-  Future<List<RadioStation>> getAllStations() async {
-    return List.unmodifiable(_stations);
+  Future<List<RadioStation>> getAllBaseStations() async {
+    return List.unmodifiable(_baseStations);
   }
 
-  // Получение радиостанции по идентификатору
+  // Получение всех пользовательских радиостанций
   @override
-  Future<RadioStation?> getById(String id) async {
-    for (final station in _stations) {
+  Future<List<RadioStation>> getAllLocalStations() async {
+    return List.unmodifiable(_localStations);
+  }
+
+  // Получение базовой радиостанции по идентификатору
+  @override
+  Future<RadioStation?> getBaseStationById(String id) async {
+    for (final station in _baseStations) {
       if (station.id == id) return station; // Возврат найденной станции
     }
     return null; // Если станция не найдена вернуть null
+  }
+
+  // Получение пользовательской радиостанции по идентификатору
+  @override
+  Future<RadioStation?> getLocalStationById(String id) async {
+    for (final station in _localStations) {
+      if (station.id == id) return station;
+    }
+    return null;
   }
 }

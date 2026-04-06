@@ -33,7 +33,7 @@ class RadioStationFeedViewModel extends ChangeNotifier {
     notifyListeners(); // Уведомление UI о начале загрузки
 
     try {
-      stations = await repository.getAllStations();
+      stations = await repository.getAllBaseStations();
       playerService.stations = stations!;
       error = null; // Сброс ошибок при успешной загрузке
     } catch (e) {
