@@ -86,10 +86,6 @@ List<SingleChildWidget> buildAppProviders({
     create: (_) => MysteriousPageService(),
   ),
 
-  Provider<MysteriousPageService>(
-    create: (_) => MysteriousPageService(),
-  ),
-
   Provider<BackgroundPlaybackPolicy>(
     create: (context) => SettingsBackgroundPlaybackPolicy(
       context.read<SettingsService>(),
@@ -99,7 +95,7 @@ List<SingleChildWidget> buildAppProviders({
   // Создание при старте приложения
   Provider(
     create: (context) => AppLifecycleService(
-      context.read<PlayerControls>(),
+      context.read<PlayerService>(),
       context.read<BackgroundPlaybackPolicy>(),
     ),
     dispose: (_, service) => service.dispose(),

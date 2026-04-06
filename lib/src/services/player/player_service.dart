@@ -45,10 +45,9 @@ class PlayerService extends ChangeNotifier implements PlayerStateReader, PlayerC
     )..start();
   }
 
-  AudioPlayer get audioPlayer => _audioPlayer;
-
   @override
   AudioPlayerState get state => _state;
+  AudioPlayer get audioPlayer => _audioPlayer;
 
   AudioPlayerState _state = AudioPlayerState.empty;
 
