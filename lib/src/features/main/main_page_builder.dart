@@ -6,7 +6,6 @@ import 'package:musicplayer/src/services/player/player_contracts.dart';
 import 'sections/header_section.dart';
 import 'sections/drawer_section.dart';
 import 'sections/feed/radio_station_feed.dart';
-import 'sections/action_button.dart';
 import 'sections/bottom_panel_section.dart';
 
 // Сборщик основной страницы
@@ -30,9 +29,6 @@ class MainPageBuilder extends StatelessWidget {
           Expanded(child: RadioStationFeed()),
         ],
       ),
-
-      // Кнопка добавления пользовательской станции
-      floatingActionButton: ActionButton(),
 
       // Нижняя панель управления плеером
       bottomNavigationBar: hasCurrentStation ? const BottomPanelSection() : null,
