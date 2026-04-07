@@ -9,7 +9,7 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get appTitle => 'Flac Радио';
+  String get appTitle => 'Flac Radio';
 
   @override
   String get rockRadio => 'Рок радио';
@@ -21,10 +21,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get jazzRadio => 'Джаз радио';
 
   @override
-  String get popRadio => 'Поп радио';
+  String get electronicRadio => 'Электронное радио';
 
   @override
-  String get electronicRadio => 'Электронное радио';
+  String get error => 'Ошибка';
+
+  @override
+  String get noStations => 'Нет станций';
 
   @override
   String get copyLink => 'Скопировать ссылку';

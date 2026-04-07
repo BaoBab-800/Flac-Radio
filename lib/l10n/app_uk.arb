@@ -5,8 +5,10 @@
   "rockRadio": "Рок радіо",
   "metalRadio": "Метал радіо",
   "jazzRadio": "Джаз радіо",
-  "popRadio": "Поп радіо",
   "electronicRadio": "Електронне радіо",
+
+  "error": "Помилка",
+  "noStations": "Немає станцій",
 
   "copyLink": "Скопіювати посилання",
   "linkCopied": "Посилання скопійоване",

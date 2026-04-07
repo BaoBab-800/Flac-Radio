@@ -28,11 +28,11 @@ class RadioStationFeed extends StatelessWidget {
 
         // Отображение ошибки при загрузке
         if (viewModel.error != null)
-          return Center(child: Text('Ошибка: ${viewModel.error}'));
+          return Center(child: Text('${context.l10n.error}: ${viewModel.error}'));
 
         // Сообщение о пустом списке станций
         if (viewModel.isEmpty)
-          return const Center(child: Text('Нет станций'));
+          return Center(child: Text(context.l10n.noStations));
 
         // Список радиостанций
         return ListView.builder(

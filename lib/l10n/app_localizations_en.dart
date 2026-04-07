@@ -21,10 +21,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get jazzRadio => 'Jazz radio';
 
   @override
-  String get popRadio => 'Pop radio';
+  String get electronicRadio => 'Electronic Radio';
 
   @override
-  String get electronicRadio => 'Electronic Radio';
+  String get error => 'Error';
+
+  @override
+  String get noStations => 'No stations';
 
   @override
   String get copyLink => 'Copy link';

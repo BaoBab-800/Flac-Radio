@@ -21,10 +21,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get jazzRadio => 'Джаз радіо';
 
   @override
-  String get popRadio => 'Поп радіо';
+  String get electronicRadio => 'Електронне радіо';
 
   @override
-  String get electronicRadio => 'Електронне радіо';
+  String get error => 'Помилка';
+
+  @override
+  String get noStations => 'Немає станцій';
 
   @override
   String get copyLink => 'Скопіювати посилання';

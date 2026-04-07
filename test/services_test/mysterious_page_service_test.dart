@@ -1,5 +1,5 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:musicplayer/src/services/settings/mysterious_page_service.dart';
-import 'package:test/test.dart';
 
 void main() {
   group('MysteriousPageService', () {

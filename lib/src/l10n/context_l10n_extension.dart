@@ -13,8 +13,10 @@ extension AppLocalizationsX on AppLocalizations {
       'rockRadio': rockRadio,
       'metalRadio': metalRadio,
       'jazzRadio': jazzRadio,
-      'popRadio': popRadio,
       'electronicRadio': electronicRadio,
+
+      'error': error,
+      'noStations': noStations,
 
       'copyLink': copyLink,
       'linkCopied': linkCopied,

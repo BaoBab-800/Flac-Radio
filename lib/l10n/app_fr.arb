@@ -5,8 +5,10 @@
   "rockRadio": "Radio rock",
   "metalRadio": "Radio metal",
   "jazzRadio": "Radio jazz",
-  "popRadio": "Radio pop",
   "electronicRadio": "Radio électronique",
+
+  "error": "Erreur",
+  "noStations": "Aucune station",
 
   "copyLink": "Copier le lien",
   "linkCopied": "Lien copié",

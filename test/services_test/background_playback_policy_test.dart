@@ -1,3 +1,4 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:musicplayer/src/core/settings/global_settings.dart';
 import 'package:musicplayer/src/core/settings/player_settings.dart';
 import 'package:musicplayer/src/core/settings/settings_repository.dart';
@@ -5,7 +6,6 @@ import 'package:musicplayer/src/core/theme/app_theme.dart';
 import 'package:musicplayer/src/data/settings/settings_dto.dart';
 import 'package:musicplayer/src/services/settings/background_playback_policy.dart';
 import 'package:musicplayer/src/services/settings/settings_service.dart';
-import 'package:test/test.dart';
 
 class _FakeSettingsRepository implements SettingsRepository {
   @override

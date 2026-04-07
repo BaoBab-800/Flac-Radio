@@ -127,17 +127,23 @@ abstract class AppLocalizations {
   /// **'Jazz radio'**
   String get jazzRadio;
 
-  /// No description provided for @popRadio.
-  ///
-  /// In en, this message translates to:
-  /// **'Pop radio'**
-  String get popRadio;
-
   /// No description provided for @electronicRadio.
   ///
   /// In en, this message translates to:
   /// **'Electronic Radio'**
   String get electronicRadio;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get error;
+
+  /// No description provided for @noStations.
+  ///
+  /// In en, this message translates to:
+  /// **'No stations'**
+  String get noStations;
 
   /// No description provided for @copyLink.
   ///
