@@ -9,7 +9,7 @@ import 'package:musicplayer/src/data/radio/repository/radio_station_repository.d
 import 'package:musicplayer/src/features/main/sections/feed/radio_station_feed_vm.dart';
 
 import 'package:musicplayer/src/core/settings/settings_repository.dart';
-import 'package:musicplayer/src/core/settings/shared_prefs_settings_repository.dart';
+import 'package:musicplayer/src/core/settings/hive_settings_repository.dart';
 
 import 'package:musicplayer/src/services/player/player_service.dart';
 import 'package:musicplayer/src/services/player/player_contracts.dart';
@@ -55,7 +55,7 @@ List<SingleChildWidget> buildAppProviders({
   ),
 
   Provider<SettingsRepository>(
-    create: (_) => const SharedPrefsSettingsRepository(),
+    create: (_) => const HiveSettingsRepository(),
   ),
 
   // Инициализация настроек при создании

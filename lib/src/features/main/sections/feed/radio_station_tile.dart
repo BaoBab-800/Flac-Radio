@@ -70,9 +70,7 @@ class RadioStationTile extends StatelessWidget {
           ),
         ),
 
-        // Аватар радиостанции:
-        // Если задан imageUrl отображается изображение из сети
-        // Если нет показывается иконка по умолчанию
+        // Аватар радиостанции
         leading: station.imagePath != null
             ? CircleAvatar(
           backgroundImage: AssetImage(station.imagePath!),
